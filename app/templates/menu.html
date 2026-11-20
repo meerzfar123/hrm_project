@@ -1,0 +1,203 @@
+{# This page uses the public base layout. #}
+{% extends "base.html" %}
+
+
+{# Set the browser tab title. #}
+{% block title %}My Screen{% endblock %}
+
+
+{# Put the page inside the public layout. #}
+{% block public_content %}
+
+<!-- Main page wrapper. -->
+<div class="home-page">
+
+
+    <!-- ======================================================
+         WELCOME HERO
+         ====================================================== -->
+
+    <section class="tech-hero">
+
+        <!-- Small label above the main heading. -->
+        <div class="tech-label">
+            HRM &amp; RECRUITMENT
+        </div>
+
+
+        <!-- Welcome heading with the logged-in user's name. -->
+        <h1>
+            Welcome, {{ user.name }}
+        </h1>
+
+
+        <!-- Short welcome message. -->
+        <p class="tech-hero-text">
+            Manage your HR activities, recruitment process,
+            candidates, and manager access from one place.
+        </p>
+
+
+        <!-- Show the current user's role. -->
+        <div class="role-pill">
+            {{ user.role }}
+        </div>
+
+    </section>
+
+
+
+    <!-- ======================================================
+         HR OPTIONS
+         ====================================================== -->
+
+    {% if user.role == "hr" %}
+
+    <section class="technology-cards">
+
+
+        <!-- HR dashboard card. -->
+        <article class="technology-card">
+
+            <!-- Simple icon. -->
+            <div class="technology-icon">
+                HR
+            </div>
+
+
+            <!-- Card title. -->
+            <h2>
+                HR Screen
+            </h2>
+
+
+            <!-- Card description. -->
+            <p>
+                Create and manage jobs, review candidates,
+                and handle your recruitment activities.
+            </p>
+
+
+            <!-- Existing HR route. -->
+            <a href="/hr" class="careers-button">
+                Open HR Screen &rarr;
+            </a>
+
+        </article>
+
+
+
+        <!-- Manager access card. -->
+        <article class="technology-card">
+
+            <!-- Simple icon. -->
+            <div class="technology-icon">
+                M
+            </div>
+
+
+            <!-- Card title. -->
+            <h2>
+                Manager Access
+            </h2>
+
+
+            <!-- Card description. -->
+            <p>
+                Invite managers, manage existing manager
+                accounts, and control their access.
+            </p>
+
+
+            <!-- Existing manager access route. -->
+            <a href="/hr/access" class="careers-button">
+                Manage Access &rarr;
+            </a>
+
+        </article>
+
+    </section>
+
+
+    {% elif user.role == "candidate" %}
+
+    <!-- Candidate screen. -->
+    <section class="technology-cards">
+
+        <article class="technology-card">
+
+            <div class="technology-icon">
+                C
+            </div>
+
+            <h2>
+                Candidate Screen
+            </h2>
+
+            <p>
+                View available jobs and apply for positions
+                that match your profile.
+            </p>
+
+            <a href="/candidate" class="careers-button">
+                Open Candidate Screen &rarr;
+            </a>
+
+        </article>
+
+    </section>
+
+
+    {% elif user.role == "manager" %}
+
+    <!-- Manager screen. -->
+    <section class="technology-cards">
+
+        <article class="technology-card">
+
+            <div class="technology-icon">
+                M
+            </div>
+
+            <h2>
+                Manager Screen
+            </h2>
+
+            <p>
+                Review new jobs and approve recruitment
+                requests from the HR team.
+            </p>
+
+            <a href="/manager" class="careers-button">
+                Open Manager Screen &rarr;
+            </a>
+
+        </article>
+
+    </section>
+
+    {% endif %}
+
+
+
+    <!-- ======================================================
+         FOOTER MESSAGE
+         ====================================================== -->
+
+    <section class="careers-section">
+
+        <h2>
+            HRM Recruitment
+        </h2>
+
+        <p>
+            Simple tools for managing people, jobs,
+            recruitment, and access.
+        </p>
+
+    </section>
+
+
+</div>
+
+{% endblock %}

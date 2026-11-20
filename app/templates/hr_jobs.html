@@ -1,0 +1,885 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs{% endblock %}
+
+{% block content %}
+
+<div class="hr-dashboard">
+
+    <!-- PAGE HEADER -->
+    <div class="dashboard-header">
+
+        <!-- Page title and description -->
+        <div>
+            <h1>Jobs</h1>
+
+            <p class="dashboard-subtitle">
+                Manage your recruitment jobs and applications.
+            </p>
+        </div>
+
+        <!-- Header action buttons -->
+        <div class="dashboard-actions">
+
+            <!-- Open manual candidate form -->
+            <a href="/hr/candidate/add" class="secondary-action-button">
+                + Add Candidate
+            </a>
+
+            <!-- Create new job -->
+            <a href="/hr/jobs/edit" class="primary-button">
+                + Create New Job
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    {% if info %}
+
+    <div class="job-success">
+        {{ info }}
+    </div>
+
+    {% endif %}
+
+
+    <!-- JOBS SECTION -->
+    <section class="jobs-section">
+
+        <!-- Section header -->
+        <div class="section-header">
+
+            <div>
+                <h2>Job Openings</h2>
+
+                <p>
+                    All jobs currently available in the recruitment system.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- JOB LIST -->
+        {% if jobs %}
+
+        <div class="jobs-list">
+
+            <!-- Loop through every job -->
+            {% for j in jobs %}
+
+            <div class="job-list-card">
+
+                <!-- JOB INFORMATION -->
+                <div class="job-info">
+
+                    <!-- Job title and status -->
+                    <div class="job-title-row">
+
+                        <h3>
+                            {{ j.title }}
+                        </h3>
+
+                        <span class="status status-{{ j.status }}">
+                            {{ j.status }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Job details -->
+                    <div class="job-details">
+
+                        <span>
+                            <strong>Department:</strong>
+                            {{ j.department }}
+                        </span>
+
+                        <span>
+                            <strong>Location:</strong>
+                            {{ j.location }}
+                        </span>
+
+                        <span>
+                            <strong>Deadline:</strong>
+                            {{ j.deadline }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- JOB ACTION AREA -->
+                <div class="job-actions">
+
+                    <!-- Only the HR who created the job can manage it -->
+                    {% if j.created_by == user.user_id %}
+
+                    <!-- Three-dot menu container -->
+                    <div class="job-menu">
+
+                        <!-- Three-dot button -->
+                        <button
+                            type="button"
+                            class="job-menu-button"
+                            onclick="toggleJobMenu(this)"
+                            aria-label="Job actions">
+                            ⋮
+                        </button>
+
+
+                        <!-- Dropdown menu -->
+                        <div class="job-menu-dropdown">
+
+                            <!-- EDIT -->
+                            {% if j.status == "draft" or j.status == "rejected" %}
+
+                            <a
+                                href="/hr/jobs/edit?job_id={{ j.job_id }}"
+                                class="job-menu-item">
+                                Edit
+                            </a>
+
+                            <!-- REVIEW -->
+                            <a
+                                href="/hr/jobs/review?job_id={{ j.job_id }}"
+                                class="job-menu-item">
+                                Review
+                            </a>
+
+                            {% endif %}
+
+
+                            <!-- CLOSE PUBLISHED JOB -->
+                            {% if j.status == "published" %}
+
+                            <form
+                                action="/hr/jobs/close"
+                                method="post">
+
+                                <input
+                                    type="hidden"
+                                    name="job_id"
+                                    value="{{ j.job_id }}">
+
+                                <button
+                                    type="submit"
+                                    class="job-menu-item job-menu-button-item">
+                                    Close Job
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+
+                            <!-- OPEN CLOSED JOB -->
+                            {% if j.status == "closed" %}
+
+                            <form
+                                action="/hr/jobs/open"
+                                method="post">
+
+                                <input
+                                    type="hidden"
+                                    name="job_id"
+                                    value="{{ j.job_id }}">
+
+                                <button
+                                    type="submit"
+                                    class="job-menu-item job-menu-button-item">
+                                    Open Job
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+
+                            <!-- DELETE DRAFT / REJECTED / CLOSED JOB -->
+                            {% if j.status == "draft"
+                               or j.status == "rejected"
+                               or j.status == "closed" %}
+
+                            <form
+                                action="/hr/jobs/delete"
+                                method="post"
+                                onsubmit="return confirm('Are you sure you want to delete this job?');">
+
+                                <input
+                                    type="hidden"
+                                    name="job_id"
+                                    value="{{ j.job_id }}">
+
+                                <button
+                                    type="submit"
+                                    class="job-menu-item job-menu-delete">
+                                    Delete Job
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+
+                            <!-- POSTER -->
+                            <a
+                                href="/hr/jobs/poster?job_id={{ j.job_id }}"
+                                class="job-menu-item">
+                                Poster
+                            </a>
+
+
+                            <!-- QUESTIONS -->
+                            <a
+                                href="/hr/jobs/questions?job_id={{ j.job_id }}"
+                                class="job-menu-item">
+                                Questions
+                            </a>
+
+
+                            <!-- APPLICATIONS -->
+                            <a
+                                href="/hr/applications?job_id={{ j.job_id }}"
+                                class="job-menu-item job-menu-primary">
+                                Applications
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% else %}
+
+                    <!-- Job created by another HR -->
+                    <span class="job-owner-note">
+                        Made by another HR
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- NO JOBS -->
+        <div class="empty-dashboard">
+
+            <h3>
+                No jobs yet
+            </h3>
+
+            <p>
+                Create your first job to start the recruitment process.
+            </p>
+
+            <a
+                href="/hr/jobs/edit"
+                class="primary-button">
+                + Create New Job
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- BACK BUTTON -->
+    <div class="page-back">
+
+        <a href="/hr">
+            &larr; Back to HR Home
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PAGE CSS
+     ========================================================= -->
+
+<style>
+
+/* Main HR dashboard container */
+.hr-dashboard {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+
+/* Page header */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+
+/* Header title */
+.dashboard-header h1 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 30px;
+}
+
+
+/* Header subtitle */
+.dashboard-subtitle {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* Header buttons container */
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+/* Add Candidate button */
+.secondary-action-button {
+    min-height: 42px;
+    padding: 0 16px;
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #bfdbfe;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #2563eb;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* Add Candidate hover */
+.secondary-action-button:hover {
+    background: #eff6ff;
+}
+
+
+/* Create Job button */
+.primary-button {
+    min-height: 42px;
+    padding: 0 16px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* Create Job hover */
+.primary-button:hover {
+    background: #1d4ed8;
+}
+
+
+/* Success message */
+.job-success {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+
+    background: #f0fdf4;
+    color: #166534;
+}
+
+
+/* Jobs section */
+.jobs-section {
+    width: 100%;
+}
+
+
+/* Section header */
+.section-header {
+    margin-bottom: 15px;
+}
+
+
+/* Section heading */
+.section-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 20px;
+}
+
+
+/* Section description */
+.section-header p {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* Job list */
+.jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    /* IMPORTANT:
+       This prevents the three-dot menu from being clipped. */
+    overflow: visible !important;
+}
+
+
+/* Individual job card */
+.job-list-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    /* IMPORTANT:
+       The dropdown must be allowed outside this card. */
+    overflow: visible !important;
+}
+
+
+/* Job information */
+.job-info {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* Job title row */
+.job-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+
+/* Job title */
+.job-title-row h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 18px;
+}
+
+
+/* Status badge */
+.status {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* Published status */
+.status-published {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+/* Closed status */
+.status-closed {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+
+/* Draft status */
+.status-draft {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+
+/* Pending status */
+.status-pending_approval {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+/* Rejected status */
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* Job details */
+.job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* Job details strong text */
+.job-details strong {
+    color: #334155;
+}
+
+
+/* Job actions area */
+.job-actions {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    flex-shrink: 0;
+
+    /* IMPORTANT:
+       Keep this above surrounding cards. */
+    z-index: 10000;
+}
+
+
+/* Three-dot menu */
+.job-menu {
+    position: relative;
+
+    display: inline-block;
+
+    z-index: 100000 !important;
+}
+
+
+/* Three-dot button */
+.job-menu-button {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #0f172a;
+
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* Three-dot hover */
+.job-menu-button:hover {
+    background: #f8fafc;
+}
+
+
+/* Dropdown menu */
+.job-menu-dropdown {
+    position: absolute;
+
+    top: 48px;
+    right: 0;
+
+    width: 190px;
+
+    display: none;
+
+    padding: 6px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+
+    z-index: 100001 !important;
+}
+
+
+/* Show dropdown */
+.job-menu-dropdown.show {
+    display: block;
+}
+
+
+/* Dropdown links */
+.job-menu-item {
+    width: 100%;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #334155;
+
+    text-decoration: none;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* Dropdown hover */
+.job-menu-item:hover {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+/* Delete button */
+.job-menu-delete {
+    color: #dc2626;
+}
+
+
+/* Delete hover */
+.job-menu-delete:hover {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+
+/* Primary Applications option */
+.job-menu-primary {
+    color: #2563eb;
+}
+
+
+/* Owner note */
+.job-owner-note {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Forms inside dropdown */
+.job-menu-dropdown form {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Empty dashboard */
+.empty-dashboard {
+    padding: 50px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+}
+
+
+/* Empty dashboard heading */
+.empty-dashboard h3 {
+    margin: 0 0 8px 0;
+    color: #0f172a;
+}
+
+
+/* Empty dashboard text */
+.empty-dashboard p {
+    color: #64748b;
+}
+
+
+/* Back area */
+.page-back {
+    margin-top: 25px;
+}
+
+
+/* Back link */
+.page-back a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+
+/* Back link hover */
+.page-back a:hover {
+    text-decoration: underline;
+}
+
+
+/* Mobile layout */
+@media (max-width: 700px) {
+
+    /* Stack page header */
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    /* Stack header buttons */
+    .dashboard-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+
+    /* Stack job card */
+    .job-list-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    /* Keep actions on right */
+    .job-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+
+    /* Job details stack naturally */
+    .job-details {
+        flex-direction: column;
+        gap: 7px;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     THREE-DOT MENU JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+/* Open or close the three-dot menu */
+function toggleJobMenu(button) {
+
+    /* Find the dropdown belonging to this button */
+    var menu = button.nextElementSibling;
+
+    /* Close every other open dropdown */
+    var allMenus = document.querySelectorAll(".job-menu-dropdown");
+
+    for (var i = 0; i < allMenus.length; i++) {
+
+        /* Do not close the menu we are currently opening */
+        if (allMenus[i] !== menu) {
+            allMenus[i].classList.remove("show");
+        }
+
+    }
+
+    /* Toggle the selected dropdown */
+    menu.classList.toggle("show");
+}
+
+
+/* Close dropdown when clicking somewhere else */
+document.addEventListener("click", function(event) {
+
+    /* Check whether the click happened inside a job menu */
+    var clickedInsideMenu = event.target.closest(".job-menu");
+
+    /* If the click was outside, close all menus */
+    if (!clickedInsideMenu) {
+
+        var allMenus = document.querySelectorAll(".job-menu-dropdown");
+
+        for (var i = 0; i < allMenus.length; i++) {
+            allMenus[i].classList.remove("show");
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

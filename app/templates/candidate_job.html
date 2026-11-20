@@ -1,0 +1,407 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }}{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* Create a simple page background. */
+.apply-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 35px 20px;
+}
+
+/* Style the job information card. */
+.job-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+}
+
+/* Style the job title. */
+.job-card h1 {
+    margin: 0 0 10px;
+    color: #172033;
+    font-size: 30px;
+}
+
+/* Style job information. */
+.job-meta {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Style the main form card. */
+.apply-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+}
+
+/* Style headings. */
+.apply-card h2 {
+    color: #172033;
+    margin-top: 0;
+}
+
+/* Create spacing around fields. */
+.form-group {
+    margin-bottom: 18px;
+}
+
+/* Style labels. */
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Style text inputs and textareas. */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+/* Highlight fields when selected. */
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* Style the CV upload area. */
+.cv-box {
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 9px;
+}
+
+/* Style the CV help text. */
+.cv-help {
+    margin-top: 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* Style the submit button. */
+.submit-button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Change button color on hover. */
+.submit-button:hover {
+    background: #1d4ed8;
+}
+
+/* Style error message. */
+.error-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 12px;
+    border-radius: 9px;
+    margin-bottom: 20px;
+}
+
+/* Style already-applied message. */
+.success-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 15px;
+    border-radius: 9px;
+}
+
+/* Style links. */
+.apply-page a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+/* Add underline when hovering links. */
+.apply-page a:hover {
+    text-decoration: underline;
+}
+
+/* Make the page comfortable on mobile. */
+@media (max-width: 600px) {
+
+    /* Reduce page padding on small screens. */
+    .apply-page {
+        padding: 20px 12px;
+    }
+
+    /* Reduce card padding on small screens. */
+    .job-card,
+    .apply-card {
+        padding: 20px;
+    }
+
+    /* Reduce title size on small screens. */
+    .job-card h1 {
+        font-size: 25px;
+    }
+}
+
+</style>
+
+
+<div class="apply-page">
+
+    <!-- Show the job information. -->
+    <div class="job-card">
+
+        <!-- Show the job title. -->
+        <h1>
+            {{ job.title }}
+        </h1>
+
+        <!-- Show department, location and salary. -->
+        <div class="job-meta">
+
+            {{ job.department }}
+
+            {% if job.location %}
+                &middot; {{ job.location }}
+            {% endif %}
+
+            {% if job.salary_range %}
+                &middot; {{ job.salary_range }}
+            {% endif %}
+
+        </div>
+
+        <!-- Show the job description. -->
+        <p>
+            {{ job.description }}
+        </p>
+
+        <!-- Show requirements. -->
+        <p>
+            <strong>Requirements</strong>
+        </p>
+
+        <p style="white-space: pre-line;">
+            {{ job.requirements }}
+        </p>
+
+        <!-- Show benefits when available. -->
+        {% if job.benefits %}
+            <p>
+                <strong>What we offer</strong>
+            </p>
+
+            <p style="white-space: pre-line;">
+                {{ job.benefits }}
+            </p>
+        {% endif %}
+
+        <!-- Show deadline when available. -->
+        {% if job.deadline %}
+            <p class="job-meta">
+                Apply before {{ job.deadline }}
+            </p>
+        {% endif %}
+
+    </div>
+
+
+    <!-- Show an error when something goes wrong. -->
+    {% if error %}
+
+        <div class="error-box">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    {% if applied %}
+
+        <!-- Tell the candidate they already applied. -->
+        <div class="success-box">
+
+            You already applied to this job.
+
+            <br><br>
+
+            
+
+        </div>
+
+    {% else %}
+
+        <!-- Create the application form card. -->
+        <div class="apply-card">
+
+            <!-- Form heading. -->
+            <h2>
+                Apply for this job
+            </h2>
+
+            <!-- Keep the original POST route. -->
+            <form
+                method="post"
+                action="/candidate/apply"
+                enctype="multipart/form-data"
+            >
+
+                <!-- Send the job ID to the backend. -->
+                <input
+                    type="hidden"
+                    name="job_id"
+                    value="{{ job.job_id }}"
+                >
+
+
+                <!-- Experience field. -->
+                <div class="form-group">
+
+                    <label for="experience_years">
+                        Years of experience
+                    </label>
+
+                    <input
+                        type="text"
+                        id="experience_years"
+                        name="experience_years"
+                        value="{{ form.experience_years }}"
+                        maxlength="2"
+                        required
+                        placeholder="Example: 2"
+                    >
+
+                </div>
+
+
+                <!-- Education field. -->
+                <div class="form-group">
+
+                    <label for="education">
+                        Education
+                    </label>
+
+                    <input
+                        type="text"
+                        id="education"
+                        name="education"
+                        value="{{ form.education }}"
+                        maxlength="200"
+                        required
+                        placeholder="Example: BS Computer Science"
+                    >
+
+                </div>
+
+
+                <!-- Expected salary field. -->
+                <div class="form-group">
+
+                    <label for="expected_salary">
+                        Expected monthly salary
+                    </label>
+
+                    <input
+                        type="text"
+                        id="expected_salary"
+                        name="expected_salary"
+                        value="{{ form.expected_salary }}"
+                        maxlength="9"
+                        required
+                        placeholder="Example: 100000"
+                    >
+
+                </div>
+
+
+                <!-- CV upload field. -->
+                <div class="form-group">
+
+                    <label for="cv">
+                        Your CV
+                    </label>
+
+                    <div class="cv-box">
+
+                        <p class="cv-help">
+                            PDF or Word file. Maximum size: 5 MB.
+                        </p>
+
+                        <input
+                            type="file"
+                            id="cv"
+                            name="cv"
+                            accept=".pdf,.docx"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Show all questionnaire questions. -->
+                {% for qid, text in questions %}
+
+                    <div class="form-group">
+
+                        <label for="answer_{{ qid }}">
+                            {{ text }}
+                        </label>
+
+                        <textarea
+                            id="answer_{{ qid }}"
+                            name="answer_{{ qid }}"
+                            rows="3"
+                            maxlength="1000"
+                            required
+                            placeholder="Write your answer here..."
+                        ></textarea>
+
+                    </div>
+
+                {% endfor %}
+
+
+                <!-- Keep the existing submit action. -->
+                <button
+                    type="submit"
+                    class="apply-submit-button"
+                >
+                    Send application
+                    <span>→</span>
+                </button>
+
+            </form>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

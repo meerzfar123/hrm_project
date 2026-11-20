@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Edit company information{% endblock %}
+
+{% block content %}
+    <div class="form-card wide">
+        <h1>Company information</h1>
+        <p>This text appears on the home page, the login page and the candidate screen.</p>
+
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        {% if info %}<div class="success">{{ info }}</div>{% endif %}
+
+        <form method="post" action="/hr/company">
+            <label for="company_name">Company name</label>
+            <input type="text" id="company_name" name="company_name" value="{{ form.company_name }}" maxlength="100" required>
+
+            <label for="about_us">About us</label>
+            <textarea id="about_us" name="about_us" rows="5" maxlength="2000">{{ form.about_us }}</textarea>
+
+            <label for="mission">Mission</label>
+            <textarea id="mission" name="mission" rows="3" maxlength="1000">{{ form.mission }}</textarea>
+
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" value="{{ form.address }}" maxlength="300">
+
+            <label for="website">Website (start with https://)</label>
+            <input type="text" id="website" name="website" value="{{ form.website }}" maxlength="200">
+
+            <label for="contact_email">Contact email</label>
+            <input type="text" id="contact_email" name="contact_email" value="{{ form.contact_email }}" maxlength="200">
+
+            <button type="submit">Save</button>
+        </form>
+
+        <p><a href="/hr">Back to the HR screen</a></p>
+    </div>
+{% endblock %}

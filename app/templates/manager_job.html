@@ -1,0 +1,522 @@
+{# Use the existing shared base layout. #}
+{% extends "base.html" %}
+
+{# Set the browser tab title. #}
+{% block title %}Decide - {{ job.title }}{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+    /* Create the same light Manager page background. */
+    .manager-decision-page {
+        min-height: calc(100vh - 80px);
+        background: #f5f7fa;
+        padding: 40px 42px 60px;
+        box-sizing: border-box;
+    }
+
+    /* Keep the page width comfortable for reading. */
+    .manager-decision-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Create the page heading area. */
+    .manager-decision-header {
+        margin-bottom: 28px;
+    }
+
+    /* Style the small page label. */
+    .manager-decision-label {
+        color: #2563eb;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    /* Style the job title. */
+    .manager-decision-header h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    /* Style the short page description. */
+    .manager-decision-header p {
+        margin: 8px 0 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Style error messages. */
+    .manager-decision-page .error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 12px 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    /* Create the same simple white cards used by Manager pages. */
+    .manager-decision-page .panel {
+        background: #ffffff;
+        border: 1px solid #e1e5ea;
+        border-radius: 8px;
+        padding: 26px;
+        margin-bottom: 22px;
+        box-shadow: none;
+    }
+
+    /* Style card headings. */
+    .manager-decision-page .panel h2 {
+        margin-top: 0;
+        margin-bottom: 18px;
+        color: #111827;
+        font-size: 19px;
+    }
+
+    /* Create a clean job information grid. */
+    .job-information {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    /* Style each job information item. */
+    .job-information-item {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 14px;
+    }
+
+    /* Style information labels. */
+    .job-information-label {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    /* Style information values. */
+    .job-information-value {
+        color: #111827;
+        font-size: 14px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    /* Add a divider before the detailed job information. */
+    .job-detail {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 22px;
+    }
+
+    /* Style Description, Requirements and Benefits headings. */
+    .job-detail h2 {
+        margin-top: 22px;
+        margin-bottom: 9px;
+        color: #111827;
+        font-size: 17px;
+    }
+
+    /* Keep the job text easy to read. */
+    .job-detail p {
+        color: #475569;
+        font-size: 14px;
+        line-height: 1.7;
+        margin-top: 0;
+    }
+
+    /* Style the questions list. */
+    .manager-questions {
+        margin: 0;
+        padding-left: 24px;
+    }
+
+    /* Style each question. */
+    .manager-questions li {
+        color: #475569;
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 7px 0;
+    }
+
+    /* Create the decision area. */
+    .decision-section {
+        border: 1px solid #e1e5ea;
+    }
+
+    /* Style the reason label. */
+    .decision-section label {
+        display: block;
+        color: #374151;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    /* Style the rejection reason field. */
+    .decision-section textarea {
+        width: 100%;
+        max-width: 100%;
+        min-height: 100px;
+        padding: 11px 13px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        box-sizing: border-box;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 14px;
+        color: #111827;
+    }
+
+    /* Highlight the textarea when selected. */
+    .decision-section textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+    }
+
+    /* Put the decision buttons beside each other. */
+    .button-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    /* Style the Approve button. */
+    .button-row button[type="submit"] {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 5px;
+        background: #2563eb;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Add a small hover effect to Approve. */
+    .button-row button[type="submit"]:hover {
+        background: #1d4ed8;
+    }
+
+    /* Style the Reject button separately. */
+    .button-row .btn-danger {
+        background: #ffffff;
+        border: 1px solid #dc2626;
+        color: #dc2626;
+    }
+
+    /* Add a light hover effect to Reject. */
+    .button-row .btn-danger:hover {
+        background: #fef2f2;
+    }
+
+    /* Style the Back link. */
+    .manager-back-link {
+        display: inline-block;
+        margin-top: 2px;
+        color: #2563eb;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    /* Underline the Back link on hover. */
+    .manager-back-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Make the information grid responsive. */
+    @media (max-width: 850px) {
+        .job-information {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Make the page comfortable on mobile screens. */
+    @media (max-width: 600px) {
+        .manager-decision-page {
+            padding: 25px 18px 40px;
+        }
+
+        .manager-decision-header h1 {
+            font-size: 25px;
+        }
+
+        .job-information {
+            grid-template-columns: 1fr;
+        }
+
+        .button-row {
+            flex-direction: column;
+        }
+
+        .button-row button {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+<!-- Main Manager decision page. -->
+<div class="manager-decision-page">
+
+    <!-- Keep the content centered and readable. -->
+    <div class="manager-decision-container">
+
+
+        <!-- ==================== PAGE HEADER ==================== -->
+
+        <div class="manager-decision-header">
+
+            <!-- Small section label. -->
+            <div class="manager-decision-label">
+                Job review
+            </div>
+
+            <!-- Show the actual job title. -->
+            <h1>
+                {{ job.title }}
+            </h1>
+
+            <!-- Explain the purpose of the page. -->
+            <p>
+                Review the job details before making a final decision.
+            </p>
+
+        </div>
+
+
+        <!-- Show an error if the backend provides one. -->
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <!-- ==================== JOB DETAILS ==================== -->
+
+        <section class="panel">
+
+            <!-- Section heading. -->
+            <h2>
+                Job details
+            </h2>
+
+
+            <!-- Main job information. -->
+            <div class="job-information">
+
+                <!-- Department. -->
+                <div class="job-information-item">
+
+                    <div class="job-information-label">
+                        Department
+                    </div>
+
+                    <div class="job-information-value">
+                        {{ job.department or "-" }}
+                    </div>
+
+                </div>
+
+
+                <!-- Location. -->
+                <div class="job-information-item">
+
+                    <div class="job-information-label">
+                        Location
+                    </div>
+
+                    <div class="job-information-value">
+                        {{ job.location or "-" }}
+                    </div>
+
+                </div>
+
+
+                <!-- Salary. -->
+                <div class="job-information-item">
+
+                    <div class="job-information-label">
+                        Salary
+                    </div>
+
+                    <div class="job-information-value">
+                        {{ job.salary_range or "-" }}
+                    </div>
+
+                </div>
+
+
+                <!-- Deadline. -->
+                <div class="job-information-item">
+
+                    <div class="job-information-label">
+                        Deadline
+                    </div>
+
+                    <div class="job-information-value">
+                        {{ job.deadline or "-" }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Detailed job information. -->
+            <div class="job-detail">
+
+                <!-- Job description. -->
+                <h2>
+                    Description
+                </h2>
+
+                <p style="white-space: pre-line;">
+                    {{ job.description }}
+                </p>
+
+
+                <!-- Job requirements. -->
+                <h2>
+                    Requirements
+                </h2>
+
+                <p style="white-space: pre-line;">
+                    {{ job.requirements }}
+                </p>
+
+
+                <!-- Job benefits. -->
+                <h2>
+                    Benefits
+                </h2>
+
+                <p style="white-space: pre-line;">
+                    {{ job.benefits or "-" }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================== QUESTIONS ==================== -->
+
+        <section class="panel">
+
+            <!-- Questions heading. -->
+            <h2>
+                Questions ({{ questions|length }})
+            </h2>
+
+
+            <!-- Show all job questions. -->
+            <ol class="manager-questions">
+
+                {% for q in questions %}
+
+                <li>
+                    {{ q }}
+                </li>
+
+                {% endfor %}
+
+            </ol>
+
+        </section>
+
+
+        <!-- ==================== DECISION ==================== -->
+
+        <section class="panel decision-section">
+
+            <!-- Decision heading. -->
+            <h2>
+                Manager decision
+            </h2>
+
+            <!-- Existing working decision form. -->
+            <form method="post" action="/manager/decide">
+
+                <!-- Keep the existing job ID field. -->
+                <input
+                    type="hidden"
+                    name="job_id"
+                    value="{{ job.job_id }}"
+                >
+
+
+                <!-- Reason field. -->
+                <label for="reason">
+                    Reason
+                    <span style="font-weight:400; color:#64748b;">
+                        (needed only to reject)
+                    </span>
+                </label>
+
+                <!-- Keep the same textarea name and limits. -->
+                <textarea
+                    id="reason"
+                    name="reason"
+                    rows="3"
+                    maxlength="500"
+                    placeholder="Enter the reason if you are rejecting this job..."
+                ></textarea>
+
+
+                <!-- Keep the existing approve/reject values. -->
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        name="decision"
+                        value="approve"
+                    >
+                        Approve and publish
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        name="decision"
+                        value="reject"
+                        class="btn-danger"
+                    >
+                        Reject
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- Back to Manager dashboard. -->
+        <a
+            href="/manager"
+            class="manager-back-link"
+        >
+            &larr; Back to Manager
+        </a>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,346 @@
+
+{# This page uses the shared public base layout. #}
+{% extends "base.html" %}
+
+
+{# Set the browser tab title. #}
+{% block title %}Manager screen{% endblock %}
+
+
+{# Put the manager screen inside the visible public content area. #}
+{% block public_content %}
+
+<style>
+    /* Create the main manager layout with a sidebar and content area. */
+    .manager-layout {
+        display: flex;
+        min-height: calc(100vh - 80px);
+        margin: -20px;
+        background: #f5f7fa;
+    }
+
+    /* Create the white left sidebar. */
+    .manager-sidebar {
+        width: 270px;
+        min-width: 270px;
+        min-height: calc(100vh - 80px);
+        background: #ffffff;
+        border-right: 1px solid #e1e5ea;
+        display: flex;
+        flex-direction: column;
+        padding: 28px 22px;
+        box-sizing: border-box;
+    }
+
+    /* Create the small profile circle. */
+    .manager-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #f0f5ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    /* Show the manager's name in the sidebar. */
+    .manager-name {
+        font-size: 17px;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 4px;
+    }
+
+    /* Show the manager's role below the name. */
+    .manager-role {
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    /* Keep the logout button at the bottom of the sidebar. */
+    .manager-sidebar-bottom {
+        margin-top: auto;
+        padding-top: 30px;
+    }
+
+    /* Style the logout button. */
+    .manager-logout {
+        width: 100%;
+        padding: 10px 16px;
+        background: #ffffff;
+        border: 1px solid #9ca3af;
+        border-radius: 5px;
+        color: #111827;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    /* Slightly change the button when the mouse is over it. */
+    .manager-logout:hover {
+        background: #f3f4f6;
+    }
+
+    /* Create the main content area. */
+    .manager-main {
+        flex: 1;
+        min-width: 0;
+        padding: 42px 42px 60px;
+        box-sizing: border-box;
+    }
+
+    /* Create the welcome heading. */
+    .manager-welcome {
+        margin-bottom: 34px;
+    }
+
+    /* Style the welcome message. */
+    .manager-welcome h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    /* Style the small role text under the welcome heading. */
+    .manager-welcome p {
+        margin: 8px 0 0;
+        color: #64748b;
+        font-size: 15px;
+    }
+
+    /* Keep the existing panel clean and white. */
+    .manager-main .panel {
+        background: #ffffff;
+        border: 1px solid #e1e5ea;
+        border-radius: 8px;
+        padding: 26px;
+        box-shadow: none;
+    }
+
+    /* Style the page heading inside the existing content. */
+    .manager-main .panel h2 {
+        color: #111827;
+        margin-top: 0;
+    }
+
+    /* Make the table fit the available content width. */
+    .manager-main .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Make the table text readable. */
+    .manager-main .data-table {
+        width: 100%;
+    }
+
+    /* Make the Review link blue. */
+    .manager-main .actions a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    /* Add an underline when the Review link is hovered. */
+    .manager-main .actions a:hover {
+        text-decoration: underline;
+    }
+
+    /* Keep the success message clean. */
+    .manager-main .success {
+        margin-bottom: 20px;
+    }
+
+    /* Make the sidebar and content responsive on smaller screens. */
+    @media (max-width: 800px) {
+
+        /* Stack the sidebar above the main content on small screens. */
+        .manager-layout {
+            flex-direction: column;
+            margin: -10px;
+        }
+
+        /* Make the sidebar full width on small screens. */
+        .manager-sidebar {
+            width: 100%;
+            min-width: 0;
+            min-height: auto;
+            border-right: none;
+            border-bottom: 1px solid #e1e5ea;
+        }
+
+        /* Put the profile and logout area into a compact layout. */
+        .manager-sidebar-bottom {
+            margin-top: 24px;
+        }
+
+        /* Reduce main content padding on small screens. */
+        .manager-main {
+            padding: 28px 20px 40px;
+        }
+    }
+</style>
+
+
+<!-- Main Manager layout. -->
+<div class="manager-layout">
+
+
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+
+    <aside class="manager-sidebar">
+
+        <!-- Show the first letter of the Manager's name. -->
+        <div class="manager-avatar">
+            {{ user["name"][0]|upper }}
+        </div>
+
+
+        <!-- Show the logged-in Manager's name. -->
+        <div class="manager-name">
+            {{ user["name"] }}
+        </div>
+
+
+        <!-- Show the Manager's role. -->
+        <div class="manager-role">
+            Manager
+        </div>
+
+
+        <!-- Keep Logout at the bottom of the sidebar. -->
+        <div class="manager-sidebar-bottom">
+
+            <!-- Use the existing POST logout route. -->
+            <form method="post" action="/logout">
+
+                <!-- Existing logout button. -->
+                <button type="submit" class="manager-logout">
+                    Log out
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+
+    <main class="manager-main">
+
+
+        <!-- Manager welcome message. -->
+        <div class="manager-welcome">
+
+            <!-- Show the Manager's name in the welcome message. -->
+            <h1>
+                Welcome, {{ user["name"] }}
+            </h1>
+
+            <!-- Show the Manager role. -->
+            <p>
+                Manager
+            </p>
+
+        </div>
+
+
+        <!-- Show a success message after approval or rejection. -->
+        {% if info %}
+
+            <div class="success">
+                {{ info }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- Show jobs waiting for manager decision. -->
+        <section class="panel">
+
+            <!-- Section heading. -->
+            <h2>
+                Jobs waiting for your decision
+            </h2>
+
+
+            {% if jobs %}
+
+                <!-- Keep the table responsive on smaller screens. -->
+                <div class="table-wrap">
+
+                    <!-- Display the pending jobs. -->
+                    <table class="data-table">
+
+                        <!-- Table headings. -->
+                        <tr>
+                            <th>Title</th>
+                            <th>Department</th>
+                            <th>Location</th>
+                            <th>Created by</th>
+                            <th>Actions</th>
+                        </tr>
+
+
+                        <!-- Display each pending job. -->
+                        {% for j in jobs %}
+
+                        <tr>
+
+                            <!-- Job title. -->
+                            <td>
+                                {{ j.title }}
+                            </td>
+
+                            <!-- Job department. -->
+                            <td>
+                                {{ j.department }}
+                            </td>
+
+                            <!-- Job location. -->
+                            <td>
+                                {{ j.location }}
+                            </td>
+
+                            <!-- Person who created the job. -->
+                            <td>
+                                {{ j.created_by_name }}
+                            </td>
+
+                            <!-- Open the manager decision page. -->
+                            <td class="actions">
+                                <a href="/manager/job?job_id={{ j.job_id }}">
+                                    Review
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <!-- Show this when there are no pending jobs. -->
+                <p class="empty">
+                    No jobs are waiting.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}

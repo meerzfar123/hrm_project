@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}My applications{% endblock %}
+
+{% block public_content %}
+<h1>My applications</h1>
+{% if info %}<div class="success">{{ info }}</div>{% endif %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+{% if shortlisted %}
+<h2>You are shortlisted</h2>
+{% for s in shortlisted %}
+<section class="panel">
+    <h3>{{ s.title }}</h3>
+
+    <p><strong>Interview date and time:</strong>
+        {% if s.interview %}{{ s.interview }}{% else %}Not scheduled yet. HR will email you.{% endif %}</p>
+
+    <p><strong>Special instructions</strong></p>
+    {% if s.instructions %}
+        <p style="white-space: pre-line;">{{ s.instructions }}</p>
+    {% else %}
+        <p class="empty">No special instructions yet.</p>
+    {% endif %}
+
+    <p><strong>Your questions</strong></p>
+    {% for q in s.queries %}
+        <div class="query-box">
+            <p>{{ q.question }} <span class="hint">({{ q.asked }})</span></p>
+            {% if q.reply %}
+                <p><strong>HR:</strong> {{ q.reply }}</p>
+            {% else %}
+                <p class="hint">Waiting for a reply.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <form method="post" action="/candidate/query" style="max-width:none;">
+        <input type="hidden" name="candidate_id" value="{{ s.candidate_id }}">
+        <label for="q{{ s.candidate_id }}">Ask a question or raise a concern before the interview</label>
+        <textarea id="q{{ s.candidate_id }}" name="question" rows="3" maxlength="1000" required></textarea>
+        <button type="submit">Send question</button>
+    </form>
+</section>
+{% endfor %}
+{% endif %}
+
+<h2>All my applications</h2>
+<section class="panel">
+    {% if applications %}
+        <div class="table-wrap">
+            <table class="data-table">
+                <tr><th>Job</th><th>Status</th><th>Interview</th></tr>
+                {% for a in applications %}
+                <tr>
+                    <td>{{ a.title }}</td>
+                    <td><span class="status">{{ a.status }}</span></td>
+                    <td>{{ a.interview or "-" }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <p class="empty">You have not applied yet.</p>
+    {% endif %}
+</section>
+

@@ -1,0 +1,14 @@
+{# This page uses the base layout #}
+{% extends "base.html" %}
+
+{# The text on the browser tab #}
+{% block title %}{{ title }}{% endblock %}
+
+{% block public_content %}
+<section class="card">
+    {# The title and the text are sent by the server #}
+    <h1>{{ title }}</h1>
+    <p>{{ text }}</p>
+    <p><a href="/app">Back to my screen</a></p>
+</section>
+{% endblock %}

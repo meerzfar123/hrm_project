@@ -1,0 +1,35 @@
+{# This page uses the base layout #}
+{% extends "base.html" %}
+
+{# The text on the browser tab #}
+{% block title %}Verify your Gmail{% endblock %}
+
+{% block public_content %}
+<section class="card form-card">
+    <h1>Verify your Gmail</h1>
+    <p>We sent a 6-digit code to <strong>{{ email }}</strong>. It works for 10 minutes.</p>
+
+    {# In terminal mode nothing is emailed, so tell the person where the code is #}
+    {% if dev_mode %}
+        <div class="dev-box">Dev mode: nothing is emailed. Read the code in the terminal that runs uvicorn.</div>
+    {% endif %}
+
+    {# Show the error or info message if there is one #}
+    {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+    {% if info %}<div class="info-box">{{ info }}</div>{% endif %}
+
+    {# The form that sends the typed code to /verify #}
+    <form method="post" action="/verify">
+        <input type="hidden" name="email" value="{{ email }}">
+        <label for="code">6-digit code</label>
+        <input type="text" id="code" name="code" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
+        <button class="btn" type="submit">Verify</button>
+    </form>
+
+    {# A second form that asks for a new code #}
+    <form method="post" action="/resend">
+        <input type="hidden" name="email" value="{{ email }}">
+        <button class="btn btn-light" type="submit">Send a new code</button>
+    </form>
+</section>
+{% endblock %}

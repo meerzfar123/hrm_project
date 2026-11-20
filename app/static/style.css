@@ -1,0 +1,3511 @@
+
+/* =========================================================
+
+   HRM SYSTEM - SIMPLE LIGHT UI
+
+   This stylesheet keeps the existing class names.
+
+   It changes only the appearance of the system.
+
+   ========================================================= */
+
+/* =========================================================
+
+   1. BASIC PAGE SETTINGS
+
+   ========================================================= */
+
+/* Remove default browser spacing and use a clean font. */
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+/* Set the main page background and text color. */
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #ffffff;
+
+    color: #172033;
+
+    line-height: 1.5;
+
+}
+
+/* Make links clean and simple. */
+
+a {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+/* Add underline when the mouse is over a normal link. */
+
+a:hover {
+
+    text-decoration: underline;
+
+}
+
+/* Keep images inside their containers. */
+
+img {
+
+    max-width: 100%;
+
+}
+
+/* =========================================================
+
+   2. MAIN PUBLIC NAVIGATION
+
+   ========================================================= */
+
+   /* Make width calculations include padding and borders. */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+/* Create a simple white navigation bar. */
+
+.top-bar {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    min-height: 64px;
+
+    background: #201d40;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    box-sizing: border-box;
+
+}
+
+/* Style the company or system brand. */
+
+.brand {
+
+    color: #111827;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+/* Create the navigation area. */
+
+.nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 1;
+
+}
+
+/* Style normal navigation links. */
+
+.nav a {
+
+    color: #374151;
+
+    padding: 9px 14px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+/* Give navigation links a light hover effect. */
+
+.nav a:hover {
+
+    background: #f6f5f3;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+/* =========================================================
+
+   3. PUBLIC PAGE CONTAINER
+
+   ========================================================= */
+
+/* Keep public pages centered and readable. */
+
+.page {
+
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 40px 24px;
+
+}
+
+/* Create a smaller page area when required. */
+
+.wide {
+
+    max-width: 1400px;
+
+}
+
+/* =========================================================
+
+   4. HERO / WELCOME AREAS
+
+   ========================================================= */
+
+/* Create a clean white hero section. */
+
+.hero {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    padding: 42px;
+
+    margin-bottom: 24px;
+
+}
+
+/* Style the main welcome section. */
+
+.welcome {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    padding: 32px;
+
+}
+
+/* Style hero and welcome headings. */
+
+.hero h1,
+
+.welcome h1 {
+
+    color: #111827;
+
+    font-size: 34px;
+
+    margin-bottom: 12px;
+
+}
+
+/* Style supporting hero text. */
+
+.hero p,
+
+.welcome p {
+
+    color: #6b7280;
+
+    max-width: 760px;
+
+}
+
+/* Style small welcome labels. */
+
+.welcome-label {
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+
+    text-transform: uppercase;
+
+}
+
+/* Style welcome actions. */
+
+.welcome-action {
+
+    margin-top: 20px;
+
+}
+
+/* =========================================================
+
+   5. BUTTONS
+
+   ========================================================= */
+
+/* Create the standard button shape. */
+
+.btn,
+
+.button,
+
+.primary-button,
+
+.secondary-button,
+
+.btn-primary {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 9px 16px;
+
+    border-radius: 7px;
+
+    border: 1px solid transparent;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: background 0.15s ease;
+
+}
+
+/* Main blue button. */
+
+.btn,
+
+.primary-button,
+
+.btn-primary {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border-color: #2563eb;
+
+}
+
+/* Darken the main button on hover. */
+
+.btn:hover,
+
+.primary-button:hover,
+
+.btn-primary:hover {
+
+    background: #1d4ed8;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+}
+
+/* Secondary button. */
+
+.secondary-button,
+
+.btn-secondary {
+
+    background: #ffffff;
+
+    color: #374151;
+
+    border-color: #d1d5db;
+
+}
+
+/* Add a light hover effect to secondary buttons. */
+
+.secondary-button:hover,
+
+.btn-secondary:hover {
+
+    background: #f3f4f6;
+
+    text-decoration: none;
+
+}
+
+/* Light button. */
+
+.btn-light {
+
+    background: #f9fafb;
+
+    color: #374151;
+
+    border-color: #d1d5db;
+
+}
+
+/* Red danger button. */
+
+.btn-danger {
+
+    background: #dc2626;
+
+    color: #ffffff;
+
+    border-color: #dc2626;
+
+}
+
+/* Darken danger button when hovered. */
+
+.btn-danger:hover {
+
+    background: #b91c1c;
+
+    color: #ffffff;
+
+}
+
+/* Small button. */
+
+.btn-small {
+
+    min-height: 34px;
+
+    padding: 7px 11px;
+
+    font-size: 12px;
+
+}
+
+/* Button row. */
+
+.button-row,
+
+.button-row,
+
+.actions,
+
+.job-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    align-items: center;
+
+}
+
+/* Simple link button. */
+
+.btn-link,
+
+.link-button,
+
+.button-link {
+
+    background: transparent;
+
+    border: 0;
+
+    color: #2563eb;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    padding: 0;
+
+}
+
+/* =========================================================
+
+   6. CARDS
+
+   ========================================================= */
+
+/* Standard white card. */
+
+.card,
+
+.form-card,
+
+.panel,
+
+.dashboard-card,
+
+.company-card,
+
+.job-dashboard-card,
+
+.job-list-card,
+
+.candidate-table-card,
+
+.hr-module-card,
+
+.hr-small-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+
+}
+
+/* Add standard card spacing. */
+
+.card {
+
+    padding: 24px;
+
+}
+
+/* Form card spacing. */
+
+.form-card {
+
+    padding: 28px;
+
+}
+
+/* Panel spacing. */
+
+.panel {
+
+    padding: 24px;
+
+}
+
+/* Dashboard card spacing. */
+
+.dashboard-card {
+
+    padding: 22px;
+
+}
+
+/* =========================================================
+
+   7. CARD HEADINGS
+
+   ========================================================= */
+
+/* Style card headings. */
+
+.card h2,
+
+.card h3,
+
+.panel h2,
+
+.panel h3,
+
+.form-card h2,
+
+.form-card h3 {
+
+    color: #111827;
+
+    margin-bottom: 8px;
+
+}
+
+/* Style supporting card text. */
+
+.card p,
+
+.panel p,
+
+.form-card p {
+
+    color: #6b7280;
+
+}
+
+/* =========================================================
+
+   8. FORMS
+
+   ========================================================= */
+
+/* Add spacing between form groups. */
+
+.form-group {
+
+    margin-bottom: 18px;
+
+}
+
+/* Style form labels. */
+
+.form-group label,
+
+.card-label,
+
+.info-label,
+
+.offer-detail-label {
+
+    display: block;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+}
+
+/* Style text inputs. */
+
+input,
+
+select,
+
+textarea {
+
+    width: 100%;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    padding: 10px 12px;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+/* Give focused fields a blue border. */
+
+input:focus,
+
+select:focus,
+
+textarea:focus {
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+/* Allow textarea resizing vertically. */
+
+textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+
+}
+
+/* Style file upload fields. */
+
+input[type="file"] {
+
+    padding: 8px;
+
+}
+
+/* Add a small help text style. */
+
+.hint {
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+
+}
+
+/* =========================================================
+
+   9. INFORMATION BOXES
+
+   ========================================================= */
+
+/* Create a clean information box. */
+
+.info-box {
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    padding: 16px;
+
+}
+
+/* Style information values. */
+
+.info-value,
+
+.offer-detail-value {
+
+    color: #111827;
+
+    font-weight: 600;
+
+}
+
+/* Keep inline content aligned. */
+
+.inline {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+/* =========================================================
+
+   10. STATUS BADGES
+
+   ========================================================= */
+
+/* Basic status badge. */
+
+.status,
+
+.badge,
+
+.candidate-status,
+
+.role-pill,
+
+.poster-tag {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    width: fit-content;
+
+    min-height: 28px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #eef2f7;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+/* Draft status. */
+
+.status-draft {
+
+    background: #f3f4f6;
+
+    color: #4b5563;
+
+}
+
+/* Pending approval status. */
+
+.status-pending_approval {
+
+    background: #fff7ed;
+
+    color: #c2410c;
+
+}
+
+/* Published status. */
+
+.status-published {
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+}
+
+/* Rejected status. */
+
+.status-rejected {
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+}
+
+/* Selected status. */
+
+.status-selected {
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+}
+
+/* Alert badge. */
+
+.badge-alert {
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+}
+
+/* =========================================================
+
+   11. SUCCESS / ERROR MESSAGES
+
+   ========================================================= */
+
+/* Success message box. */
+
+.success,
+
+.success-message,
+
+.job-success {
+
+    background: #ecfdf5;
+
+    color: #065f46;
+
+    border: 1px solid #a7f3d0;
+
+    border-radius: 8px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 18px;
+
+}
+
+/* Error message box. */
+
+.error,
+
+.error-message,
+
+.error-box {
+
+    background: #fef2f2;
+
+    color: #991b1b;
+
+    border: 1px solid #fecaca;
+
+    border-radius: 8px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 18px;
+
+}
+
+/* =========================================================
+
+   12. DASHBOARD
+
+   ========================================================= */
+
+/* Main dashboard background. */
+
+.hr-dashboard {
+
+    background: #f5f7fa;
+
+    color: #172033;
+
+}
+
+/* Dashboard header. */
+
+.dashboard-header {
+
+    margin-bottom: 24px;
+
+}
+
+/* Dashboard title. */
+
+.dashboard-header h1,
+
+.dashboard-header h2 {
+
+    color: #111827;
+
+    font-size: 28px;
+
+}
+
+/* Dashboard subtitle. */
+
+.dashboard-subtitle {
+
+    color: #6b7280;
+
+    margin-top: 5px;
+
+}
+
+/* Dashboard cards grid. */
+
+.dashboard-cards,
+
+.cards,
+
+.hr-card-grid,
+
+.hr-small-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+}
+
+/* Make cards stack on smaller screens. */
+
+@media (max-width: 1000px) {
+
+    .dashboard-cards,
+
+    .cards,
+
+    .hr-card-grid,
+
+    .hr-small-grid {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+/* Make cards one column on mobile. */
+
+@media (max-width: 600px) {
+
+    .dashboard-cards,
+
+    .cards,
+
+    .hr-card-grid,
+
+    .hr-small-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+/* Dashboard number. */
+
+.card-number,
+
+.job-stat {
+
+    color: #111827;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+}
+
+/* Dashboard card label. */
+
+.card-label {
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+}
+
+/* =========================================================
+
+   13. HR LAYOUT
+
+   ========================================================= */
+
+/* Main HR application layout. */
+
+.hr-layout {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    background: #f5f7fa;
+
+    color: #172033;
+
+}
+
+/* Make the complete HR sidebar blue. */
+
+.hr-sidebar {
+
+    background: #113072;
+
+    border-right: none;
+
+    color: #605e82;
+
+}
+
+/* Make the HRM brand text white. */
+
+.hr-brand {
+
+    color: #ffffff !important;
+
+}
+
+/* Make the navigation section labels light blue. */
+
+.nav-section-title {
+
+    color: #318ad8 !important;
+
+}
+
+/* Make all sidebar links white. */
+
+.hr-nav-link {
+
+    color: #ffffff !important;
+
+    border-radius: 9px;
+
+}
+
+/* Make sidebar icons white. */
+
+.hr-nav-link span {
+
+    color: #ffffff !important;
+
+}
+
+/* Change the navigation background when the mouse is over it. */
+
+.hr-nav-link:hover {
+
+    background: #1d4ed8;
+
+    color: #61cfee !important;
+
+}
+
+/* Keep icons white during hover. */
+
+.hr-nav-link:hover span {
+
+    color: #ee4508 !important;
+
+}
+
+/* Add a subtle line above the user area. */
+
+.hr-sidebar-bottom {
+
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+
+}
+
+/* Make HR user's name white. */
+
+.hr-user-mini strong {
+
+    color: #ffffff !important;
+
+}
+
+/* Make HR user's role light blue. */
+
+.hr-user-mini span {
+
+    color: #dbeafe !important;
+
+}
+
+/* Make the avatar white with blue text. */
+
+.hr-avatar {
+
+    background: #eb0808;
+
+    color: #2563eb !important;
+
+}
+
+/* Style the logout button for the blue sidebar. */
+
+.logout-button {
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    background: rgba(255, 255, 255, 0.10);
+
+    color: #ffffff !important;
+
+}
+
+/* Change logout button when mouse is over it. */
+
+.logout-button:hover {
+
+    background: #1d4ed8;
+
+    color: #ffffff !important;
+
+}
+
+/* HR navigation. */
+
+.hr-nav {
+
+    padding: 16px 12px;
+
+}
+
+/* Sidebar section title. */
+
+.nav-section-title {
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    padding: 10px 10px 7px;
+
+}
+
+/* HR navigation link. */
+
+.hr-nav-link {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    margin-bottom: 3px;
+
+    color: #4b5563;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+/* HR navigation hover. */
+
+.hr-nav-link:hover {
+
+    background: #f3f4f6;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+/* Active HR navigation link. */
+
+.hr-nav-link.active {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+/* Sidebar bottom area. */
+
+.hr-sidebar-bottom {
+
+    margin-top: auto;
+
+    padding: 16px 12px;
+
+    border-top: 1px solid #e5e7eb;
+
+}
+
+/* HR main content. */
+
+.hr-main {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+/* HR content container. */
+
+.hr-content {
+
+    padding: 28px;
+
+}
+
+/* =========================================================
+
+   14. HR TOP BAR
+
+   ========================================================= */
+
+/* Create a clean HR top bar. */
+
+.hr-topbar {
+
+    min-height: 64px;
+
+    background: #f2f1f4;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 24px;
+
+}
+
+/* HR topbar label. */
+
+.topbar-label {
+
+    color: #111827;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+/* HR user area. */
+
+.topbar-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+}
+
+/* HR avatar. */
+
+.hr-avatar {
+
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: 700;
+
+}
+
+/* Small user information. */
+
+.hr-user-mini {
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+/* =========================================================
+
+   15. HR WELCOME CARD
+
+   ========================================================= */
+
+/* Simple white HR welcome area. */
+
+.hr-welcome {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 26px;
+
+    margin-bottom: 22px;
+
+}
+
+/* Welcome heading. */
+
+.hr-welcome h1,
+
+.hr-welcome h2 {
+
+    color: #111827;
+
+}
+
+/* Welcome description. */
+
+.hr-welcome p {
+
+    color: #6b7280;
+
+}
+
+/* =========================================================
+
+   16. HR MODULE CARDS
+
+   ========================================================= */
+
+/* HR module card. */
+
+.hr-module-card {
+
+    padding: 20px;
+
+}
+
+/* Module icon. */
+
+.module-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: 700;
+
+    margin-bottom: 14px;
+
+}
+
+/* Module arrow. */
+
+.module-arrow {
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+}
+
+/* Small HR card. */
+
+.hr-small-card {
+
+    padding: 18px;
+
+}
+
+/* =========================================================
+
+   17. JOB LISTING
+
+   ========================================================= */
+
+/* Job listing section. */
+
+.jobs-section,
+
+.company-section,
+
+.pipeline-section,
+
+.ranking-section {
+
+    margin-bottom: 24px;
+
+}
+
+/* Job list. */
+
+.jobs-list {
+
+    display: grid;
+
+    gap: 14px;
+
+}
+
+/* Job card header. */
+
+.job-card-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+}
+
+/* Job title row. */
+
+.job-title-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+}
+
+/* Job title. */
+
+.job-title-row h2,
+
+.job-title-row h3 {
+
+    color: #111827;
+
+}
+
+/* Job information. */
+
+.job-info,
+
+.job-details {
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+}
+
+/* Job owner note. */
+
+.job-owner-note {
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 7px;
+
+    padding: 10px 12px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+/* Job actions. */
+
+.job-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+/* Main job action. */
+
+.job-action-primary {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border-radius: 7px;
+
+    padding: 9px 14px;
+
+    font-weight: 600;
+
+}
+
+/* Job statistics. */
+
+.job-stats {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+
+    margin-top: 16px;
+
+}
+
+/* =========================================================
+
+   18. PUBLIC JOB POSTER
+
+   ========================================================= */
+
+/* Job poster card. */
+
+.poster {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+/* Poster top area. */
+
+.poster-top {
+
+    padding: 22px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+/* Poster title. */
+
+.poster-title {
+
+    color: #111827;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+}
+
+/* Poster text. */
+
+.poster-text {
+
+    color: #6b7280;
+
+}
+
+/* Poster metadata. */
+
+.poster-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    margin-top: 12px;
+
+}
+
+/* Poster footer. */
+
+.poster-footer {
+
+    padding: 18px 22px;
+
+    background: #f8fafc;
+
+}
+
+/* Poster actions. */
+
+.poster-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+/* =========================================================
+
+   19. TABLES
+
+   ========================================================= */
+
+/* Make tables horizontally scrollable when needed. */
+
+.table-wrap,
+
+.data-table {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+/* Standard table. */
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+
+}
+
+/* Table header. */
+
+table thead th {
+
+    background: #f8fafc;
+
+    color: #374151;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    padding: 12px 14px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+}
+
+/* Table body cells. */
+
+table tbody td {
+
+    color: #374151;
+
+    border-bottom: 1px solid #eef0f3;
+
+    padding: 13px 14px;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+
+}
+
+/* Give table rows a light hover effect. */
+
+table tbody tr:hover {
+
+    background: #fafafa;
+
+}
+
+/* =========================================================
+
+   20. APPLICATION TABS
+
+   ========================================================= */
+
+/* Candidate tabs container. */
+
+.candidate-tabs,
+
+.tabs {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    margin-bottom: 18px;
+
+}
+
+/* Candidate tab. */
+
+.candidate-tab,
+
+.tab {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    padding: 10px 14px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    border-bottom: 2px solid transparent;
+
+}
+
+/* Tab hover. */
+
+.candidate-tab:hover,
+
+.tab:hover {
+
+    color: #2563eb;
+
+}
+
+/* Active tab. */
+
+.candidate-tab.active,
+
+.tab.active {
+
+    color: #2563eb;
+
+    border-bottom-color: #2563eb;
+
+}
+
+/* Candidate table header. */
+
+.candidate-table-header,
+
+.section-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 14px;
+
+}
+
+/* =========================================================
+
+   21. CANDIDATE SECTIONS
+
+   ========================================================= */
+
+/* Candidate section. */
+
+.candidate-section {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+}
+
+/* Candidate section heading. */
+
+.section-heading {
+
+    color: #111827;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 14px;
+
+}
+
+/* Candidate open button. */
+
+.candidate-open-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 7px;
+
+    padding: 8px 12px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+/* Shortlisted preview. */
+
+.shortlisted-preview {
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    padding: 16px;
+
+}
+
+/* =========================================================
+
+   22. ANSWERS / QUESTIONNAIRE
+
+   ========================================================= */
+
+/* Question row. */
+
+.question-row {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    padding: 16px;
+
+    margin-bottom: 12px;
+
+}
+
+/* Answer box. */
+
+.answer-box {
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 7px;
+
+    padding: 12px;
+
+    color: #374151;
+
+}
+
+/* =========================================================
+
+   23. INTERVIEW / RANKING / PIPELINE
+
+   ========================================================= */
+
+/* Pipeline container. */
+
+.pipeline {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+/* Pipeline step. */
+
+.pipeline-step {
+
+    flex: 1;
+
+    min-width: 140px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    padding: 14px;
+
+    text-align: center;
+
+}
+
+/* Ranking section. */
+
+.ranking-section {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 22px;
+
+}
+
+/* Ranking number. */
+
+.rank-number {
+
+    color: #2563eb;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+/* =========================================================
+
+   24. OFFER DETAILS
+
+   ========================================================= */
+
+/* Offer detail block. */
+
+.offer-detail {
+
+    display: grid;
+
+    grid-template-columns: 180px 1fr;
+
+    gap: 8px 18px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eef0f3;
+
+}
+
+/* Offer labels. */
+
+.offer-detail-label {
+
+    margin: 0;
+
+}
+
+/* Offer values. */
+
+.offer-detail-value {
+
+    margin: 0;
+
+}
+
+/* =========================================================
+
+   25. SEARCH / QUERY BOX
+
+   ========================================================= */
+
+/* Query box. */
+
+.query-box {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    padding: 16px;
+
+    margin-bottom: 18px;
+
+}
+
+/* =========================================================
+
+   26. BACK BUTTON / PAGE NAVIGATION
+
+   ========================================================= */
+
+/* Back button. */
+
+.back-button,
+
+.page-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 18px;
+
+}
+
+/* Change back button color on hover. */
+
+.back-button:hover,
+
+.page-back:hover {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+/* Page navigation. */
+
+.page-navigation {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+/* =========================================================
+
+   27. EMPTY STATES
+
+   ========================================================= */
+
+/* Empty dashboard. */
+
+.empty,
+
+.empty-dashboard {
+
+    background: #ffffff;
+
+    border: 1px dashed #d1d5db;
+
+    border-radius: 10px;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+}
+
+/* Empty state text. */
+
+.empty,
+
+.empty-dashboard p {
+
+    color: #6b7280;
+
+}
+
+/* =========================================================
+
+   28. SMALL UTILITY CLASSES
+
+   ========================================================= */
+
+/* Muted text. */
+
+.muted {
+
+    color: #6b7280 !important;
+
+}
+
+/* Small showing text. */
+
+.showing {
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+/* Hide elements when required. */
+
+.no-print {
+
+    display: block;
+
+}
+
+/* =========================================================
+
+   29. PASSWORD FIELD
+
+   ========================================================= */
+
+/* Password wrapper. */
+
+.password-wrap {
+
+    position: relative;
+
+}
+
+/* Keep password controls aligned. */
+
+.password-wrap input {
+
+    padding-right: 45px;
+
+}
+
+/* Eye button. */
+
+.eye-button {
+
+    position: absolute;
+
+    right: 8px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 0;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    cursor: pointer;
+
+}
+
+/* Eye icon states. */
+
+.eye-open,
+
+.eye-closed {
+
+    color: #6b7280;
+
+}
+
+/* =========================================================
+
+   30. FOOTER
+
+   ========================================================= */
+
+/* Simple footer. */
+
+.footer {
+
+    background: #ffffff;
+
+    border-top: 1px solid #e5e7eb;
+
+    color: #6b7280;
+
+    text-align: center;
+
+    padding: 20px;
+
+    font-size: 12px;
+
+    margin-top: 40px;
+
+}
+
+/* =========================================================
+
+   31. RESPONSIVE HR LAYOUT
+
+   ========================================================= */
+
+/* Adjust HR layout for tablets. */
+
+@media (max-width: 900px) {
+
+    /* Make the sidebar narrower. */
+
+    .hr-sidebar {
+
+        width: 210px;
+
+    }
+
+    /* Reduce HR content padding. */
+
+    .hr-content {
+
+        padding: 22px;
+
+    }
+
+    /* Stack offer details. */
+
+    .offer-detail {
+
+        grid-template-columns: 1fr;
+
+        gap: 4px;
+
+    }
+
+}
+
+/* Adjust HR layout for phones. */
+
+@media (max-width: 700px) {
+
+    /* Change the HR layout to a vertical layout. */
+
+    .hr-layout {
+
+        display: block;
+
+    }
+
+    /* Make the sidebar full width on mobile. */
+
+    .hr-sidebar {
+
+        width: 100%;
+
+        min-height: auto;
+
+        border-right: 0;
+
+        border-bottom: 1px solid #e5e7eb;
+
+    }
+
+    /* Keep sidebar navigation compact. */
+
+    .hr-nav {
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 5px;
+
+    }
+
+    /* Remove extra navigation section spacing. */
+
+    .nav-section-title {
+
+        width: 100%;
+
+    }
+
+    /* Make navigation links easier to use on mobile. */
+
+    .hr-nav-link {
+
+        flex: 1;
+
+        min-width: 130px;
+
+    }
+
+    /* Reduce topbar padding. */
+
+    .hr-topbar {
+
+        padding: 0 16px;
+
+    }
+
+    /* Reduce content padding. */
+
+    .hr-content {
+
+        padding: 16px;
+
+    }
+
+    /* Make public page padding smaller. */
+
+    .page {
+
+        padding: 24px 16px;
+
+    }
+
+    /* Make hero smaller. */
+
+    .hero,
+
+    .welcome {
+
+        padding: 24px;
+
+    }
+
+    /* Reduce hero heading size. */
+
+    .hero h1,
+
+    .welcome h1 {
+
+        font-size: 26px;
+
+    }
+
+    /* Stack header controls. */
+
+    .candidate-table-header,
+
+    .section-header,
+
+    .job-card-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+/* =========================================================
+
+   32. VERY SMALL MOBILE SCREEN
+
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    /* Reduce public navigation padding. */
+
+    .top-bar {
+
+        padding: 0 14px;
+
+    }
+
+    /* Allow navigation to wrap. */
+
+    .nav {
+
+        flex-wrap: wrap;
+
+        justify-content: flex-end;
+
+    }
+
+    /* Make navigation links smaller. */
+
+    .nav a {
+
+        padding: 7px 9px;
+
+        font-size: 12px;
+
+    }
+
+    /* Make buttons comfortable on small screens. */
+
+    .btn,
+
+    .button,
+
+    .primary-button,
+
+    .secondary-button {
+
+        width: 100%;
+
+    }
+
+    /* Stack button rows. */
+
+    .button-row,
+
+    .actions,
+
+    .job-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    /* Keep small buttons readable. */
+
+    .btn-small {
+
+        width: auto;
+
+    }
+
+}
+
+/* =========================================================
+
+   END OF HRM LIGHT UI
+
+   ========================================================= */
+
+/* =========================================================
+
+   PUBLIC HOMEPAGE - SOFT WAVE + FLOATING CARDS
+
+   ========================================================= */
+
+/* Keep the public website typography clean and modern. */
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f4f8fc;
+
+    color: #172033;
+
+    overflow-x: hidden;
+
+}
+
+/* Let the public page use the full browser width. */
+
+.page {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+/* Create a clean floating public navigation bar. */
+
+.top-bar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 50;
+
+    width: 100%;
+
+    min-height: 70px;
+
+    padding: 0 34px;
+
+    background: rgba(44, 127, 229, 0.97);
+
+    border-bottom: 1px solid #e3ebf5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    box-shadow: 0 4px 18px rgba(31, 55, 80, 0.05);
+
+}
+
+/* Keep the logo at a comfortable size. */
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    color: #111827;
+
+}
+
+/* Keep the logo image aligned correctly. */
+
+.brand img {
+
+    display: block;
+
+    height: 40px;
+
+    width: auto;
+
+    object-fit: contain;
+
+}
+
+/* Create the public navigation group. */
+
+.nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+/* Style each public navigation link. */
+
+.nav a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 38px;
+
+    padding: 0 13px;
+
+    border-radius: 999px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+}
+
+/* Add a soft hover effect to navigation links. */
+
+.nav a:hover {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    transform: translateY(-1px);
+
+}
+
+/* Style the Sign up link exactly like the other navigation links. */
+
+.nav .button-link {
+
+    padding: 0 13px;
+
+    background: transparent;
+
+    color: #475569;
+
+    border: none;
+
+    box-shadow: none;
+
+}
+
+/* Keep the Sign up hover effect the same as the other links. */
+
+.nav .button-link:hover {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    box-shadow: none;
+
+}
+
+/* Create the homepage background. */
+
+.home-page {
+
+    width: 100%;
+
+    min-width: 0;
+
+    background:
+
+        radial-gradient(circle at 8% 15%, rgba(191, 219, 254, 0.35), transparent 25%),
+
+        radial-gradient(circle at 92% 35%, rgba(224, 242, 254, 0.55), transparent 28%),
+
+        #f5f9fd;
+
+}
+
+/* Create the main homepage hero. */
+
+.tech-hero {
+
+    position: relative;
+
+    max-width: 1160px;
+
+    min-height: 410px;
+
+    margin: 42px auto 0;
+
+    padding: 66px 68px 78px;
+
+    background:
+
+        radial-gradient(circle at 84% 28%, rgba(191, 219, 254, 0.42), transparent 25%),
+
+        linear-gradient(135deg, #ffffff 0%, #f3f8ff 58%, #eaf3ff 100%);
+
+    border: 1px solid #e0eaf5;
+
+    border-radius: 30px;
+
+    box-shadow: 0 18px 48px rgba(30, 64, 100, 0.08);
+
+    overflow: hidden;
+
+}
+
+/* Add a large soft circle to the hero. */
+
+.tech-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 340px;
+
+    height: 340px;
+
+    right: -160px;
+
+    top: -155px;
+
+    background: rgba(191, 219, 254, 0.34);
+
+    border-radius: 50%;
+
+}
+
+/* Add a smaller soft circle to the hero. */
+
+.tech-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 135px;
+
+    height: 135px;
+
+    right: 110px;
+
+    bottom: -78px;
+
+    background: rgba(224, 242, 254, 0.85);
+
+    border-radius: 50%;
+
+}
+
+/* Keep the hero content above the decorative shapes. */
+
+.tech-hero > * {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+/* Style the technology label. */
+
+.tech-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 32px;
+
+    margin-bottom: 18px;
+
+    padding: 0 14px;
+
+    background: #eaf3ff;
+
+    color: #2563eb;
+
+    border: 1px solid #d8e8fb;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+}
+
+/* Style the main company heading. */
+
+.tech-hero h1 {
+
+    max-width: 780px;
+
+    margin: 0 0 16px;
+
+    color: #0f172a;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: clamp(40px, 6vw, 60px);
+
+    line-height: 1.04;
+
+    font-weight: 800;
+
+    letter-spacing: -1.6px;
+
+}
+
+/* Style the hero supporting text. */
+
+.tech-hero-text {
+
+    max-width: 650px;
+
+    margin: 0 0 28px;
+
+    color: #64748b;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+}
+
+/* Create the main Careers button. */
+
+.careers-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 46px;
+
+    padding: 0 23px;
+
+    background: #2563eb;
+
+    color: #ffffff !important;
+
+    border: 1px solid #2563eb;
+
+    border-radius: 999px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-decoration: none !important;
+
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.19);
+
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+/* Lift the main button when hovered. */
+
+.careers-button:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25);
+
+}
+
+/* Create the controlled wave transition below the hero. */
+
+.home-wave {
+
+    position: relative;
+
+    height: 92px;
+
+    margin-top: -1px;
+
+    overflow: hidden;
+
+    background: #f5f9fd;
+
+}
+
+/* Create the main white wave. */
+
+.home-wave::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: -6%;
+
+    top: -76px;
+
+    width: 112%;
+
+    height: 150px;
+
+    background: #ffffff;
+
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+
+}
+
+/* Create a smaller blue wave underneath the white wave. */
+
+.home-wave::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: -6%;
+
+    top: -43px;
+
+    width: 112%;
+
+    height: 118px;
+
+    background: #edf5ff;
+
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+
+}
+
+/* Create the technology section heading. */
+
+.home-intro {
+
+    max-width: 850px;
+
+    margin: 0 auto 28px;
+
+    padding: 0 24px;
+
+    text-align: center;
+
+}
+
+/* Style the small section label. */
+
+.home-intro-label {
+
+    margin-bottom: 8px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.09em;
+
+    text-transform: uppercase;
+
+}
+
+/* Style the technology section heading. */
+
+.home-intro h2 {
+
+    margin: 0 0 10px;
+
+    color: #0f172a;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 32px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+
+}
+
+/* Style the technology section description. */
+
+.home-intro p {
+
+    max-width: 690px;
+
+    margin: 0 auto;
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+
+}
+
+/* Create the three floating technology cards. */
+
+.technology-cards {
+
+    max-width: 1160px;
+
+    margin: 0 auto;
+
+    padding: 0 24px 48px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+
+}
+
+/* Create the floating card surface. */
+
+.technology-card {
+
+    position: relative;
+
+    min-height: 215px;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1eaf4;
+
+    border-radius: 20px;
+
+    box-shadow: 0 12px 32px rgba(30, 64, 100, 0.075);
+
+    overflow: hidden;
+
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+
+}
+
+/* Add a decorative circle to each card. */
+
+.technology-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 125px;
+
+    height: 125px;
+
+    top: -70px;
+
+    right: -55px;
+
+    background: #eef6ff;
+
+    border-radius: 50%;
+
+}
+
+/* Make cards float upward when hovered. */
+
+.technology-card:hover {
+
+    transform: translateY(-7px);
+
+    border-color: #d3e2f2;
+
+    box-shadow: 0 20px 42px rgba(30, 64, 100, 0.12);
+
+}
+
+/* Create the card icon. */
+
+.technology-icon {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 48px;
+
+    height: 48px;
+
+    margin-bottom: 20px;
+
+    background: #eef5ff;
+
+    color: #2563eb;
+
+    border: 1px solid #dceafa;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+/* Style card headings. */
+
+.technology-card h2 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 10px;
+
+    color: #111827;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 20px;
+
+    line-height: 1.3;
+
+}
+
+/* Style card descriptions. */
+
+.technology-card p {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.75;
+
+}
+
+/* Keep the existing database-driven company section. */
+
+.home-company-section {
+
+    max-width: 1160px;
+
+    margin: 0 auto;
+
+    padding: 0 24px 18px;
+
+}
+
+/* Create the final Careers call-to-action. */
+
+.careers-section {
+
+    position: relative;
+
+    max-width: 1160px;
+
+    margin: 18px auto 58px;
+
+    padding: 50px 28px;
+
+    background:
+
+        radial-gradient(circle at 82% 35%, rgba(191, 219, 254, 0.35), transparent 25%),
+
+        linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
+
+    border: 1px solid #dfe9f5;
+
+    border-radius: 24px;
+
+    box-shadow: 0 14px 38px rgba(30, 64, 100, 0.07);
+
+    text-align: center;
+
+    overflow: hidden;
+
+}
+
+/* Add a soft decorative circle to the CTA. */
+
+.careers-section::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+
+    height: 220px;
+
+    left: -115px;
+
+    bottom: -145px;
+
+    background: rgba(219, 234, 254, 0.58);
+
+    border-radius: 50%;
+
+}
+
+/* Keep CTA content above the decorative circle. */
+
+.careers-section > * {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+/* Style the CTA heading. */
+
+.careers-section h2 {
+
+    margin: 0 0 10px;
+
+    color: #0f172a;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+}
+
+/* Style the CTA description. */
+
+.careers-section p {
+
+    max-width: 650px;
+
+    margin: 0 auto 23px;
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+
+}
+
+/* Keep the public footer clean. */
+
+.page + .footer {
+
+    background: #ffffff;
+
+    border-top: 1px solid #e5edf6;
+
+    color: #64748b;
+
+}
+
+/* Make the public design responsive on tablets. */
+
+@media (max-width: 900px) {
+
+    .top-bar {
+
+        padding: 0 22px;
+
+    }
+
+    .tech-hero {
+
+        margin-left: 22px;
+
+        margin-right: 22px;
+
+        padding: 56px 48px 70px;
+
+    }
+
+    .technology-cards {
+
+        grid-template-columns: 1fr;
+
+        max-width: 760px;
+
+    }
+
+    .home-company-section,
+
+    .careers-section {
+
+        margin-left: 22px;
+
+        margin-right: 22px;
+
+    }
+
+}
+
+/* Make the public design comfortable on phones. */
+
+@media (max-width: 700px) {
+
+    .top-bar {
+
+        min-height: 62px;
+
+        padding: 0 14px;
+
+    }
+
+    .brand img {
+
+        height: 34px;
+
+    }
+
+    .nav {
+
+        gap: 2px;
+
+    }
+
+    .nav a {
+
+        min-height: 34px;
+
+        padding: 0 8px;
+
+        font-size: 11px;
+
+    }
+
+    .nav .button-link {
+
+        padding: 0 11px;
+
+    }
+
+    .tech-hero {
+
+        min-height: 380px;
+
+        margin: 28px 14px 0;
+
+        padding: 44px 28px 62px;
+
+        border-radius: 24px;
+
+    }
+
+    .tech-hero h1 {
+
+        font-size: 42px;
+
+        letter-spacing: -1px;
+
+    }
+
+    .tech-hero-text {
+
+        font-size: 15px;
+
+    }
+
+    .home-wave {
+
+        height: 80px;
+
+    }
+
+    .home-intro {
+
+        padding: 0 20px;
+
+    }
+
+    .home-intro h2 {
+
+        font-size: 27px;
+
+    }
+
+    .technology-cards {
+
+        padding: 0 14px 40px;
+
+    }
+
+    .technology-card {
+
+        min-height: 195px;
+
+        padding: 24px;
+
+    }
+
+    .home-company-section {
+
+        padding: 0 14px 18px;
+
+        margin: 0;
+
+    }
+
+    .careers-section {
+
+        margin: 16px 14px 42px;
+
+        padding: 42px 22px;
+
+        border-radius: 20px;
+
+    }
+
+    .careers-section h2 {
+
+        font-size: 26px;
+
+    }
+
+}
+
+/* Make very small screens safe from horizontal scrolling. */
+
+@media (max-width: 430px) {
+
+    .top-bar {
+
+        padding: 0 10px;
+
+    }
+
+    .brand img {
+
+        height: 30px;
+
+    }
+
+    .nav a {
+
+        padding: 0 6px;
+
+        font-size: 10px;
+
+    }
+
+    .nav .button-link {
+
+        padding: 0 9px;
+
+    }
+
+    .tech-hero {
+
+        margin-left: 10px;
+
+        margin-right: 10px;
+
+        padding: 36px 22px 54px;
+
+    }
+
+    .tech-hero h1 {
+
+        font-size: 35px;
+
+    }
+
+    .technology-cards {
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+
+    }
+
+    .careers-section {
+
+        margin-left: 10px;
+
+        margin-right: 10px;
+
+    }
+
+}
+
+
+
+
+

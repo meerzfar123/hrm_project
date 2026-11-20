@@ -1,0 +1,662 @@
+{% extends "base.html" %}
+
+{% block title %}Recruitment Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* Main dashboard wrapper */
+.hr-dashboard {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Small welcome area at the top */
+.dashboard-intro {
+    margin-bottom: 28px;
+}
+
+/* Main dashboard heading */
+.dashboard-intro h1 {
+    margin: 0 0 8px 0;
+    font-size: 30px;
+    font-weight: 800;
+    color: #172033;
+}
+
+/* Small description below heading */
+.dashboard-intro p {
+    margin: 0;
+    color: #64748b;
+    font-size: 15px;
+}
+
+/* Jobs section */
+.jobs-section {
+    width: 100%;
+}
+
+/* Header above the jobs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Section title */
+.section-header h2 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    color: #172033;
+}
+
+/* Section description */
+.section-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Manage Jobs button */
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #dbe5f0;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+/* Manage Jobs hover */
+.secondary-button:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    transform: translateY(-1px);
+}
+
+/* Individual job card */
+.job-dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    transition: 0.2s ease;
+}
+
+/* Small lift when hovering job card */
+.job-dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+/* Top part of job card */
+.job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* Job title */
+.job-card-header h3 {
+    margin: 0 0 10px 0;
+    color: #172033;
+    font-size: 20px;
+}
+
+/* Job status */
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #eef2f7;
+    color: #475569;
+}
+
+/* Open status */
+.status-open {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* Closed status */
+.status-closed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Primary button */
+.primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 17px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid #2563eb;
+    transition: 0.2s ease;
+}
+
+/* Primary button hover */
+.primary-button:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(37, 99, 235, 0.22);
+}
+
+/* Statistics row */
+.job-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+}
+
+/* Individual statistic box */
+.job-stat {
+    background: #f8fafc;
+    border: 1px solid #e8eef5;
+    border-radius: 13px;
+    padding: 17px 18px;
+}
+
+/* Statistic number */
+.job-stat strong {
+    display: block;
+    color: #172033;
+    font-size: 25px;
+    line-height: 1;
+    margin-bottom: 7px;
+}
+
+/* Statistic label */
+.job-stat span {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Shortlisted candidates area */
+.shortlisted-preview {
+    margin-top: 18px;
+    padding-top: 4px;
+}
+
+/* Shortlisted title */
+.shortlisted-preview h4 {
+    margin: 0 0 14px 0;
+    color: #172033;
+    font-size: 15px;
+}
+
+/* Table outer wrapper */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5ebf2;
+    border-radius: 13px;
+}
+
+/* Candidates table */
+.data-table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+/* Table heading */
+.data-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: left;
+    padding: 13px 15px;
+    border-bottom: 1px solid #e5ebf2;
+}
+
+/* Table cells */
+.data-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #edf2f7;
+    color: #334155;
+    font-size: 13px;
+}
+
+/* Remove border from final row */
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Candidate score */
+.data-table td strong {
+    color: #2563eb;
+    font-size: 14px;
+}
+
+/* Profile link */
+.data-table a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* Profile link hover */
+.data-table a:hover {
+    text-decoration: underline;
+}
+
+/* Empty message */
+.empty {
+    margin: 0;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px dashed #d8e1ec;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Empty dashboard */
+.empty-dashboard {
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 55px 25px;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.05);
+}
+
+/* Empty dashboard heading */
+.empty-dashboard h3 {
+    margin: 0 0 8px 0;
+    color: #172033;
+    font-size: 20px;
+}
+
+/* Empty dashboard text */
+.empty-dashboard p {
+    margin: 0 0 20px 0;
+    color: #64748b;
+}
+
+/* Responsive layout for tablets */
+@media (max-width: 850px) {
+
+    .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .job-card-header {
+        flex-direction: column;
+    }
+
+    .job-card-header .primary-button {
+        width: 100%;
+    }
+
+    .job-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 600px) {
+
+    .hr-dashboard {
+        padding: 0;
+    }
+
+    .dashboard-intro h1 {
+        font-size: 25px;
+    }
+
+    .job-dashboard-card {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .job-card-header h3 {
+        font-size: 18px;
+    }
+
+    .job-stat {
+        padding: 15px;
+    }
+}
+
+</style>
+
+
+<div class="hr-dashboard">
+
+
+    <!-- ==============================
+         DASHBOARD INTRO
+         ============================== -->
+
+    <div class="dashboard-intro">
+
+        <h1>Recruitment Dashboard</h1>
+
+        <p>
+            Manage your open positions, applications and shortlisted candidates.
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         JOB RECRUITMENT OVERVIEW
+         ============================== -->
+
+    <section class="jobs-section">
+
+
+        <!-- Section heading -->
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Jobs & Recruitment Activity
+                </h2>
+
+                <p>
+                    Open each job to manage its candidates.
+                </p>
+
+            </div>
+
+
+            <!-- Existing Manage Jobs route -->
+
+            <a href="/hr/jobs" class="secondary-button">
+                Manage Jobs
+            </a>
+
+        </div>
+
+
+        <!-- ==============================
+             LOOP THROUGH ALL JOBS
+             ============================== -->
+
+        {% for j in jobs %}
+
+
+        <!-- Individual job card -->
+
+        <div class="job-dashboard-card">
+
+
+            <!-- ==============================
+                 JOB HEADER
+                 ============================== -->
+
+            <div class="job-card-header">
+
+                <div>
+
+                    <h3>
+                        {{ j.title }}
+                    </h3>
+
+
+                    <!-- Existing job status -->
+
+                    <span class="status status-{{ j.status }}">
+                        {{ j.status }}
+                    </span>
+
+                </div>
+
+
+                <!-- Existing applications route -->
+
+                <a
+                    href="/hr/applications?job_id={{ j.job_id }}"
+                    class="primary-button">
+
+                    Open Applications
+
+                </a>
+
+            </div>
+
+
+            <!-- ==============================
+                 JOB STATISTICS
+                 ============================== -->
+
+            <div class="job-stats">
+
+
+                <!-- Total applications -->
+
+                <div class="job-stat">
+
+                    <strong>
+                        {{ j.total }}
+                    </strong>
+
+                    <span>
+                        Applications
+                    </span>
+
+                </div>
+
+
+                <!-- Shortlisted candidates -->
+
+                <div class="job-stat">
+
+                    <strong>
+                        {{ j.shortlisted }}
+                    </strong>
+
+                    <span>
+                        Shortlisted
+                    </span>
+
+                </div>
+
+
+                <!-- Open questions -->
+
+                <div class="job-stat">
+
+                    <strong>
+
+                        {% if j.open_queries %}
+                            {{ j.open_queries }}
+                        {% else %}
+                            0
+                        {% endif %}
+
+                    </strong>
+
+                    <span>
+                        Open Questions
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+                 SHORTLISTED CANDIDATES
+                 ============================== -->
+
+            {% if j.shortlist %}
+
+
+            <div class="shortlisted-preview">
+
+                <h4>
+                    Shortlisted Candidates
+                </h4>
+
+
+                <div class="table-wrap">
+
+                    <table class="data-table">
+
+
+                        <!-- Table heading -->
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Name
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Score
+                                </th>
+
+                                <th>
+                                    Interview
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- Candidate rows -->
+
+                        <tbody>
+
+                            {% for c in j.shortlist %}
+
+                            <tr>
+
+                                <td>
+                                    {{ c.name }}
+                                </td>
+
+                                <td>
+                                    {{ c.email }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ c.score }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ c.interview or "Not scheduled" }}
+                                </td>
+
+                                <td>
+
+                                    <!-- Existing candidate profile route -->
+
+                                    <a href="/hr/application?candidate_id={{ c.candidate_id }}">
+                                        Open Profile
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- No shortlisted candidates -->
+
+            <p class="empty">
+                No candidates are shortlisted for this job yet.
+            </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- ==============================
+             NO JOBS MESSAGE
+             ============================== -->
+
+        <div class="empty-dashboard">
+
+            <h3>
+                No recruitment activity yet
+            </h3>
+
+            <p>
+                Create a job and start receiving applications.
+            </p>
+
+            <!-- Existing jobs route -->
+
+            <a href="/hr/jobs" class="primary-button">
+                Go to Jobs
+            </a>
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </section>
+
+</div>
+
+{% endblock %}

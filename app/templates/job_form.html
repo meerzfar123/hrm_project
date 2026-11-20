@@ -1,0 +1,970 @@
+{% extends "base.html" %}
+
+{% block title %}Job Form{% endblock %}
+
+{% block content %}
+
+<!-- Main job form page. -->
+<div class="job-form-page">
+
+    <!-- Simple page heading. -->
+    <div class="job-form-header">
+
+        <div>
+            <!-- Small section name. -->
+            <p class="job-form-label">RECRUITMENT</p>
+
+            <!-- Page title. -->
+            <h1>
+                {% if form.job_id %}
+                    Edit Job
+                {% else %}
+                    Create New Job
+                {% endif %}
+            </h1>
+
+            <!-- Short page description. -->
+            <p>
+                {% if form.job_id %}
+                    Update the job information before sending it for review.
+                {% else %}
+                    Create a new position and prepare it for manager review.
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Back to jobs page. -->
+        <a href="/hr/jobs" class="back-link">← Back to Jobs</a>
+
+    </div>
+
+
+    <!-- Show backend error if there is one. -->
+    {% if error %}
+    <div class="form-message error-message">
+        {{ error }}
+    </div>
+    {% endif %}
+
+
+    <!-- Show manager rejection reason when editing a rejected job. -->
+    {% if form.reject_reason %}
+    <div class="form-message rejection-message">
+        <strong>Manager feedback:</strong>
+        {{ form.reject_reason }}
+    </div>
+    {% endif %}
+
+
+    <!-- Main job form. -->
+    <form method="post" action="/hr/jobs/save" class="job-form">
+
+        <!-- Keep job ID when editing an existing job. -->
+        <input type="hidden" name="job_id" value="{{ form.job_id or 0 }}">
+
+
+        <!-- =====================================================
+             JOB INFORMATION
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Job Information</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Enter the basic information about this position.
+            </p>
+
+            <!-- Two fields in one row. -->
+            <div class="field-grid">
+
+                <!-- Job title field. -->
+                <div class="form-field">
+
+                    <label for="title">
+                        Job Title <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ form.title }}"
+                        maxlength="150"
+                        placeholder="e.g. Software Engineer"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Department field. -->
+                <div class="form-field">
+
+                    <label for="department">
+                        Department
+                    </label>
+
+                    <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        value="{{ form.department }}"
+                        maxlength="100"
+                        placeholder="e.g. Engineering"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AI ASSISTANT
+        ====================================================== -->
+
+        <section class="form-section ai-section">
+
+            <!-- Simple AI assistant row. -->
+            <div class="ai-row">
+
+                <div>
+
+                    <!-- AI title. -->
+                    <h3>AI Job Description Assistant</h3>
+
+                    <!-- Short explanation. -->
+                    <p>
+                        Generate description, requirements and benefits.
+                    </p>
+
+                    <!-- AI status message. -->
+                    <span id="ai-note" class="ai-note"></span>
+
+                </div>
+
+
+                <!-- Existing AI button. -->
+                <button
+                    type="button"
+                    id="ai-button"
+                    class="btn-ai"
+                >
+                    Suggest with AI
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             JOB DETAILS
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Job Details</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Add the location and salary information.
+            </p>
+
+            <!-- Location and salary fields. -->
+            <div class="field-grid">
+
+                <!-- Location field. -->
+                <div class="form-field">
+
+                    <label for="location">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="{{ form.location }}"
+                        maxlength="100"
+                        placeholder="e.g. Lahore, Pakistan"
+                    >
+
+                </div>
+
+
+                <!-- Salary field. -->
+                <div class="form-field">
+
+                    <label for="salary_range">
+                        Salary Range
+                    </label>
+
+                    <input
+                        type="text"
+                        id="salary_range"
+                        name="salary_range"
+                        value="{{ form.salary_range }}"
+                        maxlength="100"
+                        placeholder="150,000 - 200,000 PKR"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DESCRIPTION
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Job Description</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Explain the role and its main responsibilities.
+            </p>
+
+            <!-- Description field. -->
+            <div class="form-field">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="6"
+                    maxlength="4000"
+                    placeholder="Describe the role, responsibilities and main objectives..."
+                >{{ form.description }}</textarea>
+
+                <!-- Character limit. -->
+                <small>Maximum 4,000 characters.</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             REQUIREMENTS
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Candidate Requirements</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Add the skills, qualifications and experience required.
+            </p>
+
+            <!-- Requirements field. -->
+            <div class="form-field">
+
+                <label for="requirements">
+                    Requirements
+                </label>
+
+                <textarea
+                    id="requirements"
+                    name="requirements"
+                    rows="6"
+                    maxlength="4000"
+                    placeholder="List the required qualifications, skills and experience..."
+                >{{ form.requirements }}</textarea>
+
+                <!-- Character limit. -->
+                <small>Maximum 4,000 characters.</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BENEFITS
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Benefits</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Add the benefits offered to the selected candidate.
+            </p>
+
+            <!-- Benefits field. -->
+            <div class="form-field">
+
+                <label for="benefits">
+                    Benefits
+                </label>
+
+                <textarea
+                    id="benefits"
+                    name="benefits"
+                    rows="4"
+                    maxlength="2000"
+                    placeholder="e.g. Health coverage, flexible working, training..."
+                >{{ form.benefits }}</textarea>
+
+                <!-- Character limit. -->
+                <small>Maximum 2,000 characters.</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             APPLICATION DEADLINE
+        ====================================================== -->
+
+        <section class="form-section">
+
+            <!-- Section heading. -->
+            <h2>Application Deadline</h2>
+
+            <!-- Small explanation. -->
+            <p class="section-description">
+                Set the final date for applications.
+            </p>
+
+            <!-- Deadline field. -->
+            <div class="form-field">
+
+                <label for="deadline">
+                    Deadline
+                </label>
+
+                <input
+                    type="text"
+                    id="deadline"
+                    name="deadline"
+                    value="{{ form.deadline }}"
+                    maxlength="10"
+                    placeholder="2030-12-31"
+                >
+
+                <!-- Date format help. -->
+                <small>Use the format YYYY-MM-DD.</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ACTION BUTTONS
+        ====================================================== -->
+
+        <div class="form-actions">
+
+            <!-- Cancel button. -->
+            <a href="/hr/jobs" class="cancel-button">
+                Cancel
+            </a>
+
+
+            <!-- Save buttons. -->
+            <div class="action-buttons">
+
+                <!-- Save as draft. -->
+                <button
+                    type="submit"
+                    name="action"
+                    value="draft"
+                    class="btn-secondary"
+                >
+                    Save as Draft
+                </button>
+
+
+                <!-- Save and send for review. -->
+                <button
+                    type="submit"
+                    name="action"
+                    value="create"
+                    class="btn-primary"
+                >
+                    Save &amp; Review
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- ==========================================================
+     SIMPLE UI CSS
+========================================================== -->
+
+<style>
+
+/* Keep the page at a normal readable width. */
+.job-form-page {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 25px 28px 40px;
+}
+
+
+/* Keep the heading simple and compact. */
+.job-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Small recruitment label. */
+.job-form-label {
+    margin: 0 0 5px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* Main page heading. */
+.job-form-header h1 {
+    margin: 0;
+    color: #172033;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/* Description below heading. */
+.job-form-header p:not(.job-form-label) {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* Back link. */
+.back-link {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+/* Back link hover. */
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+/* Error and rejection messages. */
+.form-message {
+    margin-bottom: 14px;
+    padding: 10px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+
+/* Error message. */
+.error-message {
+    color: #991b1b;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+
+/* Rejection message. */
+.rejection-message {
+    color: #9a3412;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+}
+
+
+/* Main white form container. */
+.job-form {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+}
+
+
+/* Normal form section. */
+.form-section {
+    padding: 20px 23px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+
+/* Remove border from last section. */
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+
+/* Section heading. */
+.form-section h2 {
+    margin: 0;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* Section explanation. */
+.section-description {
+    margin: 5px 0 15px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* Two normal fields beside each other. */
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+
+/* Individual field. */
+.form-field {
+    margin-bottom: 14px;
+}
+
+
+/* Remove extra margin from final field. */
+.form-section .form-field:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Form labels. */
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Required star. */
+.form-field label span {
+    color: #dc2626;
+}
+
+
+/* Inputs and textareas. */
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d7dee8;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #172033;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+
+/* Normal input height. */
+.form-field input {
+    height: 39px;
+    padding: 0 10px;
+}
+
+
+/* Normal textarea. */
+.form-field textarea {
+    padding: 9px 10px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+
+/* Input focus. */
+.form-field input:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+
+/* Placeholder text. */
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    color: #94a3b8;
+}
+
+
+/* Small help text. */
+.form-field small {
+    display: block;
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+
+/* ==========================================================
+   AI ASSISTANT
+========================================================== */
+
+
+/* Keep AI section simple. */
+.ai-section {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: #fafbfd;
+}
+
+
+/* Put AI text and button in one row. */
+.ai-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+
+/* AI heading. */
+.ai-row h3 {
+    margin: 0;
+    color: #172033;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* AI explanation. */
+.ai-row p {
+    margin: 3px 0 0;
+    color: #64748b;
+    font-size: 11px;
+}
+
+
+/* AI status text. */
+.ai-note {
+    display: block;
+    margin-top: 3px;
+    color: #64748b;
+    font-size: 10px;
+}
+
+
+/* AI button. */
+.btn-ai {
+    padding: 7px 12px;
+    border: 1px solid #2563eb;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+
+/* AI button hover. */
+.btn-ai:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+   BOTTOM ACTIONS
+========================================================== */
+
+
+/* Bottom button area. */
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 23px;
+    background: #fafbfd;
+    border-top: 1px solid #e8edf3;
+}
+
+
+/* Save button group. */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+
+/* Cancel link. */
+.cancel-button {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+/* Save draft button. */
+.btn-secondary {
+    min-height: 36px;
+    padding: 0 13px;
+    border: 1px solid #d7dee8;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* Save and review button. */
+.btn-primary {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid #2563eb;
+    border-radius: 5px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* Primary button hover. */
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+
+/* Secondary button hover. */
+.btn-secondary:hover {
+    background: #f8fafc;
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 700px) {
+
+    /* Reduce page spacing on small screens. */
+    .job-form-page {
+        padding: 20px 15px 30px;
+    }
+
+
+    /* Stack heading and back link. */
+    .job-form-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    /* Stack fields on mobile. */
+    .field-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Stack AI content. */
+    .ai-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    /* Make AI button normal width. */
+    .btn-ai {
+        width: 100%;
+    }
+
+
+    /* Stack bottom actions. */
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+
+    /* Stack save buttons. */
+    .action-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+
+    /* Full width buttons. */
+    .action-buttons button {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<!-- ==========================================================
+     EXISTING AI FUNCTIONALITY
+========================================================== -->
+
+<script>
+
+/* Run the AI suggestion when the button is clicked. */
+document.getElementById("ai-button").addEventListener("click", function () {
+
+    /* Read the job title. */
+    var title = document.getElementById("title").value.trim();
+
+    /* Find the AI status message area. */
+    var note = document.getElementById("ai-note");
+
+
+    /* Make sure a job title was entered. */
+    if (title === "") {
+
+        /* Tell the user what is missing. */
+        note.textContent = "Type the job title first.";
+
+        /* Stop here. */
+        return;
+    }
+
+
+    /* Check if description already contains text. */
+    var filled =
+        document.getElementById("description").value.trim() !== "";
+
+
+    /* Ask before replacing existing text. */
+    if (
+        filled &&
+        !confirm(
+            "Replace the text already in the description, requirements and benefits?"
+        )
+    ) {
+        return;
+    }
+
+
+    /* Show loading message. */
+    note.textContent = "Thinking...";
+
+
+    /* Create form data for the existing AI route. */
+    var body = new URLSearchParams();
+
+
+    /* Add the job title. */
+    body.append("title", title);
+
+
+    /* Add the department. */
+    body.append(
+        "department",
+        document.getElementById("department").value
+    );
+
+
+    /* Call the existing AI suggestion route. */
+    fetch("/hr/jobs/suggest", {
+        method: "POST",
+        body: body
+    })
+
+
+    /* Read the server response as JSON. */
+    .then(function (r) {
+        return r.json();
+    })
+
+
+    /* Use the returned AI data. */
+    .then(function (data) {
+
+        /* Show server error if one was returned. */
+        if (data.error) {
+
+            note.textContent = data.error;
+
+            return;
+        }
+
+
+        /* Put generated description into the description field. */
+        document.getElementById("description").value =
+            data.description;
+
+
+        /* Put generated requirements into the requirements field. */
+        document.getElementById("requirements").value =
+            data.requirements;
+
+
+        /* Put generated benefits into the benefits field. */
+        document.getElementById("benefits").value =
+            data.benefits;
+
+
+        /* Show the correct success message. */
+        if (data.source === "ai") {
+
+            note.textContent =
+                "AI text added. Please review it before saving.";
+
+        } else {
+
+            note.textContent =
+                "Ready-made text added. Please review it before saving.";
+
+        }
+
+    })
+
+
+    /* Handle connection errors. */
+    .catch(function () {
+
+        /* Tell the user that suggestions could not be loaded. */
+        note.textContent = "Could not get suggestions.";
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}{{ company.company_name }}{% endblock %}
+
+{% block public_content %}
+
+<!-- Create the main homepage wrapper. -->
+<div class="home-page">
+
+    <!-- Create the main hero section. -->
+    <section class="tech-hero">
+
+        <!-- Show the small technology label. -->
+        <div class="tech-label">
+            AI &amp; Technology
+        </div>
+
+        <!-- Show the company name from the database. -->
+        <h1>
+            {{ company.company_name }}
+        </h1>
+
+        <!-- Check whether a company tagline exists. -->
+        {% if company.tagline %}
+
+            <!-- Show the saved company tagline. -->
+            <p class="tech-hero-text">
+                {{ company.tagline }}
+            </p>
+
+        {% else %}
+
+            <!-- Show the default tagline when no tagline exists. -->
+            <p class="tech-hero-text">
+                Technology that helps businesses grow.
+                Discover opportunities and join our team.
+            </p>
+
+        {% endif %}
+
+        <!-- Send visitors to the existing Careers page. -->
+        <a href="/careers" class="careers-button">
+            Explore Careers &rarr;
+        </a>
+
+    </section>
+
+
+    <!-- Create the soft wave between the hero and feature area. -->
+    <div class="home-wave"></div>
+
+
+    <!-- Create the technology section introduction. -->
+    <section class="home-intro">
+
+        <!-- Show the section label. -->
+        <div class="home-intro-label">
+            WHAT WE BUILD
+        </div>
+
+        <!-- Show the section heading. -->
+        <h2>
+            Technology with purpose
+        </h2>
+
+        <!-- Show the section description. -->
+        <p>
+            We combine technology, data, and innovation to create
+            practical solutions for modern businesses.
+        </p>
+
+    </section>
+
+
+    <!-- Create the three floating technology cards. -->
+    <section class="technology-cards">
+
+        <!-- Create the Artificial Intelligence card. -->
+        <article class="technology-card">
+
+            <!-- Show the AI icon. -->
+            <div class="technology-icon">
+                AI
+            </div>
+
+            <!-- Show the AI heading. -->
+            <h2>
+                Artificial Intelligence
+            </h2>
+
+            <!-- Show the AI description. -->
+            <p>
+                Building intelligent technology and modern solutions
+                for real-world business challenges.
+            </p>
+
+        </article>
+
+
+        <!-- Create the Data Solutions card. -->
+        <article class="technology-card">
+
+            <!-- Show the Data icon. -->
+            <div class="technology-icon">
+                DB
+            </div>
+
+            <!-- Show the Data heading. -->
+            <h2>
+                Data Solutions
+            </h2>
+
+            <!-- Show the Data description. -->
+            <p>
+                Turning data into useful information that supports
+                better decisions and business growth.
+            </p>
+
+        </article>
+
+
+        <!-- Create the Innovation card. -->
+        <article class="technology-card">
+
+            <!-- Show the Innovation icon. -->
+            <div class="technology-icon">
+                +
+            </div>
+
+            <!-- Show the Innovation heading. -->
+            <h2>
+                Innovation
+            </h2>
+
+            <!-- Show the Innovation description. -->
+            <p>
+                Creating practical technology solutions that help
+                organizations move forward.
+            </p>
+
+        </article>
+
+    </section>
+
+
+    <!-- Keep the existing database-driven company information. -->
+    <section class="home-company-section">
+
+        <!-- Load the existing company information template. -->
+        {% include "company_card.html" %}
+
+    </section>
+
+
+    <!-- Create the final Careers call-to-action. -->
+    <section class="careers-section">
+
+        <!-- Show the Careers heading. -->
+        <h2>
+            Ready for your next opportunity?
+        </h2>
+
+        <!-- Show the Careers description. -->
+        <p>
+            Explore our current openings, learn about available
+            positions, and apply online.
+        </p>
+
+        <!-- Send visitors to the existing Careers page. -->
+        <a href="/careers" class="careers-button">
+            View Open Positions &rarr;
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+
+{% block title %}Selected Candidates{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* Create the main Selected Candidates page area. */
+.selected-candidates-page {
+    padding: 35px 40px;
+
+    /* Give the page a light background. */
+    background: #f5f7fa;
+
+    /* Make the page fill the available screen height. */
+    min-height: calc(100vh - 70px);
+}
+
+
+/* Style the main page heading. */
+.selected-candidates-page h1 {
+    margin: 0 0 8px 0;
+
+    /* Set the heading color. */
+    color: #111827;
+
+    /* Set the heading size. */
+    font-size: 32px;
+}
+
+
+/* Style the page description. */
+.page-description {
+    margin-bottom: 30px;
+
+    /* Set the description color. */
+    color: #64748b;
+
+    /* Set the description size. */
+    font-size: 15px;
+}
+
+
+/* Create the white candidate list container. */
+.candidate-list {
+    background: white;
+
+    /* Add a light border. */
+    border: 1px solid #e5e7eb;
+
+    /* Round the corners. */
+    border-radius: 12px;
+
+    /* Prevent the content from escaping the box. */
+    overflow-x: auto;
+
+    /* Add a soft shadow. */
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+
+/* Create the heading row. */
+.candidate-header {
+    display: grid;
+
+    /* Create six columns. */
+    grid-template-columns:
+        55px
+        1.2fr
+        1.3fr
+        1.5fr
+        1.2fr
+        1.1fr;
+
+    /* Add space between columns. */
+    gap: 10px;
+
+    /* Add internal spacing. */
+    padding: 16px 20px;
+
+    /* Give the heading a light background. */
+    background: #f8fafc;
+
+    /* Add a bottom border. */
+    border-bottom: 1px solid #e5e7eb;
+
+    /* Make the headings small and bold. */
+    font-size: 13px;
+    font-weight: 700;
+
+    /* Set heading color. */
+    color: #64748b;
+}
+
+
+/* Create one row for each hired candidate. */
+.candidate-row {
+    display: grid;
+
+    /* Keep exactly the same six columns. */
+    grid-template-columns:
+        55px
+        1.2fr
+        1.3fr
+        1.5fr
+        1.2fr
+        1.1fr;
+
+    /* Add space between columns. */
+    gap: 10px;
+
+    /* Add internal spacing. */
+    padding: 18px 20px;
+
+    /* Separate the candidate rows. */
+    border-bottom: 1px solid #eeeeee;
+
+    /* Center the information vertically. */
+    align-items: center;
+
+    /* Set normal text size. */
+    font-size: 14px;
+
+    /* Set normal text color. */
+    color: #374151;
+}
+
+
+/* Remove the border from the final candidate row. */
+.candidate-row:last-child {
+    border-bottom: none;
+}
+
+
+/* Add a small hover effect. */
+.candidate-row:hover {
+    background: #fafafa;
+}
+
+
+/* Style the automatic candidate number. */
+.row-number {
+    color: #64748b;
+    font-weight: 700;
+}
+
+
+/* Style the candidate name. */
+.candidate-name {
+    color: #111827;
+    font-weight: 600;
+}
+
+
+/* Style the job title. */
+.job-title {
+    color: #374151;
+}
+
+
+/* Style email information. */
+.email {
+    color: #475569;
+}
+
+
+/* Style phone information. */
+.phone {
+    color: #475569;
+}
+
+
+/* Style joining date. */
+.joining-date {
+    color: #374151;
+    font-weight: 500;
+}
+
+
+/* Style the empty candidate message. */
+.no-candidates {
+    padding: 35px;
+
+    /* Center the message. */
+    text-align: center;
+
+    /* Set the message color. */
+    color: #64748b;
+}
+
+
+/* Create the floating Return button. */
+.return-button {
+    position: fixed;
+
+    /* Place the button near the bottom. */
+    bottom: 25px;
+
+    /* Place the button on the right. */
+    right: 25px;
+
+    /* Add space inside the button. */
+    padding: 12px 20px;
+
+    /* Make the button rounded. */
+    border-radius: 30px;
+
+    /* Remove the normal link underline. */
+    text-decoration: none;
+
+    /* Make the text white. */
+    color: white;
+
+    /* Set the button background. */
+    background: #1f2937;
+
+    /* Make the text bold. */
+    font-weight: bold;
+
+    /* Add a floating shadow. */
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+
+    /* Keep the button above the page. */
+    z-index: 1000;
+
+    /* Make hover smooth. */
+    transition: 0.2s;
+}
+
+
+/* Change the Return button when hovered. */
+.return-button:hover {
+    background: #111827;
+
+    /* Keep the text white. */
+    color: white;
+
+    /* Move the button slightly upward. */
+    transform: translateY(-2px);
+}
+
+
+/* Make the list work on smaller screens. */
+@media (max-width: 950px) {
+
+    /* Allow horizontal scrolling. */
+    .candidate-list {
+        overflow-x: auto;
+    }
+
+    /* Keep the columns readable. */
+    .candidate-header,
+    .candidate-row {
+        min-width: 950px;
+    }
+
+}
+
+
+/* Make the page padding smaller on mobile. */
+@media (max-width: 600px) {
+
+    /* Reduce the page padding. */
+    .selected-candidates-page {
+        padding: 25px 15px 40px;
+    }
+
+}
+
+</style>
+
+
+<!-- Start the Selected Candidates page. -->
+<div class="selected-candidates-page">
+
+
+    <!-- Show the page title. -->
+    <h1>
+        Selected Candidates
+    </h1>
+
+
+    <!-- Explain what candidates are shown. -->
+    <div class="page-description">
+        View candidates who have successfully completed the hiring process.
+    </div>
+
+
+    <!-- Create the candidate list. -->
+    <div class="candidate-list">
+
+
+        <!-- Create the column headings. -->
+        <div class="candidate-header">
+
+            <!-- Number heading. -->
+            <div>
+                #
+            </div>
+
+            <!-- Candidate heading. -->
+            <div>
+                CANDIDATE
+            </div>
+
+            <!-- Job heading. -->
+            <div>
+                JOB
+            </div>
+
+            <!-- Email heading. -->
+            <div>
+                EMAIL
+            </div>
+
+            <!-- Phone heading. -->
+            <div>
+                PHONE
+            </div>
+
+            <!-- Joining date heading. -->
+            <div>
+                JOINING DATE
+            </div>
+
+        </div>
+
+
+        <!-- Go through every hired candidate. -->
+        {% for candidate in hired_candidates %}
+
+
+        <!-- Create one row for this candidate. -->
+        <div class="candidate-row">
+
+
+            <!-- Automatically show 1, 2, 3, etc. -->
+            <div class="row-number">
+                {{ loop.index }}
+            </div>
+
+
+            <!-- Show the candidate name. -->
+            <div class="candidate-name">
+                {{ candidate.candidate }}
+            </div>
+
+
+            <!-- Show the job title. -->
+            <div class="job-title">
+                {{ candidate.job }}
+            </div>
+
+
+            <!-- Show the candidate email. -->
+            <div class="email">
+                {{ candidate.email }}
+            </div>
+
+
+            <!-- Show the candidate phone. -->
+            <div class="phone">
+                {{ candidate.phone }}
+            </div>
+
+
+            <!-- Show the joining date. -->
+            <div class="joining-date">
+                {{ candidate.joining_date }}
+            </div>
+
+
+        </div>
+
+
+        <!-- Finish the candidate loop. -->
+        {% else %}
+
+
+        <!-- Show this when there are no hired candidates. -->
+        <div class="no-candidates">
+            No hired candidates found.
+        </div>
+
+
+        <!-- Finish the empty-list condition. -->
+        {% endfor %}
+
+
+    </div>
+
+
+</div>
+
+
+<!-- Floating button to return to the HR dashboard. -->
+<a href="/hr" class="return-button">
+    ← Return
+</a>
+
+
+{% endblock %}

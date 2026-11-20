@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Tell the browser which character set to use. -->
+    <meta charset="UTF-8">
+
+    <!-- Make the website responsive on phones, tablets, and computers. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Set the page title using the title provided by each page. -->
+    <title>{% block title %}HRM{% endblock %}</title>
+
+    <!-- Load the main HRM stylesheet. -->
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+{% if user and user.role == "hr" and request.url.path.startswith("/hr") %}
+
+    <!-- ===================================================== -->
+    <!-- HR LAYOUT                                             -->
+    <!-- ===================================================== -->
+
+    <div class="hr-layout">
+
+        <!-- Create the left HR navigation sidebar. -->
+        <aside class="hr-sidebar">
+
+            <!-- Create the HRM brand area. -->
+            <a href="/hr" class="hr-brand">
+
+                <!-- Show the company logo. -->
+                <img
+                    src="/static/logo.png"
+                    alt="{{ company.company_name }}"
+                    class="hr-logo"
+                >
+
+                <!-- Show the HRM system name. -->
+                <span>HRM</span>
+
+            </a>
+
+
+            <!-- Create the main HR navigation menu. -->
+            <nav class="hr-nav">
+
+                <!-- Show the main navigation section label. -->
+                <p class="nav-section-title">
+                    MAIN
+                </p>
+
+
+                <!-- Link to the HR dashboard. -->
+                <a href="/hr" class="hr-nav-link">
+
+                    <!-- Show a simple dashboard icon. -->
+                    <span>⌂</span>
+
+                    <!-- Show the dashboard text. -->
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <!-- Link to the HR jobs page. -->
+                <a href="/hr/jobs" class="hr-nav-link">
+
+                    <!-- Show a simple jobs icon. -->
+                    <span>▣</span>
+
+                    <!-- Show the jobs text. -->
+                    <span>Jobs</span>
+
+                </a>
+
+
+                <!-- Show the management section label. -->
+                <p class="nav-section-title">
+                    MANAGEMENT
+                </p>
+
+
+                <!-- Link to company management. -->
+                <a href="/hr/company" class="hr-nav-link">
+
+                    <!-- Show a simple company icon. -->
+                    <span>◈</span>
+
+                    <!-- Show the company text. -->
+                    <span>Company</span>
+
+                </a>
+
+
+                <!-- Link to access management. -->
+                <a href="/hr/access" class="hr-nav-link">
+
+                    <!-- Show a simple access icon. -->
+                    <span>♙</span>
+
+                    <!-- Show the access text. -->
+                    <span>Access</span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- Create the bottom user and logout area. -->
+            <div class="hr-sidebar-bottom">
+
+                <!-- Show the current HR user information. -->
+                <div class="hr-user-mini">
+
+                    <!-- Show the first letter of the HR user's name. -->
+                    <div class="hr-avatar">
+                        {{ user.name[:1] }}
+                    </div>
+
+
+                    <!-- Show the user's name and role. -->
+                    <div class="hr-user-details">
+
+                        <!-- Show the current user's name. -->
+                        <strong>
+                            {{ user.name }}
+                        </strong>
+
+                        <!-- Show the user's HR role. -->
+                        <span>
+                            HR Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Create the existing logout form. -->
+                <form method="post" action="/logout">
+
+                    <!-- Keep the existing logout functionality. -->
+                    <button type="submit" class="logout-button">
+                        Log out
+                    </button>
+
+                </form>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Create the main HR content area. -->
+        <div class="hr-main">
+
+            <!-- Create the HR top navigation bar. -->
+            <header class="hr-topbar">
+
+                <!-- Show the HRM section name. -->
+                <div>
+
+                    <span class="topbar-label">
+                        HRM Recruitment
+                    </span>
+
+                </div>
+
+
+                <!-- Show the currently logged-in HR user. -->
+                <div class="topbar-user">
+
+                    <!-- Show the user's name. -->
+                    <span>
+                        {{ user.name }}
+                    </span>
+
+                    <!-- Show the HR role badge. -->
+                    <span class="badge">
+                        HR
+                    </span>
+
+                </div>
+
+            </header>
+
+
+            <!-- Create the main HR page content area. -->
+            <main class="hr-content">
+
+                <!-- Allow each HR page to insert its own content here. -->
+                {% block content %}{% endblock %}
+
+            </main>
+
+
+            <!-- Create the HR footer. -->
+            <footer class="footer">
+
+                <!-- Show the company name dynamically. -->
+                {{ company.company_name }} · HRM Recruitment
+
+            </footer>
+
+        </div>
+
+    </div>
+
+{% else %}
+
+    <!-- ===================================================== -->
+    <!-- PUBLIC LAYOUT                                         -->
+    <!-- ===================================================== -->
+
+    <!-- Create the public website navigation bar. -->
+    <header class="top-bar">
+
+        <!-- Create the clickable company logo. -->
+        <a class="brand" href="/">
+
+            <!-- Load the existing company logo. -->
+            <img
+                src="/static/logo.png"
+                alt="{{ company.company_name }}"
+                height="40"
+            >
+
+        </a>
+
+
+        <!-- Create the public navigation menu. -->
+        <nav class="nav">
+
+            <!-- Link to the public home page. -->
+            <a href="/">
+                Home
+            </a>
+
+
+            <!-- Link to the public careers page. -->
+            <a href="/careers">
+                Careers
+            </a>
+
+
+            <!-- Link to the login page. -->
+            <a href="/login">
+                Login
+            </a>
+
+
+            <!-- Link to the signup page. -->
+            <a href="/signup" class="button-link">
+                Sign up
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Create the main public page container. -->
+    <main class="page">
+
+        <!-- Allow each public page to insert its own content. -->
+        {% block public_content %}{% endblock %}
+
+    </main>
+
+
+    <!-- Create the public website footer. -->
+    <footer class="footer">
+
+        <!-- Show the company name dynamically. -->
+        {{ company.company_name }} - Careers
+
+    </footer>
+
+{% endif %}
+
+
+<script>
+
+    // Show or hide password fields.
+    function togglePassword(button) {
+
+        // Get the wrapper around the password input.
+        var wrap = button.parentElement;
+
+        // Find the password input inside the wrapper.
+        var box = wrap.querySelector("input");
+
+        // Check whether the password is currently hidden.
+        if (box.type === "password") {
+
+            // Change the input type so the password becomes visible.
+            box.type = "text";
+
+            // Add the showing class for visual feedback.
+            wrap.classList.add("showing");
+
+        }
+
+        // Handle the case where the password is already visible.
+        else {
+
+            // Change the input type back to password.
+            box.type = "password";
+
+            // Remove the showing class.
+            wrap.classList.remove("showing");
+
+        }
+
+    }
+
+</script>
+
+</body>
+
+</html>

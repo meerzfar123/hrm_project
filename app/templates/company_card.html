@@ -1,0 +1,71 @@
+<!-- Main company information section. -->
+<section class="company-card">
+
+    <!-- About the company. -->
+    <div class="company-section">
+
+        <!-- About heading. -->
+        <h2>About {{ company.company_name }}</h2>
+
+        <!-- Existing company description from the database. -->
+        <p>
+            {{ company.about_us }}
+        </p>
+
+    </div>
+
+
+    <!-- Mission section. -->
+    {% if company.mission %}
+
+    <div class="company-section">
+
+        <!-- Mission heading. -->
+        <h2>Our mission</h2>
+
+        <!-- Existing mission from the database. -->
+        <p>
+            {{ company.mission }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- Contact section. -->
+    {% if company.address or company.website or company.contact_email %}
+
+    <div class="company-section">
+
+        <!-- Contact heading. -->
+        <h2>Contact</h2>
+
+        <!-- Show address when available. -->
+        {% if company.address %}
+            <p>{{ company.address }}</p>
+        {% endif %}
+
+        <!-- Show website when available. -->
+        {% if company.website %}
+            <p>
+                <a href="{{ company.website }}">
+                    {{ company.website }}
+                </a>
+            </p>
+        {% endif %}
+
+        <!-- Show email when available. -->
+        {% if company.contact_email %}
+            <p>
+                <a href="mailto:{{ company.contact_email }}">
+                    {{ company.contact_email }}
+                </a>
+            </p>
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</section>

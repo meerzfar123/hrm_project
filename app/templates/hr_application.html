@@ -1,0 +1,1036 @@
+{% extends "base.html" %}
+
+{% block title %}Candidate Profile - HRM{% endblock %}
+
+{% block content %}
+
+<!-- Main candidate page. -->
+<div class="hr-dashboard">
+
+    <!-- Page header. -->
+    <div class="dashboard-header">
+
+        <div>
+            <!-- Main page title. -->
+            <h1>Candidate Profile</h1>
+
+            <!-- Short description. -->
+            <p class="dashboard-subtitle">
+                Review candidate information and recruitment progress.
+            </p>
+        </div>
+
+        <!-- Back to applications. -->
+        <a
+            href="/hr/applications?job_id={{ app.job_id }}"
+            class="job-action job-action-secondary"
+        >
+            ← Back to Applications
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         CANDIDATE INFORMATION
+    ====================================================== -->
+
+    <section class="jobs-section">
+
+        <!-- Section heading. -->
+        <div class="section-header">
+
+            <div>
+                <h2>Candidate Information</h2>
+
+                <p>
+                    Basic candidate details and screening information.
+                </p>
+            </div>
+
+            <!-- Candidate status. -->
+            {% if app.status %}
+
+            <span class="status status-{{ app.status }}">
+                {{ app.status }}
+            </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Simple candidate information list. -->
+        <div class="candidate-info-list">
+
+            <!-- Candidate name. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Candidate Name
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.name }}
+                </span>
+
+            </div>
+
+
+            <!-- Candidate email. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Email
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.email }}
+                </span>
+
+            </div>
+
+
+            <!-- Candidate phone. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Phone
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.phone }}
+                </span>
+
+            </div>
+
+
+            <!-- Candidate experience. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Experience
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.experience_years }} years
+                </span>
+
+            </div>
+
+
+            <!-- Candidate education. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Education
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.education }}
+                </span>
+
+            </div>
+
+
+            <!-- Expected salary. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Expected Salary
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.expected_salary }}
+                </span>
+
+            </div>
+
+
+            <!-- Screening score. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Screening Score
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.score }}
+                </span>
+
+            </div>
+
+
+            <!-- Screening result. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Screening Result
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ app.screening_result }}
+                </span>
+
+            </div>
+
+
+            <!-- Candidate source. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Candidate Source
+                </span>
+
+                <span class="candidate-info-value">
+
+                    {% if app.candidate_source == "Public Application" %}
+
+                        Public Application
+
+                    {% else %}
+
+                        HR-Sourced: {{ app.candidate_source }}
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- View CV button. -->
+        {% if app.cv_file_path %}
+
+        <div class="button-row">
+
+            <a
+                href="/hr/application/cv?candidate_id={{ app.candidate_id }}"
+                target="_blank"
+                class="job-action job-action-primary"
+            >
+                View CV
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         QUESTIONNAIRE ANSWERS
+    ====================================================== -->
+
+    {% if answers %}
+
+    <section class="jobs-section">
+
+        <!-- Questionnaire heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Questionnaire Answers</h2>
+
+                <p>
+                    Click a question to view the candidate's answer.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Show each question. -->
+        {% for answer in answers %}
+
+        <details class="candidate-question">
+
+            <!-- Question title. -->
+            <summary>
+                {{ answer[0] }}
+            </summary>
+
+            <!-- Candidate answer. -->
+            <div class="candidate-answer">
+                {{ answer[1] }}
+            </div>
+
+        </details>
+
+        {% endfor %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         RECRUITMENT DECISION
+    ====================================================== -->
+
+    {% if app.status == "applied" %}
+
+    <section class="jobs-section">
+
+        <!-- Decision heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Recruitment Decision</h2>
+
+                <p>
+                    Decide whether to shortlist or reject this candidate.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Shortlist candidate. -->
+        <form
+            method="post"
+            action="/hr/application/status"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+            <!-- Shortlisted status. -->
+            <input
+                type="hidden"
+                name="status"
+                value="shortlisted"
+            >
+
+            <!-- Shortlist button. -->
+            <button
+                type="submit"
+                class="job-action job-action-primary"
+            >
+                Shortlist Candidate
+            </button>
+
+        </form>
+
+
+        <!-- Reject candidate. -->
+        <form
+            method="post"
+            action="/hr/application/status"
+            onsubmit="return confirm('Are you sure you want to reject this candidate?');"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+            <!-- Rejected status. -->
+            <input
+                type="hidden"
+                name="status"
+                value="rejected"
+            >
+
+            <!-- Reject button. -->
+            <button
+                type="submit"
+                class="job-action job-action-danger"
+            >
+                Reject Candidate
+            </button>
+
+        </form>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         SCHEDULE INTERVIEW
+    ====================================================== -->
+
+    {% if app.status == "shortlisted" and not interview %}
+
+    <section class="jobs-section">
+
+        <!-- Interview heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Schedule Interview</h2>
+
+                <p>
+                    Schedule an interview with this shortlisted candidate.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Interview form. -->
+        <form
+            method="post"
+            action="/hr/interview/save"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+
+            <!-- Interview date. -->
+            <div class="form-group">
+
+                <label for="interview_date">
+                    Interview Date
+                </label>
+
+                <input
+                    type="date"
+                    id="interview_date"
+                    name="interview_date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Interview time. -->
+            <div class="form-group">
+
+                <label for="interview_time">
+                    Interview Time
+                </label>
+
+                <input
+                    type="time"
+                    id="interview_time"
+                    name="interview_time"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Interview type. -->
+            <div class="form-group">
+
+                <label for="interview_type">
+                    Interview Type
+                </label>
+
+                <select
+                    id="interview_type"
+                    name="interview_type"
+                    required
+                >
+
+                    <option value="online">
+                        Online
+                    </option>
+
+                    <option value="in_person">
+                        In Person
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Interview notes. -->
+            <div class="form-group">
+
+                <label for="interview_notes">
+                    Interview Notes
+                </label>
+
+                <textarea
+                    id="interview_notes"
+                    name="interview_notes"
+                    placeholder="Enter interview notes..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- Save interview. -->
+            <button
+                type="submit"
+                class="job-action job-action-primary"
+            >
+                Schedule Interview
+            </button>
+
+        </form>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         INTERVIEW FEEDBACK
+    ====================================================== -->
+
+    {% if interview and app.status == "shortlisted" %}
+
+    <section class="jobs-section">
+
+        <!-- Feedback heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Interview Feedback</h2>
+
+                <p>
+                    Record the interview result and candidate rating.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if interview.feedback == "" and interview.rating is none %}
+
+        <!-- Feedback form. -->
+        <form
+            method="post"
+            action="/hr/feedback/save"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+
+            <!-- Rating. -->
+            <div class="form-group">
+
+                <label for="rating">
+                    Rating
+                </label>
+
+                <select
+                    id="rating"
+                    name="rating"
+                    required
+                >
+
+                    <option value="">
+                        Select rating
+                    </option>
+
+                    <option value="1">
+                        1 - Poor
+                    </option>
+
+                    <option value="2">
+                        2 - Below Average
+                    </option>
+
+                    <option value="3">
+                        3 - Average
+                    </option>
+
+                    <option value="4">
+                        4 - Good
+                    </option>
+
+                    <option value="5">
+                        5 - Excellent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Feedback. -->
+            <div class="form-group">
+
+                <label for="feedback">
+                    Feedback
+                </label>
+
+                <textarea
+                    id="feedback"
+                    name="feedback"
+                    placeholder="Enter interview feedback..."
+                    required
+                >{{ interview.feedback or "" }}</textarea>
+
+            </div>
+
+
+            <!-- Save feedback. -->
+            <button
+                type="submit"
+                class="job-action job-action-primary"
+            >
+                Save Interview Feedback
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <!-- Saved interview information. -->
+        <div class="candidate-info-list">
+
+            <!-- Rating. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Interview Rating
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ interview.rating }}
+                </span>
+
+            </div>
+
+
+            <!-- Feedback. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Interview Feedback
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ interview.feedback }}
+                </span>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         FINAL HR DECISION
+    ====================================================== -->
+
+    {% if app.status == "shortlisted" and interview %}
+
+    <section class="jobs-section">
+
+        <!-- Final decision heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Final HR Decision</h2>
+
+                <p>
+                    Make the final recruitment decision.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="button-row">
+
+            <!-- Select candidate. -->
+            <form
+                method="post"
+                action="/hr/final-decision"
+            >
+
+                <!-- Candidate ID. -->
+                <input
+                    type="hidden"
+                    name="candidate_id"
+                    value="{{ app.candidate_id }}"
+                >
+
+                <!-- Decision. -->
+                <input
+                    type="hidden"
+                    name="decision"
+                    value="selected"
+                >
+
+                <!-- Select button. -->
+                <button
+                    type="submit"
+                    class="job-action job-action-primary"
+                >
+                    Select Candidate
+                </button>
+
+            </form>
+
+
+            <!-- Reject candidate. -->
+            <form
+                method="post"
+                action="/hr/final-decision"
+            >
+
+                <!-- Candidate ID. -->
+                <input
+                    type="hidden"
+                    name="candidate_id"
+                    value="{{ app.candidate_id }}"
+                >
+
+                <!-- Decision. -->
+                <input
+                    type="hidden"
+                    name="decision"
+                    value="rejected"
+                >
+
+                <!-- Reject button. -->
+                <button
+                    type="submit"
+                    class="job-action job-action-danger"
+                >
+                    Reject Candidate
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         MAKE AN OFFER
+    ====================================================== -->
+
+    {% if app.status == "selected" %}
+
+    <section class="jobs-section">
+
+        <!-- Offer heading. -->
+        <div class="section-header">
+
+            <div>
+
+                <h2>Make an Offer</h2>
+
+                <p>
+                    Enter the salary and joining date.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Offer form. -->
+        <form
+            method="post"
+            action="/hr/offer/save"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+
+            <!-- Salary. -->
+            <div class="form-group">
+
+                <label for="offer_salary">
+                    Offered Salary
+                </label>
+
+                <input
+                    type="number"
+                    id="offer_salary"
+                    name="offer_salary"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter offered salary"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Joining date. -->
+            <div class="form-group">
+
+                <label for="joining_date">
+                    Joining Date
+                </label>
+
+                <input
+                    type="date"
+                    id="joining_date"
+                    name="joining_date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Save offer. -->
+            <button
+                type="submit"
+                class="job-action job-action-primary"
+            >
+                Save Offer
+            </button>
+
+        </form>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         OFFER STATUS
+    ====================================================== -->
+
+    {% if app.status == "offer_pending" or app.status == "hired" or app.status == "offer_rejected" %}
+
+    <section class="jobs-section">
+
+        <!-- Offer heading. -->
+        <div class="section-header">
+
+            <div>
+
+                {% if offer.status == "accepted" %}
+
+                <h2>Offer Accepted</h2>
+
+                <p>
+                    The candidate has accepted the job offer.
+                </p>
+
+                {% elif offer.status == "rejected" %}
+
+                <h2>Offer Rejected</h2>
+
+                <p>
+                    The candidate has rejected the job offer.
+                </p>
+
+                {% else %}
+
+                <h2>Offer Pending</h2>
+
+                <p>
+                    The offer is waiting for the candidate's response.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        {% if offer %}
+
+        <!-- Offer information. -->
+        <div class="candidate-info-list">
+
+            <!-- Offered salary. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Offered Salary
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ offer.salary }}
+                </span>
+
+            </div>
+
+
+            <!-- Joining date. -->
+            <div class="candidate-info-row">
+
+                <span class="candidate-info-label">
+                    Joining Date
+                </span>
+
+                <span class="candidate-info-value">
+                    {{ offer.joining_date }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Send offer while pending. -->
+        {% if offer.status == "pending" %}
+
+        <form
+            method="post"
+            action="/hr/offer/send"
+            onsubmit="return confirm('Send this offer letter to the candidate?');"
+        >
+
+            <!-- Candidate ID. -->
+            <input
+                type="hidden"
+                name="candidate_id"
+                value="{{ app.candidate_id }}"
+            >
+
+            <!-- Send offer. -->
+            <button
+                type="submit"
+                class="job-action job-action-primary"
+            >
+                Send Offer Letter
+            </button>
+
+        </form>
+
+        {% endif %}
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- Back to applications. -->
+    <div class="button-row">
+
+        <a
+            href="/hr/applications?job_id={{ app.job_id }}"
+            class="job-action job-action-secondary"
+        >
+            Back to Applications
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Simple CSS only for the candidate information rows. -->
+<style>
+
+/* Keep candidate information as simple rows. */
+.candidate-info-list {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* Create one normal information row. */
+.candidate-info-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    padding: 13px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    align-items: center;
+}
+
+/* Remove the border from the last row. */
+.candidate-info-row:last-child {
+    border-bottom: none;
+}
+
+/* Normal label. */
+.candidate-info-label {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Normal value. */
+.candidate-info-value {
+    color: #172033;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Keep questions simple. */
+.candidate-question {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+/* Style question heading. */
+.candidate-question summary {
+    padding: 12px 14px;
+    cursor: pointer;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Style answer area. */
+.candidate-answer {
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 14px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Responsive layout for mobile. */
+@media (max-width: 700px) {
+
+    /* Put label and value on separate lines. */
+    .candidate-info-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

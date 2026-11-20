@@ -1,0 +1,305 @@
+{# This page uses the existing HRM base layout. #}
+{% extends "base.html" %}
+
+{# Set the browser tab title. #}
+{% block title %}Manager access{% endblock %}
+
+{% block content %}
+
+{# Main Manager Access page wrapper. #}
+<div class="hr-page">
+
+    {# Page heading area. #}
+    <div class="page-header">
+        <div>
+            <h1>Manager access</h1>
+
+            <p class="hint">
+                Only HR can give or remove manager access.
+                A person becomes a manager after their Gmail is verified.
+            </p>
+        </div>
+    </div>
+
+
+    {# Show error message when something goes wrong. #}
+    {% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+
+    {# Show success or information message. #}
+    {% if info %}
+    <div class="success">
+        {{ info }}
+    </div>
+    {% endif %}
+
+
+    {# Invite Manager card. #}
+    <section class="panel">
+
+        {# Card heading. #}
+        <div class="panel-header">
+            <div>
+                <h2>Invite a manager</h2>
+
+                <p class="hint">
+                    Enter the manager's Gmail address to send an invitation.
+                </p>
+            </div>
+        </div>
+
+
+        {# Manager invitation form. #}
+        <form method="post"
+              action="/hr/access/invite"
+              class="form">
+
+            {# Gmail input field. #}
+            <div class="form-group">
+
+                <label for="email">
+                    Gmail of the manager
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="manager@gmail.com"
+                    required
+                >
+
+            </div>
+
+
+            {# Submit invitation button. #}
+            <div class="form-actions">
+
+                <button type="submit">
+                    Give manager access
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    {# Current Managers section. #}
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+
+                <h2>Current managers</h2>
+
+                <p class="hint">
+                    Managers who currently have access to the system.
+                </p>
+
+            </div>
+        </div>
+
+
+        {% if managers %}
+
+        {# Keep the existing HRM table style. #}
+        <div class="table-wrap">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Gmail</th>
+                        <th>Account since</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for m in managers %}
+
+                    <tr>
+
+                        <td>
+                            {{ m.name }}
+                        </td>
+
+                        <td>
+                            {{ m.email }}
+                        </td>
+
+                        <td>
+                            {{ m.since }}
+                        </td>
+
+                        <td class="actions">
+
+                            {# Remove manager access. #}
+                            <form
+                                method="post"
+                                action="/hr/access/remove"
+                                class="inline"
+                                onsubmit="return confirm('Remove manager access for this person?');"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="user_id"
+                                    value="{{ m.user_id }}"
+                                >
+
+                                <button
+                                    class="btn-small btn-danger"
+                                    type="submit"
+                                >
+                                    Remove
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        {# Show this when there are no managers. #}
+        <p class="empty">
+            No managers yet.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    {# Pending invitations section. #}
+    <section class="panel">
+
+        <div class="panel-header">
+            <div>
+
+                <h2>Pending invites</h2>
+
+                <p class="hint">
+                    Invitations waiting for the person to sign up and verify.
+                </p>
+
+            </div>
+        </div>
+
+
+        {% if invites %}
+
+        {# Keep the existing table layout. #}
+        <div class="table-wrap">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Gmail</th>
+                        <th>Invited by</th>
+                        <th>When</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for i in invites %}
+
+                    <tr>
+
+                        <td>
+                            {{ i.email }}
+                        </td>
+
+                        <td>
+                            {{ i.invited_by }}
+                        </td>
+
+                        <td>
+                            {{ i.created }}
+                        </td>
+
+                        <td class="actions">
+
+                            {# Cancel the pending invitation. #}
+                            <form
+                                method="post"
+                                action="/hr/access/cancel"
+                                class="inline"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="invite_id"
+                                    value="{{ i.invite_id }}"
+                                >
+
+                                <button
+                                    class="btn-small btn-danger"
+                                    type="submit"
+                                >
+                                    Cancel
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        {# Show this when there are no pending invitations. #}
+        <p class="empty">
+            No pending invites.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    {# Link back to the main HR dashboard. #}
+    <p class="back-link">
+        <a href="/hr">
+            &larr; Back to HR screen
+        </a>
+    </p>
+
+</div>
+
+{% endblock %}
