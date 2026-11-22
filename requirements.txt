@@ -1,26 +1,9 @@
-﻿# FastAPI web framework
-fastapi==0.162.0
-
-# Server used to run FastAPI
+﻿fastapi==0.162.0
 uvicorn==0.54.0
-
-# PostgreSQL database connection
 psycopg2-binary==2.9.13
-
-# HTML templates
 jinja2==3.1.6
-
-# Read PDF CV files
 pypdf==6.21.4
-
-# Create and read Word documents
 python-docx==1.2.0
-
-# Read environment variables from .env
 python-dotenv==1.2.4
-
-# Handle uploaded CV files
 python-multipart==0.0.33
-
-# Send HTTP requests
 requests==2.34.2
