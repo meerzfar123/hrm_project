@@ -3509,3 +3509,74 @@ body {
 
 
 
+/* =========================================================
+   HR SIDEBAR: stays fixed while the page scrolls
+   ========================================================= */
+
+.hr-layout .hr-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Logo: normal size, brand on one line */
+.hr-layout .hr-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    text-decoration: none;
+}
+.hr-layout .hr-logo {
+    height: 32px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+}
+.hr-layout .hr-brand span {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Bottom area: user and log out stay at the bottom */
+.hr-layout .hr-sidebar-bottom {
+    margin-top: auto;
+    padding: 16px;
+}
+.hr-layout .hr-user-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.hr-layout .hr-user-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.hr-layout .logout-button {
+    width: 100%;
+    min-height: 40px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Phones: sidebar goes on top and scrolls normally */
+@media (max-width: 700px) {
+    .hr-layout .hr-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+}

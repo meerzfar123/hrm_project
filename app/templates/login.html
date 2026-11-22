@@ -1,554 +1,241 @@
-
-{# Use the shared public website layout. #}
 {% extends "base.html" %}
 
-
-{# Set the browser tab title. #}
 {% block title %}Login{% endblock %}
 
-
-{# Put the login page inside the public content area. #}
 {% block public_content %}
 
-<style>
+<div class="lg-page">
 
-    /* ==========================================================
-       TECHNOLOGY COMPANY LOGIN PAGE
-       ========================================================== */
+    <div class="lg-wrapper">
 
-    /* Create the full login page area. */
-    .tech-login-page {
-        min-height: calc(100vh - 80px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 24px;
-        box-sizing: border-box;
-        background: #f5f8fc;
-    }
+        <section class="lg-card">
 
+            <h1>Welcome back</h1>
 
-    /* Create the two-column login container. */
-    .tech-login-container {
-        width: 100%;
-        max-width: 1050px;
-        min-height: 590px;
-        display: flex;
-        background: #ffffff;
-        border: 1px solid #dfe7f1;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 18px 55px rgba(15, 23, 42, 0.08);
-    }
+            <p class="lg-intro">Log in to continue to your account.</p>
 
+            {% if error %}
+                <div class="lg-error">{{ error }}</div>
+            {% endif %}
 
-    /* ==========================================================
-       LEFT TECHNOLOGY BRANDING SIDE
-       ========================================================== */
+            {% if info %}
+                <div class="lg-info">{{ info }}</div>
+            {% endif %}
 
-    /* Create the technology-company branding panel. */
-    .tech-login-brand {
-        width: 52%;
-        padding: 62px 55px;
-        box-sizing: border-box;
-        background:
-            linear-gradient(135deg, #f8fbff 0%, #eaf2ff 100%);
-        border-right: 1px solid #e0e8f2;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+            <form method="post" action="/login">
 
-
-    /* Create a subtle technology circle in the background. */
-    .tech-login-brand::before {
-        content: "";
-        position: absolute;
-        width: 360px;
-        height: 360px;
-        border: 1px solid rgba(37, 99, 235, 0.12);
-        border-radius: 50%;
-        right: -170px;
-        top: -120px;
-    }
-
-
-    /* Create another subtle technology circle. */
-    .tech-login-brand::after {
-        content: "";
-        position: absolute;
-        width: 230px;
-        height: 230px;
-        border: 1px solid rgba(37, 99, 235, 0.10);
-        border-radius: 50%;
-        right: -90px;
-        bottom: -80px;
-    }
-
-
-    /* Keep the actual branding content above the decorative circles. */
-    .tech-brand-content {
-        position: relative;
-        z-index: 2;
-    }
-
-
-    /* Small company technology label. */
-    .tech-company-label {
-        display: inline-block;
-        margin-bottom: 25px;
-        color: #2563eb;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 2px;
-    }
-
-
-    /* Main technology company heading. */
-    .tech-brand-title {
-        max-width: 480px;
-        margin: 0 0 20px 0;
-        color: #111827;
-        font-size: 42px;
-        line-height: 1.1;
-        font-weight: 800;
-    }
-
-
-    /* Technology company description. */
-    .tech-brand-text {
-        max-width: 450px;
-        margin: 0 0 32px 0;
-        color: #64748b;
-        font-size: 16px;
-        line-height: 1.8;
-    }
-
-
-    /* Create the three technology indicators. */
-    .tech-points {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-
-    /* Style each technology indicator. */
-    .tech-point {
-        padding: 9px 14px;
-        background: #ffffff;
-        border: 1px solid #dbe5f1;
-        border-radius: 999px;
-        color: #334155;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-
-    /* ==========================================================
-       RIGHT LOGIN SIDE
-       ========================================================== */
-
-    /* Create the login form area. */
-    .tech-login-form-area {
-        width: 48%;
-        padding: 62px 55px;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff;
-    }
-
-
-    /* Limit the width of the login form. */
-    .tech-login-form-box {
-        width: 100%;
-        max-width: 370px;
-    }
-
-
-    /* Style the login heading. */
-    .tech-login-form-box h1 {
-        margin: 0 0 10px 0;
-        color: #111827;
-        font-size: 32px;
-        font-weight: 800;
-    }
-
-
-    /* Style the login supporting text. */
-    .login-subtitle {
-        margin: 0 0 30px 0;
-        color: #64748b;
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-
-    /* Style the existing error message. */
-    .tech-login-form-box .error-box {
-        margin-bottom: 20px;
-        padding: 12px 14px;
-        background: #fff5f5;
-        border: 1px solid #fecaca;
-        border-radius: 7px;
-        color: #b91c1c;
-        font-size: 14px;
-    }
-
-
-    /* Style the existing information message. */
-    .tech-login-form-box .info-box {
-        margin-bottom: 20px;
-        padding: 12px 14px;
-        background: #f0f7ff;
-        border: 1px solid #bfdbfe;
-        border-radius: 7px;
-        color: #1d4ed8;
-        font-size: 14px;
-    }
-
-
-    /* Keep the existing form structure clean. */
-    .tech-login-form-box form {
-        width: 100%;
-    }
-
-
-    /* Style the form labels. */
-    .tech-login-form-box label {
-        display: block;
-        margin-bottom: 8px;
-        color: #334155;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-
-    /* Style the existing email and password fields. */
-    .tech-login-form-box input {
-        width: 100%;
-        height: 46px;
-        margin-bottom: 20px;
-        padding: 0 13px;
-        box-sizing: border-box;
-        background: #ffffff;
-        border: 1px solid #cbd5e1;
-        border-radius: 7px;
-        color: #111827;
-        font-size: 14px;
-        outline: none;
-    }
-
-
-    /* Highlight the field when the user clicks it. */
-    .tech-login-form-box input:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-    }
-
-
-    /* Create the main login button. */
-    .tech-login-button {
-        width: 100%;
-        height: 46px;
-        margin-top: 4px;
-        background: #2563eb;
-        border: 1px solid #2563eb;
-        border-radius: 7px;
-        color: #ffffff;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-    }
-
-
-    /* Darken the button slightly when hovered. */
-    .tech-login-button:hover {
-        background: #1d4ed8;
-        border-color: #1d4ed8;
-    }
-
-
-    /* Create the signup message below the form. */
-    .login-signup {
-        margin: 24px 0 0 0;
-        text-align: center;
-        color: #64748b;
-        font-size: 14px;
-    }
-
-
-    /* Style the signup link. */
-    .login-signup a {
-        color: #2563eb;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-
-    /* Add an underline when the signup link is hovered. */
-    .login-signup a:hover {
-        text-decoration: underline;
-    }
-
-
-    /* ==========================================================
-       MOBILE RESPONSIVE DESIGN
-       ========================================================== */
-
-    /* Adjust the layout for tablets and mobile devices. */
-    @media (max-width: 850px) {
-
-        /* Stack the branding and login sections vertically. */
-        .tech-login-container {
-            flex-direction: column;
-            max-width: 560px;
-        }
-
-
-        /* Make the branding panel full width. */
-        .tech-login-brand {
-            width: 100%;
-            padding: 45px 35px;
-            border-right: none;
-            border-bottom: 1px solid #e0e8f2;
-        }
-
-
-        /* Make the login panel full width. */
-        .tech-login-form-area {
-            width: 100%;
-            padding: 45px 35px;
-        }
-
-
-        /* Reduce the branding heading on smaller screens. */
-        .tech-brand-title {
-            font-size: 34px;
-        }
-
-    }
-
-
-    /* Further simplify the page on small phones. */
-    @media (max-width: 500px) {
-
-        /* Reduce page padding. */
-        .tech-login-page {
-            padding: 20px 12px;
-        }
-
-
-        /* Remove large rounded corners on very small screens. */
-        .tech-login-container {
-            border-radius: 12px;
-        }
-
-
-        /* Reduce branding padding. */
-        .tech-login-brand {
-            padding: 35px 25px;
-        }
-
-
-        /* Reduce login form padding. */
-        .tech-login-form-area {
-            padding: 35px 25px;
-        }
-
-
-        /* Reduce the main technology heading. */
-        .tech-brand-title {
-            font-size: 30px;
-        }
-
-
-        /* Reduce the login heading. */
-        .tech-login-form-box h1 {
-            font-size: 28px;
-        }
-
-    }
-
-</style>
-
-
-<!-- ==========================================================
-     MAIN LOGIN PAGE
-     ========================================================== -->
-
-<div class="tech-login-page">
-
-
-    <!-- Main two-column login container. -->
-    <div class="tech-login-container">
-
-
-        <!-- ==================================================
-             LEFT TECHNOLOGY COMPANY SECTION
-             ================================================== -->
-
-        <section class="tech-login-brand">
-
-            <!-- Keep branding content above the decorative background. -->
-            <div class="tech-brand-content">
-
-                <!-- Small technology company label. -->
-                <div class="tech-company-label">
-                    TECH SOLUTION PROVIDER
+                <div class="lg-field">
+                    <label for="email">Gmail address</label>
+                    <input type="email" id="email" name="email" value="{{ email }}"required>
                 </div>
 
-
-                <!-- Main technology message. -->
-                <h1 class="tech-brand-title">
-                    Technology that helps businesses grow.
-                </h1>
-
-
-                <!-- Technology company description. -->
-                <p class="tech-brand-text">
-                    Building intelligent solutions with AI, data,
-                    and modern technology to solve real-world
-                    business challenges.
-                </p>
-
-
-                <!-- Show the main technology areas. -->
-                <div class="tech-points">
-
-                    <!-- AI technology. -->
-                    <span class="tech-point">
-                        AI
-                    </span>
-
-                    <!-- Data technology. -->
-                    <span class="tech-point">
-                        DATA
-                    </span>
-
-                    <!-- Innovation. -->
-                    <span class="tech-point">
-                        INNOVATION
-                    </span>
-
+                <div class="lg-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
 
-            </div>
+                <button class="lg-button" type="submit">Log in</button>
 
-        </section>
+            </form>
 
-
-        <!-- ==================================================
-             RIGHT LOGIN FORM
-             ================================================== -->
-
-        <section class="tech-login-form-area">
-
-            <!-- Keep the login form at a comfortable width. -->
-            <div class="tech-login-form-box">
-
-                <!-- Login heading. -->
-                <h1>
-                    Welcome back
-                </h1>
-
-
-                <!-- Login supporting text. -->
-                <p class="login-subtitle">
-                    Log in to continue to your account.
-                </p>
-
-
-                <!-- Show the error message when login fails. -->
-                {% if error %}
-
-                    <div class="error-box">
-                        {{ error }}
-                    </div>
-
-                {% endif %}
-
-
-                <!-- Show the information message when available. -->
-                {% if info %}
-
-                    <div class="info-box">
-                        {{ info }}
-                    </div>
-
-                {% endif %}
-
-
-                <!-- Keep the existing login form and POST route. -->
-                <form method="post" action="/login">
-
-                    <!-- Email field label. -->
-                    <label for="email">
-                        Gmail address
-                    </label>
-
-
-                    <!-- Keep the existing email field name. -->
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ email }}"
-                        placeholder="Enter your Gmail address"
-                        required
-                    >
-
-
-                    <!-- Password field label. -->
-                    <label for="password">
-                        Password
-                    </label>
-
-
-                    <!-- Keep the existing password field name. -->
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        required
-                    >
-
-
-                    <!-- Submit the existing login form. -->
-                    <button
-                        class="tech-login-button"
-                        type="submit"
-                    >
-                        Log in
-                    </button>
-
-                </form>
-
-                <!-- Link to the forgot password page. -->
-                <p class="login-signup" style="margin-top: 16px;">
+            <p class="lg-forgot">
                 <a href="/forgot-password">Forgot password?</a>
-                </p>
+            </p>
 
-
-                <!-- Keep the existing signup route. -->
-                <p class="login-signup">
-                    New here?
-                    <a href="/signup">
-                        Create an account
-                    </a>
-                </p>
-
-            </div>
+            <p class="lg-signup">
+                New here? <a href="/signup">Create an account</a>
+            </p>
 
         </section>
+
+        <div class="lg-links">
+            <a href="/">Home</a>
+            <span>&nbsp;&middot;&nbsp;</span>
+            <a href="/careers">Careers</a>
+        </div>
 
     </div>
 
 </div>
+
+<style>
+
+/* Soft page background */
+.lg-page {
+    min-height: calc(100vh - 64px);
+    padding: 40px 20px 56px;
+    background:
+        radial-gradient(circle at 8% 12%, rgba(191, 219, 254, 0.35), transparent 24%),
+        radial-gradient(circle at 92% 30%, rgba(224, 242, 254, 0.55), transparent 28%),
+        #f5f9fd;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.lg-wrapper {
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+/* One white card */
+.lg-card {
+    position: relative;
+    padding: 30px 32px 28px;
+    background: #ffffff;
+    border: 1px solid #e0eaf5;
+    border-radius: 20px;
+    box-shadow: 0 10px 28px rgba(30, 64, 100, 0.07);
+    overflow: hidden;
+}
+.lg-card::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    right: -75px;
+    top: -80px;
+    background: #eef6ff;
+    border-radius: 50%;
+}
+.lg-card > * { position: relative; z-index: 2; }
+
+/* Headings and text */
+.lg-card h1 {
+    margin: 0 0 8px;
+    color: #0f172a;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+.lg-intro {
+    margin: 0 0 20px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+/* Messages */
+.lg-error,
+.lg-info {
+    margin-bottom: 18px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.lg-error {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #be123c;
+}
+.lg-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+/* Fields */
+.lg-field { margin-bottom: 16px; }
+
+.lg-field label {
+    display: block;
+    margin-bottom: 6px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+}
+.lg-field input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    background: #fbfdff;
+    border: 1px solid #d6e0eb;
+    border-radius: 12px;
+    color: #172033;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.lg-field input::placeholder { color: #94a3b8; }
+.lg-field input:focus {
+    background: #ffffff;
+    border-color: #7aa7e8;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+/* Button */
+.lg-button {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    border: 1px solid #2563eb;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.lg-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+/* Forgot password and sign up */
+.lg-forgot {
+    margin: 16px 0 0;
+    text-align: center;
+    font-size: 13px;
+}
+.lg-forgot a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+.lg-forgot a:hover { text-decoration: underline; }
+
+.lg-signup {
+    margin: 16px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid #e8eef5;
+    color: #64748b;
+    font-size: 13px;
+    text-align: center;
+}
+.lg-signup a {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+.lg-signup a:hover { text-decoration: underline; }
+
+/* Bottom links */
+.lg-links {
+    padding-top: 18px;
+    color: #64748b;
+    font-size: 13px;
+    text-align: center;
+}
+.lg-links a {
+    color: #64748b;
+    font-weight: 600;
+    text-decoration: none;
+}
+.lg-links a:hover { color: #2563eb; }
+
+/* Phones */
+@media (max-width: 520px) {
+    .lg-page { padding: 24px 12px 44px; }
+    .lg-card { padding: 26px 20px 24px; border-radius: 16px; }
+    .lg-card h1 { font-size: 22px; }
+}
+
+</style>
 
 {% endblock %}

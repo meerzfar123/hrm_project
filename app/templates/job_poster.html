@@ -1,1861 +1,450 @@
-
 {% extends "base.html" %}
 
 {% block title %}{{ job.title }} - {{ company.company_name }}{% endblock %}
 
-
 {# =========================================================
-   PROFESSIONAL JOB POSTER
-
-   The same poster structure is used by:
-   1. Public Careers
-   2. Manager
-   3. HR
-
-   Only the surrounding layout changes.
+   JOB POSTER - matches the public homepage / careers design
+   Written once as a macro and used by both layouts:
+   public careers (public_content) and HR/manager (content).
+   Classes start with "jp-" so they never clash with style.css.
    ========================================================= #}
 
+{% macro poster(default_back) %}
 
-{% block public_content %}
+<div class="jp">
 
-<div class="job-poster-page">
-
-    {# Poster action buttons shown on screen but not printed. #}
-    <div class="no-print poster-actions">
-
-        <a href="{{ back_url or '/careers' }}" class="poster-back">
-            ← {{ back_text or 'Back to jobs' }}
-        </a>
-
-        <div class="poster-action-buttons">
-
-            {% if apply_url %}
-                <a href="{{ apply_url }}" class="poster-apply-top">
-                    Apply for this job →
-                </a>
-            {% endif %}
-
-            <button type="button"
-                    class="poster-print"
-                    onclick="window.print()">
-                Print / Save PDF
-            </button>
-
-        </div>
-
+    {# Screen-only actions #}
+    <div class="jp-bar no-print">
+        <a href="{{ back_url or default_back }}" class="jp-back">&larr; {{ back_text or 'Back to jobs' }}</a>
+        <button type="button" class="jp-print" onclick="window.print()">Print or save as PDF</button>
     </div>
 
+    <article class="jp-sheet">
 
-    {# Main professional poster. #}
-    <div class="poster">
-
-        {# =================================================
-           COMPANY HEADER
-           ================================================= #}
-        <div class="poster-header">
-
-            <div class="company-brand">
-
-                <img
-                    src="/static/logo.png"
-                    alt="{{ company.company_name }}"
-                    class="poster-logo">
-
-                <div class="company-brand-text">
-
-                    <strong>
-                        {{ company.company_name }}
-                    </strong>
-
-                    <span>
-                        Careers
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="hiring-badge">
-                WE'RE HIRING
-            </div>
-
+        {# Blue top bar, same as the website navigation #}
+        <div class="jp-top">
+            <img src="/static/logo.png" alt="{{ company.company_name }}" class="jp-logo">
+            <span>Careers</span>
         </div>
 
-
-
-        {# =================================================
-           MAIN JOB TITLE
-           ================================================= #}
-        <div class="poster-hero">
-
-            <p class="poster-eyebrow">
-                OPEN POSITION
+        {# Hero #}
+        <div class="jp-hero">
+            <span class="jp-pill">We're hiring</span>
+            <h1 class="jp-title">{{ job.title }}</h1>
+            <p class="jp-sub">
+                {% if job.department %}{{ job.department }}{% endif %}
+                {% if job.department and job.location %} in {% endif %}
+                {% if job.location %}{{ job.location }}{% endif %}
             </p>
-
-            <h1 class="poster-title">
-                {{ job.title }}
-            </h1>
-
-            {% if job.department %}
-                <p class="poster-department">
-                    {{ job.department }}
-                </p>
-            {% endif %}
-
         </div>
 
-
-
-        {# =================================================
-           JOB INFORMATION
-           ================================================= #}
-        <div class="poster-meta">
-
-
+        {# Key details as floating cards #}
+        <div class="jp-info">
             {% if job.department %}
-
-                <div class="meta-item">
-
-                    <span class="meta-label">
-                        DEPARTMENT
-                    </span>
-
-                    <strong>
-                        {{ job.department }}
-                    </strong>
-
+                <div class="jp-card">
+                    <small>Team</small>
+                    <b>{{ job.department }}</b>
                 </div>
-
             {% endif %}
-
-
-
             {% if job.location %}
-
-                <div class="meta-item">
-
-                    <span class="meta-label">
-                        LOCATION
-                    </span>
-
-                    <strong>
-                        {{ job.location }}
-                    </strong>
-
+                <div class="jp-card">
+                    <small>Location</small>
+                    <b>{{ job.location }}</b>
                 </div>
-
             {% endif %}
-
-
-
             {% if job.salary_range %}
-
-                <div class="meta-item">
-
-                    <span class="meta-label">
-                        SALARY
-                    </span>
-
-                    <strong>
-                        {{ job.salary_range }}
-                    </strong>
-
+                <div class="jp-card">
+                    <small>Salary</small>
+                    <b>{{ job.salary_range }}</b>
                 </div>
-
             {% endif %}
-
-
-
             {% if job.deadline %}
-
-                <div class="meta-item">
-
-                    <span class="meta-label">
-                        APPLICATION DEADLINE
-                    </span>
-
-                    <strong>
-                        {{ job.deadline }}
-                    </strong>
-
+                <div class="jp-card">
+                    <small>Apply before</small>
+                    <b>{{ job.deadline }}</b>
                 </div>
-
             {% endif %}
-
-
         </div>
 
+        {# Content cards #}
+        <div class="jp-sections">
 
-
-        {# =================================================
-           POSTER BODY
-           ================================================= #}
-        <div class="poster-body">
-
-
-            {# About the role. #}
             {% if job.description %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            01
-                        </span>
-
-                        <h2>
-                            About the Role
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.description }}
-                    </div>
-
+                <section class="jp-card jp-section">
+                    <div class="jp-icon">i</div>
+                    <h2>About the role</h2>
+                    <div class="jp-text">{{ job.description }}</div>
                 </section>
-
             {% endif %}
 
-
-
-            {# Requirements. #}
             {% if job.requirements %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            02
-                        </span>
-
-                        <h2>
-                            What We're Looking For
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.requirements }}
-                    </div>
-
+                <section class="jp-card jp-section">
+                    <div class="jp-icon">&#10003;</div>
+                    <h2>What we're looking for</h2>
+                    <div class="jp-text">{{ job.requirements }}</div>
                 </section>
-
             {% endif %}
 
-
-
-            {# Benefits. #}
             {% if job.benefits %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            03
-                        </span>
-
-                        <h2>
-                            What We Offer
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.benefits }}
-                    </div>
-
+                <section class="jp-card jp-section">
+                    <div class="jp-icon">+</div>
+                    <h2>What we offer</h2>
+                    <div class="jp-text">{{ job.benefits }}</div>
                 </section>
-
-            {% endif %}
-
-
-        </div>
-
-
-
-        {# =================================================
-           APPLICATION CTA
-           ================================================= #}
-        {% if apply_url %}
-
-            <div class="poster-cta">
-
-                <div>
-
-                    <p class="cta-small">
-                        READY FOR YOUR NEXT OPPORTUNITY?
-                    </p>
-
-                    <h2>
-                        Join {{ company.company_name }}
-                    </h2>
-
-                    <p>
-                        Submit your application and take the next step
-                        in your career.
-                    </p>
-
-                </div>
-
-
-                <a href="{{ apply_url }}" class="poster-apply-button">
-                    Apply Now →
-                </a>
-
-            </div>
-
-        {% endif %}
-
-
-
-        {# =================================================
-           FOOTER
-           ================================================= #}
-        <div class="poster-footer">
-
-            <div class="footer-company">
-
-                <strong>
-                    {{ company.company_name }}
-                </strong>
-
-                <span>
-                    {% if company.website %}
-                        {{ company.website }}
-                    {% endif %}
-
-                    {% if company.contact_email %}
-                        {% if company.website %} · {% endif %}
-                        {{ company.contact_email }}
-                    {% endif %}
-                </span>
-
-            </div>
-
-
-            {% if job.deadline %}
-
-                <div class="footer-deadline">
-
-                    <span>
-                        APPLY BEFORE
-                    </span>
-
-                    <strong>
-                        {{ job.deadline }}
-                    </strong>
-
-                </div>
-
             {% endif %}
 
         </div>
 
-    </div>
+        {# Apply call-to-action, same style as the careers section #}
+        <div class="jp-cta">
+            <h2>Join {{ company.company_name }}</h2>
+            <p>
+                {% if job.deadline %}Applications close on {{ job.deadline }}.{% else %}Send us your application today.{% endif %}
+            </p>
+            {% if apply_url %}
+                <a href="{{ apply_url }}" class="jp-apply-btn">Apply now &rarr;</a>
+            {% endif %}
+            {% if company.website or company.contact_email %}
+                <div class="jp-contact">
+                    {% if company.website %}<span>{{ company.website }}</span>{% endif %}
+                    {% if company.contact_email %}<span>{{ company.contact_email }}</span>{% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    </article>
 
 </div>
 
-
 <style>
+.jp {
+    --blue: #2563eb;
+    --blue-dark: #1d4ed8;
+    --bar: #2c7fe5;
+    --soft: #eaf3ff;
+    --soft-2: #eef6ff;
+    --border: #e1eaf4;
+    --ink: #0f172a;
+    --muted: #64748b;
 
-/* =========================================================
-   JOB POSTER PAGE
-   ========================================================= */
-
-
-/* Main page background. */
-.job-poster-page {
-    max-width: 1080px;
+    max-width: 210mm;
     margin: 0 auto;
-    padding: 30px 24px 60px;
+    padding: 30px 0 56px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--muted);
 }
 
+.jp a:hover { text-decoration: none; }
 
-/* Top navigation/actions above the poster. */
-.poster-actions {
+/* Screen actions */
+.jp-bar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-
-/* Back link. */
-.poster-back {
-    color: #475569;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-/* Back link hover. */
-.poster-back:hover {
-    color: #2563eb;
-}
-
-
-/* Action button group. */
-.poster-action-buttons {
-    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 16px;
 }
-
-
-/* Top Apply button. */
-.poster-apply-top {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.jp-back { color: #475569; font-size: 14px; font-weight: 600; }
+.jp-back:hover { color: var(--blue); }
+.jp-print {
     min-height: 40px;
-    padding: 0 17px;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff !important;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-
-/* Top Apply hover. */
-.poster-apply-top:hover {
-    background: #1d4ed8;
-}
-
-
-/* Print button. */
-.poster-print {
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid #d8e0eb;
-    border-radius: 8px;
+    padding: 0 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
     background: #ffffff;
-    color: #334155;
+    color: #374151;
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
 }
+.jp-print:hover { background: var(--soft); color: var(--blue); }
 
-
-/* Print button hover. */
-.poster-print:hover {
-    border-color: #b7c4d5;
-    background: #f8fafc;
-}
-
-
-/* =========================================================
-   POSTER
-   ========================================================= */
-
-
-/* Main poster container. */
-.poster {
-    background: #ffffff;
-    border: 1px solid #dfe5ed;
-    border-radius: 18px;
+/* Poster sheet */
+.jp-sheet {
+    display: flex;
+    flex-direction: column;
+    min-height: 297mm;
+    background:
+        radial-gradient(circle at 8% 15%, rgba(191, 219, 254, 0.35), transparent 25%),
+        radial-gradient(circle at 92% 45%, rgba(224, 242, 254, 0.55), transparent 28%),
+        #f5f9fd;
+    border: 1px solid #e0eaf5;
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 18px 55px rgba(30, 55, 90, 0.10);
+    box-shadow: 0 18px 48px rgba(30, 64, 100, 0.10);
 }
 
-
-/* =========================================================
-   COMPANY HEADER
-   ========================================================= */
-
-
-/* Header area. */
-.poster-header {
+/* Blue top bar */
+.jp-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 28px 38px;
-    border-bottom: 1px solid #edf1f6;
+    min-height: 70px;
+    padding: 0 34px;
+    background: var(--bar);
 }
+.jp-logo { display: block; height: 40px; width: auto; object-fit: contain; }
+.jp-top span { color: #ffffff; font-size: 14px; font-weight: 700; }
 
+/* Hero */
+.jp-hero {
+    position: relative;
+    margin: 28px 28px 0;
+    padding: 46px 44px 48px;
+    background:
+        radial-gradient(circle at 84% 28%, rgba(191, 219, 254, 0.42), transparent 25%),
+        linear-gradient(135deg, #ffffff 0%, #f3f8ff 58%, #eaf3ff 100%);
+    border: 1px solid #e0eaf5;
+    border-radius: 26px;
+    overflow: hidden;
+}
+.jp-hero::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    right: -120px;
+    top: -120px;
+    background: rgba(191, 219, 254, 0.34);
+    border-radius: 50%;
+}
+.jp-hero::after {
+    content: "";
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    right: 90px;
+    bottom: -62px;
+    background: rgba(224, 242, 254, 0.85);
+    border-radius: 50%;
+}
+.jp-hero > * { position: relative; z-index: 2; }
 
-/* Company branding wrapper. */
-.company-brand {
-    display: flex;
+.jp-pill {
+    display: inline-flex;
     align-items: center;
-    gap: 14px;
-}
-
-
-/* Company logo. */
-.poster-logo {
-    width: auto;
-    height: 46px;
-    max-width: 180px;
-    object-fit: contain;
-}
-
-
-/* Company text wrapper. */
-.company-brand-text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-
-/* Company name. */
-.company-brand-text strong {
-    color: #111827;
-    font-size: 15px;
-}
-
-
-/* Careers label. */
-.company-brand-text span {
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
+    min-height: 32px;
+    margin-bottom: 16px;
+    padding: 0 14px;
+    background: var(--soft);
+    color: var(--blue);
+    border: 1px solid #d8e8fb;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
+.jp-title {
+    max-width: 620px;
+    margin: 0 0 12px;
+    color: var(--ink);
+    font-size: 48px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -1.6px;
+}
+.jp-sub { margin: 0; font-size: 17px; color: var(--muted); }
 
-
-/* Hiring badge. */
-.hiring-badge {
-    padding: 8px 12px;
-    border: 1px solid #bfdbfe;
-    border-radius: 999px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
+/* Floating cards */
+.jp-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(30, 64, 100, 0.075);
+    overflow: hidden;
+}
+.jp-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top: -52px;
+    right: -40px;
+    background: #eef6ff;
+    border-radius: 50%;
 }
 
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-
-/* Job hero section. */
-.poster-hero {
-    padding: 54px 48px 42px;
-    background: linear-gradient(
-        135deg,
-        #f8fbff 0%,
-        #ffffff 60%,
-        #f5f9ff 100%
-    );
-    border-bottom: 1px solid #edf1f6;
-}
-
-
-/* Small hero label. */
-.poster-eyebrow {
-    margin: 0 0 13px;
-    color: #2563eb;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 1.7px;
-}
-
-
-/* Main job title. */
-.poster-title {
-    max-width: 850px;
-    margin: 0;
-    color: #111827;
-    font-size: 46px;
-    line-height: 1.08;
-    font-weight: 850;
-    letter-spacing: -1.2px;
-}
-
-
-/* Department below title. */
-.poster-department {
-    margin: 15px 0 0;
-    color: #64748b;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-
-/* =========================================================
-   JOB META
-   ========================================================= */
-
-
-/* Job information row. */
-.poster-meta {
+/* Detail cards row */
+.jp-info {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-bottom: 1px solid #edf1f6;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px;
+    margin: 18px 28px 0;
 }
-
-
-/* Individual metadata block. */
-.meta-item {
-    min-height: 92px;
-    padding: 20px 22px;
-    border-right: 1px solid #edf1f6;
-}
-
-
-/* Remove border from last metadata item. */
-.meta-item:last-child {
-    border-right: none;
-}
-
-
-/* Metadata label. */
-.meta-label {
+.jp-info .jp-card { padding: 18px 20px; }
+.jp-info small {
+    position: relative;
+    z-index: 2;
     display: block;
-    margin-bottom: 7px;
-    color: #94a3b8;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: var(--muted);
+}
+.jp-info b {
+    position: relative;
+    z-index: 2;
+    display: block;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.3;
+    word-break: break-word;
 }
 
-
-/* Metadata value. */
-.meta-item strong {
-    color: #334155;
-    font-size: 13px;
-    line-height: 1.4;
+/* Content cards */
+.jp-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    margin: 14px 28px 0;
 }
+.jp-section { padding: 24px 28px 26px; }
+.jp-section > * { position: relative; z-index: 2; }
 
-
-/* =========================================================
-   POSTER BODY
-   ========================================================= */
-
-
-/* Main body. */
-.poster-body {
-    padding: 42px 48px 15px;
-}
-
-
-/* Individual section. */
-.poster-section {
-    max-width: 850px;
-    margin-bottom: 36px;
-}
-
-
-/* Section heading. */
-.section-heading {
+.jp-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 14px;
+    background: #eef5ff;
+    color: var(--blue);
+    border: 1px solid #dceafa;
+    border-radius: 13px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-}
-
-
-/* Section number. */
-.section-number {
-    color: #2563eb;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-}
-
-
-/* Section title. */
-.section-heading h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 19px;
+    justify-content: center;
+    font-size: 15px;
     font-weight: 800;
 }
-
-
-/* Poster text. */
-.poster-text {
-    color: #526174;
+.jp-section h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.3;
+    color: #111827;
+}
+.jp-text {
     font-size: 14px;
-    line-height: 1.85;
+    line-height: 1.75;
     white-space: pre-line;
 }
 
-
-/* =========================================================
-   APPLICATION CTA
-   ========================================================= */
-
-
-/* Main application call-to-action. */
-.poster-cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-    margin: 20px 38px 38px;
-    padding: 28px 30px;
-    border-radius: 13px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
+/* Call to action */
+.jp-cta {
+    position: relative;
+    margin: 18px 28px 28px;
+    padding: 36px 24px;
+    background:
+        radial-gradient(circle at 82% 35%, rgba(191, 219, 254, 0.35), transparent 25%),
+        linear-gradient(135deg, #ffffff 0%, var(--soft-2) 100%);
+    border: 1px solid #dfe9f5;
+    border-radius: 24px;
+    box-shadow: 0 14px 38px rgba(30, 64, 100, 0.07);
+    text-align: center;
+    overflow: hidden;
 }
-
-
-/* CTA small label. */
-.cta-small {
-    margin: 0 0 7px;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
+.jp-cta::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    left: -95px;
+    bottom: -120px;
+    background: rgba(219, 234, 254, 0.58);
+    border-radius: 50%;
 }
-
-
-/* CTA heading. */
-.poster-cta h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 21px;
+.jp-cta > * { position: relative; z-index: 2; }
+.jp-cta h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--ink);
 }
+.jp-cta p { margin: 0 0 20px; font-size: 15px; }
 
-
-/* CTA description. */
-.poster-cta p:last-child {
-    margin: 7px 0 0;
-    color: #64748b;
-    font-size: 13px;
-}
-
-
-/* Main Apply button. */
-.poster-apply-button {
+.jp-apply-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 145px;
-    min-height: 45px;
-    padding: 0 20px;
-    border-radius: 8px;
-    background: #2563eb;
+    min-height: 46px;
+    padding: 0 26px;
+    background: var(--blue);
     color: #ffffff !important;
-    text-decoration: none;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.19);
+}
+.jp-apply-btn:hover { background: var(--blue-dark); }
+
+.jp-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    margin-top: 18px;
     font-size: 13px;
-    font-weight: 800;
-    white-space: nowrap;
+    color: var(--muted);
 }
 
-
-/* Apply button hover. */
-.poster-apply-button:hover {
-    background: #1d4ed8;
+/* Phones */
+@media (max-width: 700px) {
+    .jp { padding: 20px 12px 40px; }
+    .jp-bar { flex-direction: column; align-items: stretch; }
+    .jp-sheet { min-height: 0; }
+    .jp-top { padding: 0 16px; }
+    .jp-hero { margin: 18px 14px 0; padding: 32px 24px 36px; }
+    .jp-title { font-size: 34px; letter-spacing: -1px; }
+    .jp-info, .jp-sections, .jp-cta { margin-left: 14px; margin-right: 14px; }
+    .jp-section { padding: 22px; }
 }
 
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-
-/* Poster footer. */
-.poster-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    padding: 24px 38px;
-    border-top: 1px solid #edf1f6;
-    background: #fafbfd;
-}
-
-
-/* Company footer information. */
-.footer-company {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-
-/* Company name in footer. */
-.footer-company strong {
-    color: #334155;
-    font-size: 12px;
-}
-
-
-/* Website/email. */
-.footer-company span {
-    color: #94a3b8;
-    font-size: 11px;
-}
-
-
-/* Deadline footer area. */
-.footer-deadline {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-
-/* Deadline label. */
-.footer-deadline span {
-    color: #94a3b8;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-
-/* Deadline date. */
-.footer-deadline strong {
-    color: #334155;
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-
-/* Tablet layout. */
-@media (max-width: 850px) {
-
-    .job-poster-page {
-        padding: 24px 18px 45px;
-    }
-
-    .poster-header {
-        padding: 23px 28px;
-    }
-
-    .poster-hero {
-        padding: 42px 32px 35px;
-    }
-
-    .poster-title {
-        font-size: 38px;
-    }
-
-    .poster-meta {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .meta-item:nth-child(2) {
-        border-right: none;
-    }
-
-    .meta-item:nth-child(-n+2) {
-        border-bottom: 1px solid #edf1f6;
-    }
-
-    .poster-body {
-        padding: 35px 32px 10px;
-    }
-
-    .poster-cta {
-        margin: 20px 28px 28px;
-    }
-
-}
-
-
-/* Mobile layout. */
-@media (max-width: 600px) {
-
-    .poster-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .poster-action-buttons {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    .poster-apply-top,
-    .poster-print {
-        width: 100%;
-    }
-
-    .poster-header {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 22px;
-    }
-
-    .hiring-badge {
-        align-self: flex-start;
-    }
-
-    .poster-hero {
-        padding: 34px 24px 30px;
-    }
-
-    .poster-title {
-        font-size: 32px;
-        letter-spacing: -0.6px;
-    }
-
-    .poster-meta {
-        grid-template-columns: 1fr;
-    }
-
-    .meta-item {
-        border-right: none;
-        border-bottom: 1px solid #edf1f6;
-    }
-
-    .meta-item:last-child {
-        border-bottom: none;
-    }
-
-    .poster-body {
-        padding: 30px 24px 5px;
-    }
-
-    .poster-section {
-        margin-bottom: 30px;
-    }
-
-    .poster-cta {
-        align-items: flex-start;
-        flex-direction: column;
-        margin: 20px;
-        padding: 23px;
-    }
-
-    .poster-apply-button {
-        width: 100%;
-    }
-
-    .poster-footer {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 22px;
-    }
-
-    .footer-deadline {
-        align-items: flex-start;
-    }
-
-}
-
-
-/* =========================================================
-   PRINT / PDF
-   ========================================================= */
-
+/* Print: one A4 page, colors kept */
+@page { size: A4; margin: 0; }
 @media print {
+    .no-print,
+    .top-bar, nav, .footer { display: none !important; }
 
-    /* Hide everything that is only needed on screen. */
-    .no-print {
-        display: none !important;
-    }
+    body { background: #ffffff !important; }
 
+    .jp { max-width: none; margin: 0; padding: 0; }
 
-    /* Remove page background and spacing. */
-    body {
-        background: #ffffff !important;
-    }
-
-
-    /* Make the poster use the printable page. */
-    .job-poster-page {
-        max-width: none;
-        margin: 0;
-        padding: 0;
-    }
-
-
-    /* Remove screen-only shadow and rounded border. */
-    .poster {
+    .jp-sheet {
+        min-height: 296mm;
         border: none;
         border-radius: 0;
         box-shadow: none;
-        overflow: visible;
-    }
-
-
-    /* Keep the professional colors when printing. */
-    .poster-hero {
-        background: #f8fbff !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-
-
-    .hiring-badge,
-    .poster-cta,
-    .meta-item,
-    .poster-footer {
+    .jp-sheet * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+    .jp-card, .jp-cta, .jp-hero { box-shadow: none; }
 
-
-    /* Keep the poster compact on printed pages. */
-    .poster-title {
-        font-size: 38px;
-    }
-
-
-    /* Avoid awkward page breaks inside sections. */
-    .poster-section,
-    .poster-cta {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-
-
-    /* Hide the normal website navigation while printing. */
-    header,
-    nav,
-    footer {
-        display: none !important;
-    }
-
+    .jp-hero { margin-top: 18px; padding: 30px 36px 32px; }
+    .jp-title { font-size: 40px; }
+    .jp-section { padding: 16px 24px 18px; break-inside: avoid; }
+    .jp-icon { width: 32px; height: 32px; margin-bottom: 8px; }
+    .jp-section h2 { font-size: 17px; }
+    .jp-text { font-size: 12px; line-height: 1.6; }
+    .jp-cta { padding: 24px 20px; margin-bottom: 20px; }
+    .jp-cta h2 { font-size: 24px; }
 }
-
 </style>
 
+{% endmacro %}
+
+
+{# Public careers layout #}
+{% block public_content %}
+    {{ poster('/careers') }}
 {% endblock %}
 
 
-
-{# =========================================================
-   HR POSTER
-
-   The HR layout uses the content block.
-   The same professional poster is inserted here.
-   ========================================================= #}
-
+{# HR / Manager layout #}
 {% block content %}
-
-<div class="job-poster-page">
-
-    {# HR poster actions. #}
-    <div class="no-print poster-actions">
-
-        <a href="{{ back_url or '/hr/jobs' }}" class="poster-back">
-            ← {{ back_text or 'Back to jobs' }}
-        </a>
-
-        <div class="poster-action-buttons">
-
-            {% if apply_url %}
-                <a href="{{ apply_url }}" class="poster-apply-top">
-                    Apply for this job →
-                </a>
-            {% endif %}
-
-            <button type="button"
-                    class="poster-print"
-                    onclick="window.print()">
-                Print / Save PDF
-            </button>
-
-        </div>
-
-    </div>
-
-
-    {# Main HR poster. #}
-    <div class="poster">
-
-        {# Company header. #}
-        <div class="poster-header">
-
-            <div class="company-brand">
-
-                <img
-                    src="/static/logo.png"
-                    alt="{{ company.company_name }}"
-                    class="poster-logo">
-
-                <div class="company-brand-text">
-
-                    <strong>
-                        {{ company.company_name }}
-                    </strong>
-
-                    <span>
-                        Careers
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="hiring-badge">
-                WE'RE HIRING
-            </div>
-
-        </div>
-
-
-
-        {# Job hero. #}
-        <div class="poster-hero">
-
-            <p class="poster-eyebrow">
-                OPEN POSITION
-            </p>
-
-            <h1 class="poster-title">
-                {{ job.title }}
-            </h1>
-
-            {% if job.department %}
-                <p class="poster-department">
-                    {{ job.department }}
-                </p>
-            {% endif %}
-
-        </div>
-
-
-
-        {# Job metadata. #}
-        <div class="poster-meta">
-
-            {% if job.department %}
-                <div class="meta-item">
-                    <span class="meta-label">DEPARTMENT</span>
-                    <strong>{{ job.department }}</strong>
-                </div>
-            {% endif %}
-
-
-            {% if job.location %}
-                <div class="meta-item">
-                    <span class="meta-label">LOCATION</span>
-                    <strong>{{ job.location }}</strong>
-                </div>
-            {% endif %}
-
-
-            {% if job.salary_range %}
-                <div class="meta-item">
-                    <span class="meta-label">SALARY</span>
-                    <strong>{{ job.salary_range }}</strong>
-                </div>
-            {% endif %}
-
-
-            {% if job.deadline %}
-                <div class="meta-item">
-                    <span class="meta-label">APPLICATION DEADLINE</span>
-                    <strong>{{ job.deadline }}</strong>
-                </div>
-            {% endif %}
-
-        </div>
-
-
-
-        {# Poster content. #}
-        <div class="poster-body">
-
-            {% if job.description %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            01
-                        </span>
-
-                        <h2>
-                            About the Role
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.description }}
-                    </div>
-
-                </section>
-
-            {% endif %}
-
-
-            {% if job.requirements %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            02
-                        </span>
-
-                        <h2>
-                            What We're Looking For
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.requirements }}
-                    </div>
-
-                </section>
-
-            {% endif %}
-
-
-            {% if job.benefits %}
-
-                <section class="poster-section">
-
-                    <div class="section-heading">
-
-                        <span class="section-number">
-                            03
-                        </span>
-
-                        <h2>
-                            What We Offer
-                        </h2>
-
-                    </div>
-
-                    <div class="poster-text">
-                        {{ job.benefits }}
-                    </div>
-
-                </section>
-
-            {% endif %}
-
-        </div>
-
-
-
-        {# Application CTA. #}
-        {% if apply_url %}
-
-            <div class="poster-cta">
-
-                <div>
-
-                    <p class="cta-small">
-                        READY FOR YOUR NEXT OPPORTUNITY?
-                    </p>
-
-                    <h2>
-                        Join {{ company.company_name }}
-                    </h2>
-
-                    <p>
-                        Submit your application and take the next step
-                        in your career.
-                    </p>
-
-                </div>
-
-                <a href="{{ apply_url }}" class="poster-apply-button">
-                    Apply Now →
-                </a>
-
-            </div>
-
-        {% endif %}
-
-
-
-        {# Footer. #}
-        <div class="poster-footer">
-
-            <div class="footer-company">
-
-                <strong>
-                    {{ company.company_name }}
-                </strong>
-
-                <span>
-
-                    {% if company.website %}
-                        {{ company.website }}
-                    {% endif %}
-
-                    {% if company.contact_email %}
-
-                        {% if company.website %}
-                            ·
-                        {% endif %}
-
-                        {{ company.contact_email }}
-
-                    {% endif %}
-
-                </span>
-
-            </div>
-
-
-            {% if job.deadline %}
-
-                <div class="footer-deadline">
-
-                    <span>
-                        APPLY BEFORE
-                    </span>
-
-                    <strong>
-                        {{ job.deadline }}
-                    </strong>
-
-                </div>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<style>
-
-/*
- * The CSS for the professional poster is intentionally kept
- * identical to the public poster design.
- */
-
-
-/* Main poster page. */
-.job-poster-page {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 30px 24px 60px;
-}
-
-
-/* Poster action area. */
-.poster-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-
-/* Back link. */
-.poster-back {
-    color: #475569;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-/* Action buttons. */
-.poster-action-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-
-/* Apply button. */
-.poster-apply-top {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    padding: 0 17px;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff !important;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-
-/* Print button. */
-.poster-print {
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid #d8e0eb;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #334155;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-
-/* Main poster. */
-.poster {
-    background: #ffffff;
-    border: 1px solid #dfe5ed;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 18px 55px rgba(30, 55, 90, 0.10);
-}
-
-
-/* Company header. */
-.poster-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 28px 38px;
-    border-bottom: 1px solid #edf1f6;
-}
-
-
-/* Company branding. */
-.company-brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-
-/* Logo. */
-.poster-logo {
-    height: 46px;
-    width: auto;
-    max-width: 180px;
-    object-fit: contain;
-}
-
-
-/* Company text. */
-.company-brand-text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-
-/* Company name. */
-.company-brand-text strong {
-    color: #111827;
-    font-size: 15px;
-}
-
-
-/* Careers text. */
-.company-brand-text span {
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-
-/* Hiring badge. */
-.hiring-badge {
-    padding: 8px 12px;
-    border: 1px solid #bfdbfe;
-    border-radius: 999px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-
-/* Hero section. */
-.poster-hero {
-    padding: 54px 48px 42px;
-    background: #f8fbff;
-    border-bottom: 1px solid #edf1f6;
-}
-
-
-/* Hero label. */
-.poster-eyebrow {
-    margin: 0 0 13px;
-    color: #2563eb;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 1.7px;
-}
-
-
-/* Job title. */
-.poster-title {
-    max-width: 850px;
-    margin: 0;
-    color: #111827;
-    font-size: 46px;
-    line-height: 1.08;
-    font-weight: 850;
-}
-
-
-/* Department. */
-.poster-department {
-    margin: 15px 0 0;
-    color: #64748b;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-
-/* Job metadata. */
-.poster-meta {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-bottom: 1px solid #edf1f6;
-}
-
-
-/* Metadata item. */
-.meta-item {
-    min-height: 92px;
-    padding: 20px 22px;
-    border-right: 1px solid #edf1f6;
-}
-
-
-/* Last metadata item. */
-.meta-item:last-child {
-    border-right: none;
-}
-
-
-/* Metadata label. */
-.meta-label {
-    display: block;
-    margin-bottom: 7px;
-    color: #94a3b8;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
-}
-
-
-/* Metadata value. */
-.meta-item strong {
-    color: #334155;
-    font-size: 13px;
-}
-
-
-/* Poster body. */
-.poster-body {
-    padding: 42px 48px 15px;
-}
-
-
-/* Poster section. */
-.poster-section {
-    max-width: 850px;
-    margin-bottom: 36px;
-}
-
-
-/* Section heading. */
-.section-heading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-}
-
-
-/* Section number. */
-.section-number {
-    color: #2563eb;
-    font-size: 11px;
-    font-weight: 900;
-}
-
-
-/* Section title. */
-.section-heading h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 19px;
-    font-weight: 800;
-}
-
-
-/* Poster text. */
-.poster-text {
-    color: #526174;
-    font-size: 14px;
-    line-height: 1.85;
-    white-space: pre-line;
-}
-
-
-/* Application CTA. */
-.poster-cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-    margin: 20px 38px 38px;
-    padding: 28px 30px;
-    border-radius: 13px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
-}
-
-
-/* CTA label. */
-.cta-small {
-    margin: 0 0 7px;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.2px;
-}
-
-
-/* CTA heading. */
-.poster-cta h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 21px;
-}
-
-
-/* CTA text. */
-.poster-cta p:last-child {
-    margin: 7px 0 0;
-    color: #64748b;
-    font-size: 13px;
-}
-
-
-/* Main Apply button. */
-.poster-apply-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 145px;
-    min-height: 45px;
-    padding: 0 20px;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff !important;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-
-/* Footer. */
-.poster-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    padding: 24px 38px;
-    border-top: 1px solid #edf1f6;
-    background: #fafbfd;
-}
-
-
-/* Footer company. */
-.footer-company {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-
-/* Footer company name. */
-.footer-company strong {
-    color: #334155;
-    font-size: 12px;
-}
-
-
-/* Footer contact. */
-.footer-company span {
-    color: #94a3b8;
-    font-size: 11px;
-}
-
-
-/* Deadline. */
-.footer-deadline {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-
-/* Deadline label. */
-.footer-deadline span {
-    color: #94a3b8;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-
-/* Deadline value. */
-.footer-deadline strong {
-    color: #334155;
-    font-size: 12px;
-}
-
-
-/* Tablet. */
-@media (max-width: 850px) {
-
-    .job-poster-page {
-        padding: 24px 18px 45px;
-    }
-
-    .poster-meta {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .meta-item:nth-child(2) {
-        border-right: none;
-    }
-
-    .poster-title {
-        font-size: 38px;
-    }
-
-}
-
-
-/* Mobile. */
-@media (max-width: 600px) {
-
-    .poster-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .poster-action-buttons {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    .poster-apply-top,
-    .poster-print {
-        width: 100%;
-    }
-
-    .poster-header {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 22px;
-    }
-
-    .poster-hero {
-        padding: 34px 24px 30px;
-    }
-
-    .poster-title {
-        font-size: 32px;
-    }
-
-    .poster-meta {
-        grid-template-columns: 1fr;
-    }
-
-    .meta-item {
-        border-right: none;
-        border-bottom: 1px solid #edf1f6;
-    }
-
-    .meta-item:last-child {
-        border-bottom: none;
-    }
-
-    .poster-body {
-        padding: 30px 24px 5px;
-    }
-
-    .poster-cta {
-        align-items: flex-start;
-        flex-direction: column;
-        margin: 20px;
-        padding: 23px;
-    }
-
-    .poster-apply-button {
-        width: 100%;
-    }
-
-    .poster-footer {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 22px;
-    }
-
-    .footer-deadline {
-        align-items: flex-start;
-    }
-
-}
-
-
-/* Print/PDF layout. */
-@media print {
-
-    .no-print {
-        display: none !important;
-    }
-
-    body {
-        background: #ffffff !important;
-    }
-
-    .job-poster-page {
-        max-width: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .poster {
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
-    }
-
-    .poster-hero {
-        background: #f8fbff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
-    .poster-section,
-    .poster-cta {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-
-    header,
-    nav,
-    footer {
-        display: none !important;
-    }
-
-}
-
-</style>
-
+    {{ poster('/hr/jobs') }}
 {% endblock %}

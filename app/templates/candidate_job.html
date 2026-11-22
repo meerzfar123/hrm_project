@@ -1,407 +1,352 @@
-
 {% extends "base.html" %}
 
-{% block title %}{{ job.title }}{% endblock %}
+{% block title %}Apply - {{ job.title }}{% endblock %}
 
 {% block public_content %}
 
-<style>
+<div class="ap-page">
 
-/* Create a simple page background. */
-.apply-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 35px 20px;
-}
+    <div class="ap-wrapper">
 
-/* Style the job information card. */
-.job-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 20px;
-}
+        <!-- One simple card -->
+        <section class="ap-card">
 
-/* Style the job title. */
-.job-card h1 {
-    margin: 0 0 10px;
-    color: #172033;
-    font-size: 30px;
-}
+            <a href="/careers/job?job_id={{ job.job_id }}" class="ap-details">View job details</a>
 
-/* Style job information. */
-.job-meta {
-    color: #64748b;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
+            <h1>Apply for {{ job.title }}</h1>
 
-/* Style the main form card. */
-.apply-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 28px;
-}
+            <p class="ap-intro">
+                Thanks for your interest in joining us{% if job.department %} in {{ job.department }}{% endif %}{% if job.location %}, {{ job.location }}{% endif %}.
+                It only takes a few minutes. We can't wait to read your application!
+            </p>
 
-/* Style headings. */
-.apply-card h2 {
-    color: #172033;
-    margin-top: 0;
-}
-
-/* Create spacing around fields. */
-.form-group {
-    margin-bottom: 18px;
-}
-
-/* Style labels. */
-.form-group label {
-    display: block;
-    margin-bottom: 7px;
-    color: #334155;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-/* Style text inputs and textareas. */
-.form-group input[type="text"],
-.form-group textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 11px 13px;
-    border: 1px solid #cbd5e1;
-    border-radius: 9px;
-    font-size: 14px;
-}
-
-/* Highlight fields when selected. */
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-}
-
-/* Style the CV upload area. */
-.cv-box {
-    padding: 15px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 9px;
-}
-
-/* Style the CV help text. */
-.cv-help {
-    margin-top: 0;
-    color: #64748b;
-    font-size: 12px;
-}
-
-/* Style the submit button. */
-.submit-button {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 9px;
-    background: #2563eb;
-    color: white;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-/* Change button color on hover. */
-.submit-button:hover {
-    background: #1d4ed8;
-}
-
-/* Style error message. */
-.error-box {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #b91c1c;
-    padding: 12px;
-    border-radius: 9px;
-    margin-bottom: 20px;
-}
-
-/* Style already-applied message. */
-.success-box {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    color: #166534;
-    padding: 15px;
-    border-radius: 9px;
-}
-
-/* Style links. */
-.apply-page a {
-    color: #2563eb;
-    text-decoration: none;
-}
-
-/* Add underline when hovering links. */
-.apply-page a:hover {
-    text-decoration: underline;
-}
-
-/* Make the page comfortable on mobile. */
-@media (max-width: 600px) {
-
-    /* Reduce page padding on small screens. */
-    .apply-page {
-        padding: 20px 12px;
-    }
-
-    /* Reduce card padding on small screens. */
-    .job-card,
-    .apply-card {
-        padding: 20px;
-    }
-
-    /* Reduce title size on small screens. */
-    .job-card h1 {
-        font-size: 25px;
-    }
-}
-
-</style>
-
-
-<div class="apply-page">
-
-    <!-- Show the job information. -->
-    <div class="job-card">
-
-        <!-- Show the job title. -->
-        <h1>
-            {{ job.title }}
-        </h1>
-
-        <!-- Show department, location and salary. -->
-        <div class="job-meta">
-
-            {{ job.department }}
-
-            {% if job.location %}
-                &middot; {{ job.location }}
+            {% if error %}
+                <div class="ap-error">{{ error }}</div>
             {% endif %}
 
-            {% if job.salary_range %}
-                &middot; {{ job.salary_range }}
-            {% endif %}
+            <form method="post" action="/careers/apply" enctype="multipart/form-data">
 
-        </div>
+                <input type="hidden" name="job_id" value="{{ job.job_id }}">
 
-        <!-- Show the job description. -->
-        <p>
-            {{ job.description }}
-        </p>
+                <h2>About you</h2>
 
-        <!-- Show requirements. -->
-        <p>
-            <strong>Requirements</strong>
-        </p>
+                <div class="ap-grid">
 
-        <p style="white-space: pre-line;">
-            {{ job.requirements }}
-        </p>
+                    <div class="ap-field">
+                        <label for="name">Your full name</label>
+                        <input type="text" id="name" name="name" value="{{ form.name }}" maxlength="100" required>
+                    </div>
 
-        <!-- Show benefits when available. -->
-        {% if job.benefits %}
-            <p>
-                <strong>What we offer</strong>
-            </p>
+                    <div class="ap-field">
+                        <label for="email">Gmail address</label>
+                        <input type="email" id="email" name="email" value="{{ form.email }}" required>
+                    </div>
 
-            <p style="white-space: pre-line;">
-                {{ job.benefits }}
-            </p>
-        {% endif %}
+                    <div class="ap-field">
+                        <label for="phone">Phone number</label>
+                        <input type="text" id="phone" name="phone" value="{{ form.phone }}" maxlength="30" required>
+                    </div>
 
-        <!-- Show deadline when available. -->
-        {% if job.deadline %}
-            <p class="job-meta">
-                Apply before {{ job.deadline }}
-            </p>
-        {% endif %}
+                    <div class="ap-field">
+                        <label for="experience_years">Years of experience</label>
+                        <input type="text" id="experience_years" name="experience_years" value="{{ form.experience_years }}" maxlength="2" required>
+                    </div>
 
-    </div>
+                    <div class="ap-field ap-full">
+                        <label for="education">Education</label>
+                        <input type="text" id="education" name="education" value="{{ form.education }}" maxlength="200" required>
+                    </div>
 
-
-    <!-- Show an error when something goes wrong. -->
-    {% if error %}
-
-        <div class="error-box">
-            {{ error }}
-        </div>
-
-    {% endif %}
-
-
-    {% if applied %}
-
-        <!-- Tell the candidate they already applied. -->
-        <div class="success-box">
-
-            You already applied to this job.
-
-            <br><br>
-
-            
-
-        </div>
-
-    {% else %}
-
-        <!-- Create the application form card. -->
-        <div class="apply-card">
-
-            <!-- Form heading. -->
-            <h2>
-                Apply for this job
-            </h2>
-
-            <!-- Keep the original POST route. -->
-            <form
-                method="post"
-                action="/candidate/apply"
-                enctype="multipart/form-data"
-            >
-
-                <!-- Send the job ID to the backend. -->
-                <input
-                    type="hidden"
-                    name="job_id"
-                    value="{{ job.job_id }}"
-                >
-
-
-                <!-- Experience field. -->
-                <div class="form-group">
-
-                    <label for="experience_years">
-                        Years of experience
-                    </label>
-
-                    <input
-                        type="text"
-                        id="experience_years"
-                        name="experience_years"
-                        value="{{ form.experience_years }}"
-                        maxlength="2"
-                        required
-                        placeholder="Example: 2"
-                    >
-
-                </div>
-
-
-                <!-- Education field. -->
-                <div class="form-group">
-
-                    <label for="education">
-                        Education
-                    </label>
-
-                    <input
-                        type="text"
-                        id="education"
-                        name="education"
-                        value="{{ form.education }}"
-                        maxlength="200"
-                        required
-                        placeholder="Example: BS Computer Science"
-                    >
-
-                </div>
-
-
-                <!-- Expected salary field. -->
-                <div class="form-group">
-
-                    <label for="expected_salary">
-                        Expected monthly salary
-                    </label>
-
-                    <input
-                        type="text"
-                        id="expected_salary"
-                        name="expected_salary"
-                        value="{{ form.expected_salary }}"
-                        maxlength="9"
-                        required
-                        placeholder="Example: 100000"
-                    >
-
-                </div>
-
-
-                <!-- CV upload field. -->
-                <div class="form-group">
-
-                    <label for="cv">
-                        Your CV
-                    </label>
-
-                    <div class="cv-box">
-
-                        <p class="cv-help">
-                            PDF or Word file. Maximum size: 5 MB.
-                        </p>
-
-                        <input
-                            type="file"
-                            id="cv"
-                            name="cv"
-                            accept=".pdf,.docx"
-                            required
-                        >
-
+                    <div class="ap-field ap-full">
+                        <label for="expected_salary">Expected monthly salary</label>
+                        <input type="text" id="expected_salary" name="expected_salary" value="{{ form.expected_salary }}" maxlength="9" required>
                     </div>
 
                 </div>
 
+                <h2>Your CV</h2>
 
-                <!-- Show all questionnaire questions. -->
-                {% for qid, text in questions %}
+                <div class="ap-field">
+                    <label for="cv">Upload your latest CV</label>
+                    <input type="file" id="cv" name="cv" accept=".pdf,.docx" required>
+                    <span class="ap-hint">PDF or Word file, up to 5 MB.</span>
+                </div>
 
-                    <div class="form-group">
+                {% if questions %}
 
-                        <label for="answer_{{ qid }}">
-                            {{ text }}
-                        </label>
+                    <h2>A few quick questions</h2>
 
-                        <textarea
-                            id="answer_{{ qid }}"
-                            name="answer_{{ qid }}"
-                            rows="3"
-                            maxlength="1000"
-                            required
-                            placeholder="Write your answer here..."
-                        ></textarea>
+                    {% for qid, text in questions %}
+                        <div class="ap-field">
+                            <label for="answer_{{ qid }}">{{ text }}</label>
+                            <textarea id="answer_{{ qid }}" name="answer_{{ qid }}" rows="2" maxlength="1000" required></textarea>
+                        </div>
+                    {% endfor %}
 
-                    </div>
+                {% endif %}
 
-                {% endfor %}
-
-
-                <!-- Keep the existing submit action. -->
-                <button
-                    type="submit"
-                    class="apply-submit-button"
-                >
-                    Send application
-                    <span>→</span>
-                </button>
+                <div class="ap-submit">
+                    <p>All done? Take a quick look, then send it to us.</p>
+                    <button type="submit">Send my application</button>
+                </div>
 
             </form>
 
+        </section>
+
+        <div class="ap-back">
+            <a href="/careers">&larr; Back to open positions</a>
         </div>
 
-    {% endif %}
-
+    </div>
 
 </div>
+
+<style>
+
+/* Colors in one place: change them here */
+.ap-page {
+    --page: #b1d6fb;
+    --card: #8fc4ed;
+    --field: #a6d5e8;
+    --field-border: #6fa8d6;
+    --ink: #0b2540;
+    --text: #1e3d5a;
+    --hint: #345a7c;
+    --blue: #2563eb;
+    --blue-dark: #1d4ed8;
+
+    padding: 50px 20px 70px;
+    background: var(--page);
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ap-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* One card */
+.ap-card {
+    position: relative;
+    padding: 38px 40px 40px;
+    background: var(--card);
+    border: 1px solid #7fb6e0;
+    border-radius: 24px;
+    box-shadow: 0 14px 40px rgba(30, 64, 100, 0.12);
+    overflow: hidden;
+}
+
+.ap-card::after {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -85px;
+    top: -90px;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+}
+
+.ap-card > * { position: relative; z-index: 2; }
+
+.ap-details {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--blue-dark);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+.ap-details:hover { text-decoration: underline; }
+
+/* Headings */
+.ap-card h1 {
+    margin: 0 0 10px;
+    color: var(--ink);
+    font-size: 26px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.ap-intro {
+    margin: 0;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.ap-card h2 {
+    margin: 30px 0 14px;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+/* Error message */
+.ap-error {
+    margin: 18px 0 0;
+    padding: 13px 15px;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-radius: 12px;
+    color: #be123c;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Fields */
+.ap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+.ap-full { grid-column: 1 / -1; }
+
+.ap-field { margin-bottom: 18px; min-width: 0; }
+.ap-grid .ap-field { margin-bottom: 0; }
+
+.ap-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.ap-field input[type="text"],
+.ap-field input[type="email"],
+.ap-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--field);
+    border: 1px solid var(--field-border);
+    border-radius: 12px;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.ap-field input[type="text"],
+.ap-field input[type="email"] { height: 46px; }
+
+/* Answer boxes: normal size */
+.ap-field textarea {
+    min-height: 72px;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.ap-field input::placeholder { color: #4f7497; }
+
+.ap-field input:focus,
+.ap-field textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* File upload */
+.ap-field input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    background: var(--field);
+    border: 1px solid var(--field-border);
+    border-radius: 12px;
+    color: var(--ink);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.ap-field input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 8px 16px;
+    background: var(--blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.ap-field input[type="file"]::file-selector-button:hover {
+    background: var(--blue-dark);
+}
+
+.ap-hint {
+    display: block;
+    margin-top: 6px;
+    color: var(--hint);
+    font-size: 12px;
+}
+
+/* Submit */
+.ap-submit {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.ap-submit p {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+}
+.ap-submit button {
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 0 26px;
+    background: var(--blue);
+    color: #ffffff;
+    border: 1px solid var(--blue);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 23px rgba(37, 99, 235, 0.25);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.ap-submit button:hover {
+    background: var(--blue-dark);
+    transform: translateY(-2px);
+}
+
+/* Back link */
+.ap-back { padding-top: 20px; text-align: center; }
+.ap-back a {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+.ap-back a:hover { color: var(--blue-dark); }
+
+/* Phones */
+@media (max-width: 640px) {
+    .ap-page { padding: 28px 12px 50px; }
+    .ap-card { padding: 28px 22px 30px; border-radius: 19px; }
+    .ap-card h1 { font-size: 22px; }
+    .ap-grid { grid-template-columns: 1fr; gap: 16px; }
+    .ap-full { grid-column: auto; }
+    .ap-submit { flex-direction: column; align-items: stretch; }
+    .ap-submit button { width: 100%; }
+}
+
+</style>
 
 {% endblock %}
