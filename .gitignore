@@ -3,7 +3,6 @@ venv/
 __pycache__/
 uploads/
 _old/
-app/config.py
 .env
 # Ignore the local Python virtual environment.
 .venv/
