@@ -2,7 +2,8 @@
 import psycopg2
 
 # Import our own settings file (config.py), which holds the host, name, user and password
-from app import config
+
+import app.config as config
 # This small function opens a connection to the database and gives it back
 def get_connection():
     # Open the connection using the settings from config.py
