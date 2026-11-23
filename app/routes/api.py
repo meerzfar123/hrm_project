@@ -30,6 +30,8 @@ from app.services import email_tools
 from app.services import job_tools
 from app.services import ai_tools
 from app.services import cv_tools
+# Import the application configuration values.
+import app.config as config
 # Find the folder where this file (api.py) lives, so paths work from any terminal folder
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -927,11 +929,11 @@ def hr_offer_send(
             status_code=404,
         )
 
-    # Build the public offer link that the candidate will receive by email.
+    # Build the public offer link using the live website URL.
     offer_url = (
-        str(request.base_url).rstrip("/")
-        + "/offer/response/"
-        + offer_token
+    config.APP_BASE_URL.rstrip("/")
+    + "/offer/response/"
+    + offer_token
     )
 
     # Get the company name used in the candidate email.

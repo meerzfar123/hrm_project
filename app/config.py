@@ -1,11 +1,11 @@
-# Import os so Python can read values from the .env file.
 import os
-
-# Load the .env file when the project starts.
 from dotenv import load_dotenv
 
-# Read all values from the .env file.
-load_dotenv()
+# Find the folder where this config.py file is located.
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Load the .env file that is inside the app folder.
+load_dotenv(os.path.join(APP_DIR, ".env"))
 
 
 # Read the PostgreSQL host from the environment.
@@ -51,3 +51,6 @@ COOKIE_SECURE = os.getenv("COOKIE_SECURE", "False").lower() == "true"
 
 # Read the session duration from the environment.
 SESSION_HOURS = int(os.getenv("SESSION_HOURS", "8"))
+
+# The live website URL used when creating public links.
+APP_BASE_URL = os.getenv("APP_BASE_URL", "http://127.0.0.1:8000")
