@@ -4,400 +4,275 @@
 
 {% block content %}
 
-<style>
-
-/* Create the main Selected Candidates page area. */
-.selected-candidates-page {
-    padding: 35px 40px;
-
-    /* Give the page a light background. */
-    background: #f5f7fa;
-
-    /* Make the page fill the available screen height. */
-    min-height: calc(100vh - 70px);
-}
-
-
-/* Style the main page heading. */
-.selected-candidates-page h1 {
-    margin: 0 0 8px 0;
-
-    /* Set the heading color. */
-    color: #111827;
-
-    /* Set the heading size. */
-    font-size: 32px;
-}
-
-
-/* Style the page description. */
-.page-description {
-    margin-bottom: 30px;
-
-    /* Set the description color. */
-    color: #64748b;
-
-    /* Set the description size. */
-    font-size: 15px;
-}
-
-
-/* Create the white candidate list container. */
-.candidate-list {
-    background: white;
-
-    /* Add a light border. */
-    border: 1px solid #e5e7eb;
-
-    /* Round the corners. */
-    border-radius: 12px;
-
-    /* Prevent the content from escaping the box. */
-    overflow-x: auto;
-
-    /* Add a soft shadow. */
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
-}
-
-
-/* Create the heading row. */
-.candidate-header {
-    display: grid;
-
-    /* Create six columns. */
-    grid-template-columns:
-        55px
-        1.2fr
-        1.3fr
-        1.5fr
-        1.2fr
-        1.1fr;
-
-    /* Add space between columns. */
-    gap: 10px;
-
-    /* Add internal spacing. */
-    padding: 16px 20px;
-
-    /* Give the heading a light background. */
-    background: #f8fafc;
-
-    /* Add a bottom border. */
-    border-bottom: 1px solid #e5e7eb;
-
-    /* Make the headings small and bold. */
-    font-size: 13px;
-    font-weight: 700;
-
-    /* Set heading color. */
-    color: #64748b;
-}
-
-
-/* Create one row for each hired candidate. */
-.candidate-row {
-    display: grid;
-
-    /* Keep exactly the same six columns. */
-    grid-template-columns:
-        55px
-        1.2fr
-        1.3fr
-        1.5fr
-        1.2fr
-        1.1fr;
-
-    /* Add space between columns. */
-    gap: 10px;
-
-    /* Add internal spacing. */
-    padding: 18px 20px;
-
-    /* Separate the candidate rows. */
-    border-bottom: 1px solid #eeeeee;
-
-    /* Center the information vertically. */
-    align-items: center;
-
-    /* Set normal text size. */
-    font-size: 14px;
-
-    /* Set normal text color. */
-    color: #374151;
-}
-
-
-/* Remove the border from the final candidate row. */
-.candidate-row:last-child {
-    border-bottom: none;
-}
-
-
-/* Add a small hover effect. */
-.candidate-row:hover {
-    background: #fafafa;
-}
-
-
-/* Style the automatic candidate number. */
-.row-number {
-    color: #64748b;
-    font-weight: 700;
-}
-
-
-/* Style the candidate name. */
-.candidate-name {
-    color: #111827;
-    font-weight: 600;
-}
-
-
-/* Style the job title. */
-.job-title {
-    color: #374151;
-}
-
-
-/* Style email information. */
-.email {
-    color: #475569;
-}
-
-
-/* Style phone information. */
-.phone {
-    color: #475569;
-}
-
-
-/* Style joining date. */
-.joining-date {
-    color: #374151;
-    font-weight: 500;
-}
-
-
-/* Style the empty candidate message. */
-.no-candidates {
-    padding: 35px;
-
-    /* Center the message. */
-    text-align: center;
-
-    /* Set the message color. */
-    color: #64748b;
-}
-
-
-/* Create the floating Return button. */
-.return-button {
-    position: fixed;
-
-    /* Place the button near the bottom. */
-    bottom: 25px;
-
-    /* Place the button on the right. */
-    right: 25px;
-
-    /* Add space inside the button. */
-    padding: 12px 20px;
-
-    /* Make the button rounded. */
-    border-radius: 30px;
-
-    /* Remove the normal link underline. */
-    text-decoration: none;
-
-    /* Make the text white. */
-    color: white;
-
-    /* Set the button background. */
-    background: #1f2937;
-
-    /* Make the text bold. */
-    font-weight: bold;
-
-    /* Add a floating shadow. */
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
-
-    /* Keep the button above the page. */
-    z-index: 1000;
-
-    /* Make hover smooth. */
-    transition: 0.2s;
-}
-
-
-/* Change the Return button when hovered. */
-.return-button:hover {
-    background: #111827;
-
-    /* Keep the text white. */
-    color: white;
-
-    /* Move the button slightly upward. */
-    transform: translateY(-2px);
-}
-
-
-/* Make the list work on smaller screens. */
-@media (max-width: 950px) {
-
-    /* Allow horizontal scrolling. */
-    .candidate-list {
-        overflow-x: auto;
-    }
-
-    /* Keep the columns readable. */
-    .candidate-header,
-    .candidate-row {
-        min-width: 950px;
-    }
-
-}
-
-
-/* Make the page padding smaller on mobile. */
-@media (max-width: 600px) {
-
-    /* Reduce the page padding. */
-    .selected-candidates-page {
-        padding: 25px 15px 40px;
-    }
-
-}
-
-</style>
-
-
-<!-- Start the Selected Candidates page. -->
-<div class="selected-candidates-page">
-
-
-    <!-- Show the page title. -->
-    <h1>
-        Selected Candidates
-    </h1>
-
-
-    <!-- Explain what candidates are shown. -->
-    <div class="page-description">
-        View candidates who have successfully completed the hiring process.
+<div class="sc-page">
+
+    <!-- Top actions -->
+    <div class="sc-top">
+        <a href="/hr" class="sc-back">← Back to HR home</a>
     </div>
 
+    <div class="sc-shell">
 
-    <!-- Create the candidate list. -->
-    <div class="candidate-list">
-
-
-        <!-- Create the column headings. -->
-        <div class="candidate-header">
-
-            <!-- Number heading. -->
-            <div>
-                #
-            </div>
-
-            <!-- Candidate heading. -->
-            <div>
-                CANDIDATE
-            </div>
-
-            <!-- Job heading. -->
-            <div>
-                JOB
-            </div>
-
-            <!-- Email heading. -->
-            <div>
-                EMAIL
-            </div>
-
-            <!-- Phone heading. -->
-            <div>
-                PHONE
-            </div>
-
-            <!-- Joining date heading. -->
-            <div>
-                JOINING DATE
-            </div>
-
+        <!-- Blue header band. Replace the text with your logo image. -->
+        <div class="sc-band">
+            <div class="sc-logo">xloop</div>
+            <span class="sc-band-label">Selected candidates</span>
         </div>
 
+        <div class="sc-body">
 
-        <!-- Go through every hired candidate. -->
-        {% for candidate in hired_candidates %}
+            <!-- Hero -->
+            <section class="sc-hero">
+                <span class="sc-tag">RECRUITMENT</span>
+                <h1>Selected Candidates</h1>
+                <p>View candidates who have successfully completed the hiring process.</p>
+            </section>
 
+            <!-- Candidate list -->
+            <section class="sc-card">
 
-        <!-- Create one row for this candidate. -->
-        <div class="candidate-row">
+                <div class="sc-table-wrap">
 
+                    <div class="sc-header">
+                        <div>#</div>
+                        <div>CANDIDATE</div>
+                        <div>JOB</div>
+                        <div>EMAIL</div>
+                        <div>PHONE</div>
+                        <div>JOINING DATE</div>
+                    </div>
 
-            <!-- Automatically show 1, 2, 3, etc. -->
-            <div class="row-number">
-                {{ loop.index }}
-            </div>
+                    <!-- Go through every hired candidate. -->
+                    {% for candidate in hired_candidates %}
 
+                    <div class="sc-row">
+                        <div class="sc-number">{{ loop.index }}</div>
+                        <div class="sc-name">{{ candidate.candidate }}</div>
+                        <div>{{ candidate.job }}</div>
+                        <div class="sc-muted">{{ candidate.email }}</div>
+                        <div class="sc-muted">{{ candidate.phone }}</div>
+                        <div class="sc-date">{{ candidate.joining_date }}</div>
+                    </div>
 
-            <!-- Show the candidate name. -->
-            <div class="candidate-name">
-                {{ candidate.candidate }}
-            </div>
+                    {% else %}
 
+                    <div class="sc-empty">No hired candidates found.</div>
 
-            <!-- Show the job title. -->
-            <div class="job-title">
-                {{ candidate.job }}
-            </div>
+                    {% endfor %}
 
+                </div>
 
-            <!-- Show the candidate email. -->
-            <div class="email">
-                {{ candidate.email }}
-            </div>
-
-
-            <!-- Show the candidate phone. -->
-            <div class="phone">
-                {{ candidate.phone }}
-            </div>
-
-
-            <!-- Show the joining date. -->
-            <div class="joining-date">
-                {{ candidate.joining_date }}
-            </div>
-
+            </section>
 
         </div>
-
-
-        <!-- Finish the candidate loop. -->
-        {% else %}
-
-
-        <!-- Show this when there are no hired candidates. -->
-        <div class="no-candidates">
-            No hired candidates found.
-        </div>
-
-
-        <!-- Finish the empty-list condition. -->
-        {% endfor %}
-
-
     </div>
-
 
 </div>
 
 
-<!-- Floating button to return to the HR dashboard. -->
-<a href="/hr" class="return-button">
-    ← Return
-</a>
+<style>
+    .sc-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 18px 20px 24px;
+        box-sizing: border-box;
+        color: #111827;
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    }
 
+    .sc-top {
+        margin-bottom: 12px;
+    }
+
+    .sc-back {
+        color: #334155;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .sc-back:hover {
+        color: #2563eb;
+    }
+
+    /* Shell */
+    .sc-shell {
+        border-radius: 22px;
+        background: #f3f7fd;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.07);
+    }
+
+    .sc-band {
+        background: #2d7de6;
+        padding: 0 28px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sc-logo {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .sc-band-label {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .sc-body {
+        padding: 18px 22px 22px;
+    }
+
+    /* Hero */
+    .sc-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 20px 28px;
+        margin-bottom: 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #ffffff 40%, #f1f6ff 100%);
+    }
+
+    .sc-hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 110px;
+        height: 110px;
+        border-bottom-left-radius: 110px;
+        background: #dbe8fd;
+    }
+
+    .sc-hero > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .sc-tag {
+        display: inline-block;
+        padding: 5px 12px;
+        border: 1px solid #dbe6fb;
+        border-radius: 999px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .sc-hero h1 {
+        margin: 10px 0 2px;
+        font-size: 32px;
+        line-height: 1.1;
+        font-weight: 900;
+        color: #0f172a;
+    }
+
+    .sc-hero p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* List card */
+    .sc-card {
+        border: 1px solid #e3e9f2;
+        border-radius: 16px;
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    .sc-table-wrap {
+        overflow-x: auto;
+    }
+
+    .sc-header,
+    .sc-row {
+        display: grid;
+        grid-template-columns: 45px 1.2fr 1.3fr 1.6fr 1.2fr 1.1fr;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 20px;
+        font-size: 13px;
+    }
+
+    .sc-header {
+        background: #f8fbff;
+        border-bottom: 1px solid #e3e9f2;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+    }
+
+    .sc-row {
+        border-bottom: 1px solid #eef2f7;
+        color: #374151;
+    }
+
+    .sc-row:last-child {
+        border-bottom: none;
+    }
+
+    .sc-row:hover {
+        background: #fafcff;
+    }
+
+    .sc-row > div {
+        min-width: 0;
+        word-break: break-word;
+    }
+
+    .sc-number {
+        color: #2563eb;
+        font-weight: 800;
+    }
+
+    .sc-name {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .sc-muted {
+        color: #475569;
+    }
+
+    .sc-date {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    .sc-empty {
+        padding: 24px;
+        text-align: center;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .sc-body {
+            padding: 14px 12px 18px;
+        }
+
+        .sc-hero h1 {
+            font-size: 26px;
+        }
+
+        .sc-header,
+        .sc-row {
+            min-width: 780px;
+        }
+    }
+</style>
 
 {% endblock %}

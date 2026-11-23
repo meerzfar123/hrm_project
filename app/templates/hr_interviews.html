@@ -2,286 +2,257 @@
 
 {% block content %}
 
-<style>
+<div class="iv-page">
 
-    /* Create the main Interviews page area. */
-    .interviews-page {
-        padding: 35px 40px;
-        background: #f5f7fa;
-        min-height: calc(100vh - 70px);
-    }
-
-    /* Style the main page heading. */
-    .interviews-page h1 {
-        margin: 0 0 8px 0;
-        font-size: 32px;
-        color: #111827;
-    }
-
-    /* Style the description below the heading. */
-    .page-description {
-        margin-bottom: 30px;
-        color: #64748b;
-        font-size: 15px;
-    }
-
-    /* Create the white interview list container. */
-    .interview-list {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        overflow-x: auto;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
-    }
-
-    /* Create the heading row. */
-    .interview-header {
-        display: grid;
-
-        /* Create four columns. */
-        grid-template-columns:
-            55px
-            1.3fr
-            1.5fr
-            1.5fr;
-
-        /* Add space between columns. */
-        gap: 10px;
-
-        /* Add space inside the row. */
-        padding: 16px 20px;
-
-        /* Give the header a light background. */
-        background: #f8fafc;
-
-        /* Add a bottom border. */
-        border-bottom: 1px solid #e5e7eb;
-
-        /* Make header text small and bold. */
-        font-size: 13px;
-        font-weight: 700;
-
-        /* Set header text color. */
-        color: #64748b;
-    }
-
-    /* Create one row for each interview. */
-    .interview-row {
-        display: grid;
-
-        /* Keep four columns. */
-        grid-template-columns:
-            55px
-            1.3fr
-            1.5fr
-            1.5fr;
-
-        /* Add space between columns. */
-        gap: 10px;
-
-        /* Add space inside each row. */
-        padding: 18px 20px;
-
-        /* Separate the rows. */
-        border-bottom: 1px solid #eeeeee;
-
-        /* Vertically center the information. */
-        align-items: center;
-
-        /* Set normal text size. */
-        font-size: 14px;
-
-        /* Set text color. */
-        color: #374151;
-    }
-
-    /* Remove the border from the final row. */
-    .interview-row:last-child {
-        border-bottom: none;
-    }
-
-    /* Add a small hover effect. */
-    .interview-row:hover {
-        background: #fafafa;
-    }
-
-    /* Style the automatic number. */
-    .row-number {
-        color: #64748b;
-        font-weight: 700;
-    }
-
-    /* Style the candidate name. */
-    .candidate-name {
-        color: #111827;
-        font-weight: 600;
-    }
-
-    /* Style the job title. */
-    .job-title {
-        color: #374151;
-    }
-
-    /* Style the interview date and time. */
-    .interview-date {
-        color: #374151;
-    }
-
-    /* Style the message when there are no interviews. */
-    .no-interviews {
-        padding: 35px;
-        text-align: center;
-        color: #64748b;
-    }
-
-    /* Create the floating Return button. */
-    .return-button {
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-
-        /* Add space inside the button. */
-        padding: 12px 20px;
-
-        /* Make the button rounded. */
-        border-radius: 30px;
-
-        /* Remove link underline. */
-        text-decoration: none;
-
-        /* Make the text white. */
-        color: white;
-
-        /* Set the button background. */
-        background: #1f2937;
-
-        /* Make the text bold. */
-        font-weight: bold;
-
-        /* Add a floating shadow. */
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
-
-        /* Keep the button above other content. */
-        z-index: 1000;
-
-        /* Make hover smooth. */
-        transition: 0.2s;
-    }
-
-    /* Change the button when the mouse is over it. */
-    .return-button:hover {
-        background: #111827;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    /* Make the list usable on smaller screens. */
-    @media (max-width: 900px) {
-
-        /* Allow the list to scroll horizontally. */
-        .interview-list {
-            overflow-x: auto;
-        }
-
-        /* Keep the columns readable. */
-        .interview-header,
-        .interview-row {
-            min-width: 750px;
-        }
-
-    }
-
-</style>
-
-
-<!-- Create the main Interviews page. -->
-<div class="interviews-page">
-
-    <!-- Show the page title. -->
-    <h1>
-        Interviews
-    </h1>
-
-    <!-- Explain what the page contains. -->
-    <div class="page-description">
-        View all selected candidates with scheduled interview details.
+    <!-- Top actions -->
+    <div class="iv-top">
+        <a href="/hr" class="iv-back">← Back to HR home</a>
     </div>
 
-    <!-- Create the interview list. -->
-    <div class="interview-list">
+    <div class="iv-shell">
 
-        <!-- Create the column headings. -->
-        <div class="interview-header">
-
-            <!-- Number column. -->
-            <div>
-                #
-            </div>
-
-            <!-- Candidate column. -->
-            <div>
-                CANDIDATE
-            </div>
-
-            <!-- Job column. -->
-            <div>
-                JOB
-            </div>
-
-            <!-- Date and time column. -->
-            <div>
-                DATE & TIME
-            </div>
-
+        <!-- Blue header band. Replace the text with your logo image. -->
+        <div class="iv-band">
+            <div class="iv-logo">xloop</div>
+            <span class="iv-band-label">Interviews</span>
         </div>
 
+        <div class="iv-body">
 
-        <!-- Loop through the existing interview data. -->
-        {% for interview in scheduled_interviews %}
+            <!-- Hero -->
+            <section class="iv-hero">
+                <span class="iv-tag">RECRUITMENT</span>
+                <h1>Interviews</h1>
+                <p>View all selected candidates with scheduled interview details.</p>
+            </section>
 
-        <!-- Create one interview row. -->
-        <div class="interview-row">
+            <!-- Interview list -->
+            <section class="iv-card">
 
-            <!-- Automatically show 1, 2, 3, etc. -->
-            <div class="row-number">
-                {{ loop.index }}
-            </div>
+                <div class="iv-table-wrap">
 
-            <!-- Show the candidate name. -->
-            <div class="candidate-name">
-                {{ interview.candidate or interview.name }}
-            </div>
+                    <div class="iv-header">
+                        <div>#</div>
+                        <div>CANDIDATE</div>
+                        <div>JOB</div>
+                        <div>DATE &amp; TIME</div>
+                    </div>
 
-            <!-- Show the job title. -->
-            <div class="job-title">
-                {{ interview.job or interview.title }}
-            </div>
+                    <!-- Loop through the existing interview data. -->
+                    {% for interview in scheduled_interviews %}
 
-            <!-- Show the interview date and time. -->
-            <div class="interview-date">
-                {{ interview.interview_datetime or interview.interview_date or interview.date }}
-            </div>
+                    <div class="iv-row">
+                        <div class="iv-number">{{ loop.index }}</div>
+                        <div class="iv-candidate">{{ interview.candidate or interview.name }}</div>
+                        <div>{{ interview.job or interview.title }}</div>
+                        <div>{{ interview.interview_datetime or interview.interview_date or interview.date }}</div>
+                    </div>
+
+                    {% else %}
+
+                    <div class="iv-empty">No scheduled interviews found.</div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
 
         </div>
-
-        <!-- If there are no interviews, show this message. -->
-        {% else %}
-
-        <div class="no-interviews">
-            No scheduled interviews found.
-        </div>
-
-        <!-- Finish the interview loop. -->
-        {% endfor %}
-
     </div>
 
 </div>
 
 
-<!-- Floating button to return to the HR home page. -->
-<a href="/hr" class="return-button">
-    ← Return
-</a>
+<style>
+    .iv-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 18px 20px 24px;
+        box-sizing: border-box;
+        color: #111827;
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    }
+
+    .iv-top {
+        margin-bottom: 12px;
+    }
+
+    .iv-back {
+        color: #334155;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .iv-back:hover {
+        color: #2563eb;
+    }
+
+    /* Shell */
+    .iv-shell {
+        border-radius: 22px;
+        background: #f3f7fd;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.07);
+    }
+
+    .iv-band {
+        background: #2d7de6;
+        padding: 0 28px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .iv-logo {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .iv-band-label {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .iv-body {
+        padding: 18px 22px 22px;
+    }
+
+    /* Hero */
+    .iv-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 20px 28px;
+        margin-bottom: 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #ffffff 40%, #f1f6ff 100%);
+    }
+
+    .iv-hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 110px;
+        height: 110px;
+        border-bottom-left-radius: 110px;
+        background: #dbe8fd;
+    }
+
+    .iv-hero > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .iv-tag {
+        display: inline-block;
+        padding: 5px 12px;
+        border: 1px solid #dbe6fb;
+        border-radius: 999px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .iv-hero h1 {
+        margin: 10px 0 2px;
+        font-size: 32px;
+        line-height: 1.1;
+        font-weight: 900;
+        color: #0f172a;
+    }
+
+    .iv-hero p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* List card */
+    .iv-card {
+        border: 1px solid #e3e9f2;
+        border-radius: 16px;
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    .iv-table-wrap {
+        overflow-x: auto;
+    }
+
+    .iv-header,
+    .iv-row {
+        display: grid;
+        grid-template-columns: 50px 1.3fr 1.5fr 1.5fr;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 20px;
+        font-size: 13px;
+    }
+
+    .iv-header {
+        background: #f8fbff;
+        border-bottom: 1px solid #e3e9f2;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+    }
+
+    .iv-row {
+        border-bottom: 1px solid #eef2f7;
+        color: #374151;
+    }
+
+    .iv-row:last-child {
+        border-bottom: none;
+    }
+
+    .iv-row:hover {
+        background: #fafcff;
+    }
+
+    .iv-number {
+        color: #2563eb;
+        font-weight: 800;
+    }
+
+    .iv-candidate {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .iv-empty {
+        padding: 24px;
+        text-align: center;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+        .iv-body {
+            padding: 14px 12px 18px;
+        }
+
+        .iv-hero h1 {
+            font-size: 26px;
+        }
+
+        .iv-header,
+        .iv-row {
+            min-width: 600px;
+        }
+    }
+</style>
 
 {% endblock %}
