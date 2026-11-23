@@ -1,1686 +1,631 @@
-
 {% extends "base.html" %}
 
 {% block title %}Application Questions{% endblock %}
 
 {% block content %}
 
-<!-- =========================================================
-     PROFESSIONAL HR JOB QUESTIONS PAGE
+<div class="qp-page">
 
-     This page allows HR to create application questions
-     candidates must answer during the job application.
-
-     Existing backend functionality is preserved.
-     ========================================================= -->
-
-
-<div class="questions-page">
-
-
-    <!-- =====================================================
-         PAGE HEADER
-         ===================================================== -->
-
-    <div class="page-header">
-
-        <div class="header-left">
-
-            <div class="page-eyebrow">
-                RECRUITMENT
-            </div>
-
-            <h1>
-                Application Questions
-            </h1>
-
-            <p>
-                Create the questions candidates must answer when
-                applying for this position.
-            </p>
-
-        </div>
-
-
-        <!-- Back to jobs button -->
-        <a href="/hr/jobs" class="back-button">
-            ← Back to Jobs
-        </a>
-
+    <!-- Top actions -->
+    <div class="qp-top">
+        <a href="/hr/jobs" class="qp-back">← Back to jobs</a>
     </div>
 
+    <div class="qp-shell">
 
-
-    <!-- =====================================================
-         JOB INFORMATION CARD
-         ===================================================== -->
-
-    <div class="job-info-card">
-
-        <div class="job-info-left">
-
-            <div class="job-icon">
-                Q
-            </div>
-
-
-            <div>
-
-                <h2>
-                    {{ job.title }}
-                </h2>
-
-                <div class="job-details">
-
-                    {% if job.department %}
-                        <span>
-                            {{ job.department }}
-                        </span>
-                    {% endif %}
-
-
-                    {% if job.location %}
-                        <span>
-                            {{ job.location }}
-                        </span>
-                    {% endif %}
-
-                </div>
-
-            </div>
-
+        <!-- Blue header band. Replace the text with your logo image. -->
+        <div class="qp-band">
+            <div class="qp-logo">xloop</div>
+            <span class="qp-band-label">Application questions</span>
         </div>
 
-
-        <!-- Current job status -->
-        <div class="job-status">
-
-            <span class="status-dot"></span>
-
-            <span class="status status-{{ job.status }}">
-                {{ job.status }}
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         SUCCESS MESSAGE
-         ===================================================== -->
-
-    {% if info %}
-
-        <div class="message success-message">
-
-            <div class="message-icon">
-                ✓
-            </div>
-
-            <div>
-                <strong>
-                    Changes saved
-                </strong>
-
-                <p>
-                    {{ info }}
-                </p>
-            </div>
-
-        </div>
-
-    {% endif %}
-
-
-
-    <!-- =====================================================
-         ERROR MESSAGE
-         ===================================================== -->
-
-    {% if error %}
-
-        <div class="message error-message">
-
-            <div class="message-icon">
-                !
-            </div>
-
-            <div>
-                <strong>
-                    Unable to save
-                </strong>
-
-                <p>
-                    {{ error }}
-                </p>
-            </div>
-
-        </div>
-
-    {% endif %}
-
-
-
-    <!-- =====================================================
-         MAIN QUESTIONS CARD
-         ===================================================== -->
-
-    <section class="questions-card">
-
-
-        <!-- Section heading -->
-        <div class="questions-card-header">
-
-            <div>
-
-                <div class="section-eyebrow">
-                    APPLICATION FORM
-                </div>
-
-                <h2>
-                    Candidate Questions
-                </h2>
-
-                <p>
-                    Add clear questions that help HR evaluate
-                    candidates during the application process.
-                </p>
-
-            </div>
-
-
-            <!-- Question counter -->
-            <div class="question-counter">
-
-                <span id="question-count">
-                    {% if questions %}
-                        {{ questions|length }}
-                    {% else %}
-                        1
-                    {% endif %}
-                </span>
-
-                <small>
-                    Question{% if questions and questions|length != 1 %}s{% endif %}
-                </small>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =================================================
-             EDITABLE QUESTIONS
-             ================================================= -->
-
-        {% if job.status == "draft" or job.status == "rejected" %}
-
-            <form
-                method="post"
-                action="/hr/jobs/questions/save"
-                id="questions-form">
-
-
-                <!-- Job ID is sent to the backend -->
-                <input
-                    type="hidden"
-                    name="job_id"
-                    value="{{ job.job_id }}">
-
-
-                <!-- =========================================
-                     QUESTIONS LIST
-                     ========================================= -->
-
-                <div
-                    id="questions-list"
-                    class="questions-list">
-
-
-                    {% if questions %}
-
-                        {% for q in questions %}
-
-                            <!-- One editable question -->
-                            <div class="question-row">
-
-                                <!-- Question number -->
-                                <div class="question-number">
-                                    {{ loop.index }}
-                                </div>
-
-
-                                <!-- Question input area -->
-                                <div class="question-field">
-
-                                    <label>
-                                        Question {{ loop.index }}
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        name="questions"
-                                        value="{{ q }}"
-                                        maxlength="300"
-                                        class="question-input"
-                                        placeholder="Example: Why are you interested in this position?">
-
-                                    <span class="character-hint">
-                                        Maximum 300 characters
-                                    </span>
-
-                                </div>
-
-
-                                <!-- Remove question -->
-                                <button
-                                    type="button"
-                                    class="remove-question"
-                                    onclick="removeQuestion(this)"
-                                    aria-label="Remove question">
-
-                                    <span>
-                                        ×
-                                    </span>
-
-                                    Remove
-
-                                </button>
-
-                            </div>
-
-                        {% endfor %}
-
-
-                    {% else %}
-
-                        <!-- First empty question -->
-                        <div class="question-row">
-
-                            <div class="question-number">
-                                1
-                            </div>
-
-
-                            <div class="question-field">
-
-                                <label>
-                                    Question 1
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="questions"
-                                    maxlength="300"
-                                    class="question-input"
-                                    placeholder="Example: Why are you interested in this position?">
-
-                                <span class="character-hint">
-                                    Maximum 300 characters
-                                </span>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="remove-question"
-                                onclick="removeQuestion(this)"
-                                aria-label="Remove question">
-
-                                <span>
-                                    ×
-                                </span>
-
-                                Remove
-
-                            </button>
-
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-
-                <!-- =================================================
-                     ADD QUESTION
-                     ================================================= -->
-
-                <button
-                    type="button"
-                    class="add-question-button"
-                    onclick="addQuestion()">
-
-                    <span class="plus-icon">
-                        +
-                    </span>
-
-                    Add Another Question
-
-                </button>
-
-
-
-                <!-- Helpful note -->
-                <div class="question-tip">
-
-                    <div class="tip-icon">
-                        i
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Question writing tip
-                        </strong>
-
-                        <p>
-                            Keep questions clear and relevant to the
-                            position. Avoid asking candidates for
-                            unnecessary personal information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     ACTIONS
-                     ================================================= -->
-
-                <div class="question-actions">
-
-                    <a href="/hr/jobs" class="secondary-action">
-                        Cancel
-                    </a>
-
-
-                    <button
-                        type="submit"
-                        class="save-question-button">
-
-                        Save Questions
-                        <span>
-                            →
-                        </span>
-
-                    </button>
-
-                </div>
-
-
-            </form>
-
-
-        {% else %}
-
-
-            <!-- =================================================
-                 LOCKED QUESTIONS
-                 ================================================= -->
-
-            <div class="locked-state">
-
-                <div class="locked-icon">
-                    ✓
-                </div>
-
-
-                <div class="locked-content">
-
-                    <h3>
-                        Questions are locked
-                    </h3>
-
+        <div class="qp-body">
+
+            <!-- Job summary -->
+            <section class="qp-hero">
+                <div>
+                    <span class="qp-tag">RECRUITMENT</span>
+                    <h1>{{ job.title }}</h1>
                     <p>
-                        This job has already been submitted for approval
-                        or published. The application questions cannot
-                        be changed at this stage.
+                        {% if job.department %}{{ job.department }}{% endif %}
+                        {% if job.location %} in {{ job.location }}{% endif %}
                     </p>
-
                 </div>
+                <span class="status status-{{ job.status }}">{{ job.status }}</span>
+            </section>
 
-            </div>
-
-
-
-            <!-- Saved questions -->
-            {% if questions %}
-
-                <div class="saved-questions-header">
-
-                    <div>
-
-                        <h3>
-                            Saved Questions
-                        </h3>
-
-                        <p>
-                            These are the questions currently attached
-                            to this job application.
-                        </p>
-
-                    </div>
-
-                    <span class="saved-count">
-                        {{ questions|length }}
-                    </span>
-
-                </div>
-
-
-                <div class="saved-question-list">
-
-                    {% for q in questions %}
-
-                        <div class="saved-question">
-
-                            <div class="saved-number">
-                                {{ loop.index }}
-                            </div>
-
-                            <p>
-                                {{ q }}
-                            </p>
-
-                        </div>
-
-                    {% endfor %}
-
-                </div>
-
-
-            {% else %}
-
-                <div class="empty-questions">
-
-                    <div class="empty-icon">
-                        Q
-                    </div>
-
-                    <h3>
-                        No questions saved
-                    </h3>
-
-                    <p>
-                        No application questions have been saved
-                        for this job.
-                    </p>
-
-                </div>
-
+            <!-- Success message -->
+            {% if info %}
+                <div class="qp-message qp-success"><strong>Changes saved:</strong> {{ info }}</div>
             {% endif %}
 
-        {% endif %}
+            <!-- Error message -->
+            {% if error %}
+                <div class="qp-message qp-error"><strong>Unable to save:</strong> {{ error }}</div>
+            {% endif %}
+
+            <!-- Questions card -->
+            <section class="qp-card">
+
+                <div class="qp-card-head">
+                    <div>
+                        <h2>Candidate questions</h2>
+                        <p>Questions candidates must answer when applying for this position.</p>
+                    </div>
+
+                    <div class="qp-counter">
+                        <span id="question-count">{% if questions %}{{ questions|length }}{% else %}1{% endif %}</span>
+                        <small>Total</small>
+                    </div>
+                </div>
 
 
-    </section>
+                {% if job.status == "draft" or job.status == "rejected" %}
 
+                    <form method="post" action="/hr/jobs/questions/save" id="questions-form">
 
+                        <input type="hidden" name="job_id" value="{{ job.job_id }}">
 
-    <!-- =====================================================
-         BOTTOM NAVIGATION
-         ===================================================== -->
+                        <div id="questions-list" class="questions-list">
 
-    <div class="bottom-navigation">
+                            {% if questions %}
 
-        <a href="/hr/jobs">
-            ← Back to Jobs
-        </a>
+                                {% for q in questions %}
+                                    <div class="question-row">
+                                        <div class="question-number">{{ loop.index }}</div>
 
+                                        <div class="question-field">
+                                            <label>Question {{ loop.index }}</label>
+                                            <input
+                                                type="text"
+                                                name="questions"
+                                                value="{{ q }}"
+                                                maxlength="300"
+                                                class="question-input"
+                                                placeholder="Example: Why are you interested in this position?">
+                                        </div>
+
+                                        <button type="button" class="remove-question" onclick="removeQuestion(this)" aria-label="Remove question">
+                                            <span>×</span> Remove
+                                        </button>
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="question-row">
+                                    <div class="question-number">1</div>
+
+                                    <div class="question-field">
+                                        <label>Question 1</label>
+                                        <input
+                                            type="text"
+                                            name="questions"
+                                            maxlength="300"
+                                            class="question-input"
+                                            placeholder="Example: Why are you interested in this position?">
+                                    </div>
+
+                                    <button type="button" class="remove-question" onclick="removeQuestion(this)" aria-label="Remove question">
+                                        <span>×</span> Remove
+                                    </button>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <button type="button" class="add-question-button" onclick="addQuestion()">
+                            <span class="plus-icon">+</span> Add another question
+                        </button>
+
+                        <p class="qp-tip">
+                            Tip: keep questions clear and relevant to the position, max 300 characters each.
+                            Avoid asking for unnecessary personal information.
+                        </p>
+
+                        <div class="question-actions">
+                            <a href="/hr/jobs" class="secondary-action">Cancel</a>
+                            <button type="submit" class="save-question-button">Save Questions →</button>
+                        </div>
+
+                    </form>
+
+                {% else %}
+
+                    <!-- Locked state -->
+                    <p class="qp-locked">
+                        Questions are locked. This job has already been submitted for approval
+                        or published, so the questions cannot be changed.
+                    </p>
+
+                    {% if questions %}
+                        <ol class="qp-saved">
+                            {% for q in questions %}
+                                <li>{{ q }}</li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <p class="qp-empty">No application questions have been saved for this job.</p>
+                    {% endif %}
+
+                {% endif %}
+
+            </section>
+
+        </div>
     </div>
-
 
 </div>
 
 
-
-<!-- =========================================================
-     PROFESSIONAL PAGE CSS
-     ========================================================= -->
-
 <style>
-
-/* =========================================================
-   MAIN PAGE
-   ========================================================= */
-
-
-/* Main questions page container. */
-.questions-page {
-    width: 100%;
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 32px 30px 60px;
-    box-sizing: border-box;
-}
-
-
-/* =========================================================
-   PAGE HEADER
-   ========================================================= */
-
-
-/* Main header layout. */
-.page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 25px;
-    margin-bottom: 24px;
-}
-
-
-/* Left side of header. */
-.header-left {
-    max-width: 720px;
-}
-
-
-/* Small page label. */
-.page-eyebrow {
-    margin-bottom: 8px;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-}
-
-
-/* Main page title. */
-.page-header h1 {
-    margin: 0;
-    color: #111827;
-    font-size: 32px;
-    line-height: 1.15;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-
-/* Header description. */
-.page-header p {
-    margin: 9px 0 0;
-    color: #64748b;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-
-/* Back button. */
-.back-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid #dbe2ea;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #334155;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-
-/* Back button hover. */
-.back-button:hover {
-    border-color: #bfdbfe;
-    background: #f8fbff;
-    color: #2563eb;
-}
-
-
-/* =========================================================
-   JOB INFORMATION
-   ========================================================= */
-
-
-/* Job information card. */
-.job-info-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 22px 24px;
-    margin-bottom: 20px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-}
-
-
-/* Left side of job information. */
-.job-info-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-
-/* Small job icon. */
-.job-icon {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 14px;
-    font-weight: 900;
-}
-
-
-/* Job title. */
-.job-info-card h2 {
-    margin: 0 0 6px;
-    color: #111827;
-    font-size: 17px;
-    font-weight: 800;
-}
-
-
-/* Job details wrapper. */
-.job-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    color: #64748b;
-    font-size: 12px;
-}
-
-
-/* Details separator style. */
-.job-details span + span::before {
-    content: "·";
-    margin-right: 8px;
-    color: #94a3b8;
-}
-
-
-/* Job status wrapper. */
-.job-status {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-
-/* Status dot. */
-.status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #22c55e;
-}
-
-
-/* Existing status badge. */
-.status {
-    display: inline-flex;
-    align-items: center;
-    min-height: 27px;
-    padding: 0 10px;
-    border-radius: 999px;
-    background: #f1f5f9;
-    color: #475569;
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-
-/* Draft status. */
-.status-draft {
-    background: #eff6ff;
-    color: #2563eb;
-}
-
-
-/* Rejected status. */
-.status-rejected {
-    background: #fef2f2;
-    color: #dc2626;
-}
-
-
-/* Pending status. */
-.status-pending_approval {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-
-/* Published status. */
-.status-published {
-    background: #ecfdf5;
-    color: #047857;
-}
-
-
-/* =========================================================
-   MESSAGES
-   ========================================================= */
-
-
-/* General message box. */
-.message {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    border-radius: 11px;
-}
-
-
-/* Message icon. */
-.message-icon {
-    width: 27px;
-    height: 27px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 900;
-}
-
-
-/* Success message. */
-.success-message {
-    background: #ecfdf5;
-    border: 1px solid #a7f3d0;
-}
-
-
-/* Success icon. */
-.success-message .message-icon {
-    background: #d1fae5;
-    color: #047857;
-}
-
-
-/* Success text. */
-.success-message strong {
-    color: #047857;
-}
-
-
-/* Error message. */
-.error-message {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-}
-
-
-/* Error icon. */
-.error-message .message-icon {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-
-/* Error text. */
-.error-message strong {
-    color: #b91c1c;
-}
-
-
-/* Message title. */
-.message strong {
-    display: block;
-    margin-bottom: 3px;
-    font-size: 12px;
-}
-
-
-/* Message description. */
-.message p {
-    margin: 0;
-    color: #64748b;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   QUESTIONS CARD
-   ========================================================= */
-
-
-/* Main questions card. */
-.questions-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-
-/* Questions card header. */
-.questions-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    padding: 27px 28px;
-    border-bottom: 1px solid #edf1f6;
-}
-
-
-/* Section eyebrow. */
-.section-eyebrow {
-    margin-bottom: 7px;
-    color: #2563eb;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1.3px;
-}
-
-
-/* Section heading. */
-.questions-card-header h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 20px;
-    font-weight: 800;
-}
-
-
-/* Section description. */
-.questions-card-header p {
-    max-width: 650px;
-    margin: 7px 0 0;
-    color: #64748b;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-
-/* Question counter. */
-.question-counter {
-    min-width: 72px;
-    padding: 10px 14px;
-    border: 1px solid #dbeafe;
-    border-radius: 10px;
-    background: #f8fbff;
-    text-align: center;
-}
-
-
-/* Counter number. */
-.question-counter span {
-    display: block;
-    color: #2563eb;
-    font-size: 20px;
-    line-height: 1;
-    font-weight: 900;
-}
-
-
-/* Counter label. */
-.question-counter small {
-    display: block;
-    margin-top: 4px;
-    color: #64748b;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-
-/* =========================================================
-   QUESTION LIST
-   ========================================================= */
-
-
-/* Questions form area. */
-#questions-form {
-    padding: 28px;
-}
-
-
-/* Questions list. */
-.questions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-}
-
-
-/* Individual question row. */
-.question-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 16px;
-    border: 1px solid #e2e8f0;
-    border-radius: 11px;
-    background: #fafbfd;
-    transition: border-color 0.15s ease;
-}
-
-
-/* Question row hover. */
-.question-row:hover {
-    border-color: #cbd5e1;
-}
-
-
-/* Question number. */
-.question-number {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 22px;
-    border-radius: 9px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 12px;
-    font-weight: 900;
-}
-
-
-/* Question field. */
-.question-field {
-    flex: 1;
-    min-width: 0;
-}
-
-
-/* Question label. */
-.question-field label {
-    display: block;
-    margin-bottom: 6px;
-    color: #334155;
-    font-size: 11px;
-    font-weight: 800;
-}
-
-
-/* Question input. */
-.question-input {
-    width: 100%;
-    height: 43px;
-    padding: 0 13px;
-    box-sizing: border-box;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #111827;
-    font-family: inherit;
-    font-size: 13px;
-    outline: none;
-}
-
-
-/* Input focus. */
-.question-input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-}
-
-
-/* Placeholder. */
-.question-input::placeholder {
-    color: #94a3b8;
-}
-
-
-/* Character hint. */
-.character-hint {
-    display: block;
-    margin-top: 5px;
-    color: #94a3b8;
-    font-size: 9px;
-}
-
-
-/* Remove button. */
-.remove-question {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    min-height: 38px;
-    margin-top: 21px;
-    padding: 0 11px;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #dc2626;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-
-/* Remove icon. */
-.remove-question span {
-    font-size: 17px;
-    line-height: 1;
-}
-
-
-/* Remove hover. */
-.remove-question:hover {
-    background: #fef2f2;
-    border-color: #fca5a5;
-}
-
-
-/* =========================================================
-   ADD QUESTION
-   ========================================================= */
-
-
-/* Add question button. */
-.add-question-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 42px;
-    margin-top: 17px;
-    padding: 0 16px;
-    border: 1px dashed #93c5fd;
-    border-radius: 9px;
-    background: #f8fbff;
-    color: #2563eb;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-
-/* Plus icon. */
-.plus-icon {
-    font-size: 18px;
-    line-height: 1;
-}
-
-
-/* Add question hover. */
-.add-question-button:hover {
-    background: #eff6ff;
-    border-color: #60a5fa;
-}
-
-
-/* =========================================================
-   QUESTION TIP
-   ========================================================= */
-
-
-/* Tip box. */
-.question-tip {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-    margin-top: 22px;
-    padding: 13px 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: 9px;
-    background: #f8fafc;
-}
-
-
-/* Tip icon. */
-.tip-icon {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #e2e8f0;
-    color: #475569;
-    font-size: 11px;
-    font-weight: 900;
-}
-
-
-/* Tip heading. */
-.question-tip strong {
-    display: block;
-    margin-bottom: 3px;
-    color: #334155;
-    font-size: 11px;
-}
-
-
-/* Tip text. */
-.question-tip p {
-    margin: 0;
-    color: #64748b;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   ACTIONS
-   ========================================================= */
-
-
-/* Action buttons area. */
-.question-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 25px;
-    padding-top: 22px;
-    border-top: 1px solid #edf1f6;
-}
-
-
-/* Cancel button. */
-.secondary-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 42px;
-    padding: 0 17px;
-    border: 1px solid #dbe2ea;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #475569;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-
-/* Cancel hover. */
-.secondary-action:hover {
-    background: #f8fafc;
-}
-
-
-/* Save button. */
-.save-question-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    min-height: 42px;
-    padding: 0 20px;
-    border: 0;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-
-/* Save button arrow. */
-.save-question-button span {
-    font-size: 16px;
-}
-
-
-/* Save hover. */
-.save-question-button:hover {
-    background: #1d4ed8;
-}
-
-
-/* =========================================================
-   LOCKED STATE
-   ========================================================= */
-
-
-/* Locked information box. */
-.locked-state {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin: 28px;
-    padding: 18px;
-    border: 1px solid #dbe2ea;
-    border-radius: 11px;
-    background: #f8fafc;
-}
-
-
-/* Locked icon. */
-.locked-icon {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #ecfdf5;
-    color: #047857;
-    font-size: 13px;
-    font-weight: 900;
-}
-
-
-/* Locked heading. */
-.locked-content h3 {
-    margin: 2px 0 5px;
-    color: #334155;
-    font-size: 14px;
-}
-
-
-/* Locked description. */
-.locked-content p {
-    margin: 0;
-    color: #64748b;
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   SAVED QUESTIONS
-   ========================================================= */
-
-
-/* Saved questions header. */
-.saved-questions-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin: 0 28px 14px;
-}
-
-
-/* Saved heading. */
-.saved-questions-header h3 {
-    margin: 0;
-    color: #111827;
-    font-size: 15px;
-}
-
-
-/* Saved description. */
-.saved-questions-header p {
-    margin: 4px 0 0;
-    color: #64748b;
-    font-size: 11px;
-}
-
-
-/* Saved count. */
-.saved-count {
-    min-width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 11px;
-    font-weight: 900;
-}
-
-
-/* Saved question list. */
-.saved-question-list {
-    padding: 0 28px 28px;
-}
-
-
-/* Individual saved question. */
-.saved-question {
-    display: flex;
-    align-items: flex-start;
-    gap: 13px;
-    padding: 14px 15px;
-    margin-top: 9px;
-    border: 1px solid #e2e8f0;
-    border-radius: 9px;
-    background: #ffffff;
-}
-
-
-/* Saved question number. */
-.saved-number {
-    width: 27px;
-    height: 27px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 900;
-}
-
-
-/* Saved question text. */
-.saved-question p {
-    margin: 4px 0 0;
-    color: #334155;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-   ========================================================= */
-
-
-/* Empty state. */
-.empty-questions {
-    margin: 0 28px 28px;
-    padding: 38px 20px;
-    border: 1px dashed #cbd5e1;
-    border-radius: 10px;
-    background: #fafbfd;
-    text-align: center;
-}
-
-
-/* Empty icon. */
-.empty-icon {
-    width: 40px;
-    height: 40px;
-    margin: 0 auto 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 13px;
-    font-weight: 900;
-}
-
-
-/* Empty heading. */
-.empty-questions h3 {
-    margin: 0;
-    color: #334155;
-    font-size: 14px;
-}
-
-
-/* Empty description. */
-.empty-questions p {
-    margin: 6px 0 0;
-    color: #64748b;
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   BOTTOM NAVIGATION
-   ========================================================= */
-
-
-/* Bottom back link. */
-.bottom-navigation {
-    margin-top: 20px;
-}
-
-
-/* Bottom link. */
-.bottom-navigation a {
-    color: #64748b;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-
-/* Bottom link hover. */
-.bottom-navigation a:hover {
-    color: #2563eb;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-
-/* Tablet layout. */
-@media (max-width: 800px) {
-
-    .questions-page {
-        padding: 25px 20px 45px;
-    }
-
-
-    .page-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-
-    .job-info-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-
-    .questions-card-header {
-        align-items: flex-start;
-    }
-
-
-    .question-row {
-        flex-wrap: wrap;
-    }
-
-
-    .question-field {
-        min-width: calc(100% - 50px);
-    }
-
-
-    .remove-question {
-        margin-left: 50px;
-        margin-top: 0;
-    }
-
-}
-
-
-/* Mobile layout. */
-@media (max-width: 600px) {
-
-    .questions-page {
-        padding: 20px 14px 40px;
-    }
-
-
-    .page-header h1 {
-        font-size: 27px;
-    }
-
-
-    .back-button {
+    .qp-page {
         width: 100%;
-    }
-
-
-    .job-info-card {
-        padding: 18px;
-    }
-
-
-    .job-info-left {
-        align-items: flex-start;
-    }
-
-
-    .questions-card-header {
-        flex-direction: column;
-        padding: 22px 20px;
-    }
-
-
-    .question-counter {
-        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 18px 20px 24px;
         box-sizing: border-box;
+        color: #111827;
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
     }
 
-
-    #questions-form {
-        padding: 20px;
+    .qp-top {
+        margin-bottom: 12px;
     }
 
+    .qp-back {
+        color: #334155;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .qp-back:hover {
+        color: #2563eb;
+    }
+
+    /* Shell */
+    .qp-shell {
+        border-radius: 22px;
+        background: #f3f7fd;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.07);
+    }
+
+    .qp-band {
+        background: #2d7de6;
+        padding: 0 28px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .qp-logo {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .qp-band-label {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .qp-body {
+        padding: 18px 22px 22px;
+    }
+
+    /* Hero */
+    .qp-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 26px;
+        margin-bottom: 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #ffffff 40%, #f1f6ff 100%);
+    }
+
+    .qp-hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        border-bottom-left-radius: 100px;
+        background: #dbe8fd;
+    }
+
+    .qp-hero > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .qp-hero .status {
+        margin-right: 30px;
+    }
+
+    .qp-tag {
+        display: inline-block;
+        padding: 4px 11px;
+        border: 1px solid #dbe6fb;
+        border-radius: 999px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .qp-hero h1 {
+        margin: 8px 0 2px;
+        font-size: 28px;
+        line-height: 1.1;
+        font-weight: 900;
+        color: #0f172a;
+    }
+
+    .qp-hero p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Status badge */
+    .status {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 0 11px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-draft { background: #eff6ff; color: #2563eb; }
+    .status-rejected { background: #fef2f2; color: #dc2626; }
+    .status-pending_approval { background: #fff7ed; color: #c2410c; }
+    .status-published { background: #ecfdf5; color: #047857; }
+
+    /* Messages */
+    .qp-message {
+        margin-bottom: 12px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 13px;
+    }
+
+    .qp-success {
+        border: 1px solid #a7f3d0;
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .qp-error {
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    /* Card */
+    .qp-card {
+        padding: 16px 20px 18px;
+        border: 1px solid #e3e9f2;
+        border-radius: 16px;
+        background: #ffffff;
+    }
+
+    .qp-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+    }
+
+    .qp-card-head h2 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .qp-card-head p {
+        margin: 3px 0 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .qp-counter {
+        min-width: 56px;
+        padding: 6px 12px;
+        border: 1px solid #dbe6fb;
+        border-radius: 12px;
+        background: #eef4ff;
+        text-align: center;
+    }
+
+    .qp-counter span {
+        display: block;
+        color: #2563eb;
+        font-size: 18px;
+        line-height: 1;
+        font-weight: 900;
+    }
+
+    .qp-counter small {
+        display: block;
+        margin-top: 2px;
+        color: #64748b;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    /* Question rows */
+    .questions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
     .question-row {
-        padding: 13px;
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 12px;
+        background: #fafcff;
     }
-
 
     .question-number {
-        margin-top: 0;
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px;
+        border-radius: 8px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 800;
     }
 
-
     .question-field {
-        width: calc(100% - 50px);
+        flex: 1;
         min-width: 0;
     }
 
+    .question-field label {
+        display: block;
+        margin-bottom: 3px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .question-input {
+        width: 100%;
+        height: 36px;
+        padding: 0 12px;
+        box-sizing: border-box;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #111827;
+        font-family: inherit;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .question-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .question-input::placeholder {
+        color: #94a3b8;
+    }
 
     .remove-question {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 36px;
+        padding: 0 12px;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #dc2626;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
     }
 
+    .remove-question span {
+        font-size: 16px;
+        line-height: 1;
+    }
 
+    .remove-question:hover {
+        background: #fef2f2;
+    }
+
+    /* Add question */
+    .add-question-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        margin-top: 10px;
+        padding: 0 16px;
+        border: 1px dashed #93c5fd;
+        border-radius: 999px;
+        background: #f8fbff;
+        color: #2563eb;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .plus-icon {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    .add-question-button:hover {
+        background: #eff6ff;
+    }
+
+    .qp-tip {
+        margin: 12px 0 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* Actions */
     .question-actions {
-        flex-direction: column-reverse;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #edf1f6;
     }
 
+    .secondary-action {
+        color: #475569;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+    }
 
-    .secondary-action,
+    .secondary-action:hover {
+        color: #2563eb;
+    }
+
     .save-question-button {
-        width: 100%;
+        padding: 10px 24px;
+        border: 0;
+        border-radius: 999px;
+        background: #2d7de6;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
     }
 
-
-    .locked-state {
-        margin: 20px;
+    .save-question-button:hover {
+        background: #2563eb;
     }
 
-
-    .saved-questions-header {
-        margin-left: 20px;
-        margin-right: 20px;
+    /* Locked state */
+    .qp-locked {
+        margin: 0 0 10px;
+        padding: 10px 14px;
+        border: 1px solid #dbe2ea;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.5;
     }
 
-
-    .saved-question-list {
+    .qp-saved {
+        margin: 0;
         padding-left: 20px;
-        padding-right: 20px;
-        padding-bottom: 20px;
+        color: #334155;
+        font-size: 13px;
+        line-height: 1.7;
     }
 
-
-    .empty-questions {
-        margin-left: 20px;
-        margin-right: 20px;
+    .qp-empty {
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
     }
 
-}
+    /* Responsive */
+    @media (max-width: 700px) {
+        .qp-body {
+            padding: 14px 12px 18px;
+        }
 
+        .qp-hero {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .question-row {
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .question-field {
+            width: calc(100% - 40px);
+            flex: none;
+        }
+
+        .remove-question {
+            margin-left: 38px;
+        }
+
+        .question-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+            text-align: center;
+        }
+    }
 </style>
 
 
-
-<!-- =========================================================
-     QUESTION JAVASCRIPT
-
-     The existing add/remove behavior is preserved.
-     ========================================================= -->
-
 <script>
 
-/* ---------------------------------------------------------
-   Remove one question
-   --------------------------------------------------------- */
-
+/* Remove one question */
 function removeQuestion(button) {
-
-    // Find the question row containing the clicked button.
     var row = button.parentElement;
-
-    // Remove that question from the page.
     row.remove();
-
-    // Renumber the remaining questions.
     updateQuestionNumbers();
-
-    // Update the question counter.
     updateQuestionCount();
-
 }
 
 
-/* ---------------------------------------------------------
-   Add a new question
-   --------------------------------------------------------- */
-
+/* Add a new question */
 function addQuestion() {
-
-    // Find the list containing all questions.
     var list = document.getElementById("questions-list");
-
-    // Create a new question row.
     var row = document.createElement("div");
 
-    // Apply the same styling as existing question rows.
     row.className = "question-row";
 
-    // Add the question number, input and remove button.
     row.innerHTML = `
         <div class="question-number"></div>
 
         <div class="question-field">
-
-            <label>
-                Question
-            </label>
-
+            <label>Question</label>
             <input
                 type="text"
                 name="questions"
                 maxlength="300"
                 class="question-input"
                 placeholder="Example: Why are you interested in this position?">
-
-            <span class="character-hint">
-                Maximum 300 characters
-            </span>
-
         </div>
 
         <button
@@ -1688,92 +633,46 @@ function addQuestion() {
             class="remove-question"
             onclick="removeQuestion(this)"
             aria-label="Remove question">
-
-            <span>
-                ×
-            </span>
-
-            Remove
-
+            <span>×</span> Remove
         </button>
     `;
 
-    // Add the new question to the bottom of the list.
     list.appendChild(row);
 
-    // Renumber all questions.
     updateQuestionNumbers();
-
-    // Update the question counter.
     updateQuestionCount();
 
-    // Automatically focus the new question input.
     var inputs = list.querySelectorAll(".question-input");
-
-    // Select the newest input.
     inputs[inputs.length - 1].focus();
-
 }
 
 
-/* ---------------------------------------------------------
-   Renumber questions
-   --------------------------------------------------------- */
-
+/* Renumber questions */
 function updateQuestionNumbers() {
-
-    // Find every question row.
     var rows = document.querySelectorAll(".question-row");
 
-    // Go through every question row.
     for (var i = 0; i < rows.length; i++) {
-
-        // Find the number box.
-        var numberBox =
-            rows[i].querySelector(".question-number");
-
-        // Update the visible question number.
-        numberBox.textContent = i + 1;
-
-        // Update the label beside the input.
-        var label =
-            rows[i].querySelector(".question-field label");
-
-        // Update the label text.
-        label.textContent = "Question " + (i + 1);
-
+        rows[i].querySelector(".question-number").textContent = i + 1;
+        rows[i].querySelector(".question-field label").textContent = "Question " + (i + 1);
     }
-
 }
 
 
-/* ---------------------------------------------------------
-   Update question counter
-   --------------------------------------------------------- */
-
+/* Update question counter */
 function updateQuestionCount() {
-
-    // Find all visible question rows.
     var rows = document.querySelectorAll(".question-row");
-
-    // Find the counter number.
     var counter = document.getElementById("question-count");
 
-    // Show the current number of questions.
-    counter.textContent = rows.length;
-
+    if (counter) {
+        counter.textContent = rows.length;
+    }
 }
 
 
-/* ---------------------------------------------------------
-   Run these functions when the page first loads.
-   --------------------------------------------------------- */
-
+/* Run once when the page loads */
 updateQuestionNumbers();
-
 updateQuestionCount();
 
 </script>
-
 
 {% endblock %}

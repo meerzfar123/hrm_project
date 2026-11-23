@@ -265,54 +265,99 @@ def open_job(job_id, user_id):
     return rows == 1
 
 
-# Delete a job safely
-# Only draft and rejected jobs can be permanently deleted
+# Delete a job safely.
+# This allows draft, rejected, and closed jobs to be permanently deleted.
 def delete_job(job_id, user_id):
-    # First check whether this HR owns the job and whether it is safe to delete
+
+    # First check that this HR owns the job.
     job = db.fetch_one(
         "SELECT status FROM jobs "
         "WHERE job_id = %s AND created_by = %s;",
         (job_id, user_id),
     )
 
-    # No job or another HR owns it
+    # If the job does not exist or belongs to another HR, stop here.
     if job is None:
         return "not_found"
 
-    # Published jobs must be closed instead of deleted
-    if job[0] == "published":
+    # Get the job status.
+    status = job[0]
+
+    # Published jobs must still be closed before they can be deleted.
+    if status == "published":
         return "published"
 
-    # Pending approval jobs cannot be deleted
-    if job[0] == "pending_approval":
+    # Jobs waiting for manager approval cannot be deleted.
+    if status == "pending_approval":
         return "pending"
 
-    # Closed jobs are kept because they may have applications/history
-    if job[0] == "closed":
-        return "closed"
-
-    # Delete questions belonging to the draft/rejected job
+    # Delete answers belonging to candidates of this job.
     db.execute(
-        "DELETE FROM job_questions WHERE job_id = %s;",
+        "DELETE FROM candidate_answers "
+        "WHERE candidate_id IN "
+        "(SELECT candidate_id FROM candidates WHERE job_id = %s);",
         (job_id,),
     )
 
-    # Delete the job itself
+    # Delete queries belonging to candidates of this job.
+    db.execute(
+        "DELETE FROM candidate_queries "
+        "WHERE candidate_id IN "
+        "(SELECT candidate_id FROM candidates WHERE job_id = %s);",
+        (job_id,),
+    )
+
+    # Delete interviews belonging to candidates of this job.
+    db.execute(
+        "DELETE FROM interviews "
+        "WHERE candidate_id IN "
+        "(SELECT candidate_id FROM candidates WHERE job_id = %s);",
+        (job_id,),
+    )
+
+    # Delete offers belonging to candidates of this job.
+    db.execute(
+        "DELETE FROM offers "
+        "WHERE candidate_id IN "
+        "(SELECT candidate_id FROM candidates WHERE job_id = %s);",
+        (job_id,),
+    )
+
+    # Now delete the candidates belonging to this job.
+    db.execute(
+        "DELETE FROM candidates "
+        "WHERE job_id = %s;",
+        (job_id,),
+    )
+
+    # Delete the questions belonging to this job.
+    db.execute(
+        "DELETE FROM job_questions "
+        "WHERE job_id = %s;",
+        (job_id,),
+    )
+
+    # Delete notifications belonging to this job.
+    db.execute(
+        "DELETE FROM notifications "
+        "WHERE job_id = %s;",
+        (job_id,),
+    )
+
+    # Finally delete the job itself.
     rows = db.execute(
         "DELETE FROM jobs "
         "WHERE job_id = %s "
-        "AND created_by = %s "
-        "AND status IN ('draft', 'rejected');",
+        "AND created_by = %s;",
         (job_id, user_id),
     )
 
-    # Return success when exactly one job was deleted
+    # If one job was deleted, report success.
     if rows == 1:
         return "deleted"
 
-    # Something prevented the deletion
+    # Something unexpected prevented the deletion.
     return "error"
-
 
 # Tell every manager that a job waits for approval
 def notify_managers(job_id, title):

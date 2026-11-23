@@ -6,517 +6,474 @@
 
 {% block public_content %}
 
-<style>
+<div class="md-page">
 
-    /* Create the same light Manager page background. */
-    .manager-decision-page {
-        min-height: calc(100vh - 80px);
-        background: #f5f7fa;
-        padding: 40px 42px 60px;
-        box-sizing: border-box;
-    }
+    <!-- Top actions -->
+    <div class="md-top">
+        <a href="/manager" class="md-back">&larr; Back to Manager</a>
+    </div>
 
-    /* Keep the page width comfortable for reading. */
-    .manager-decision-container {
-        max-width: 1100px;
-        margin: 0 auto;
-    }
+    <div class="md-shell">
 
-    /* Create the page heading area. */
-    .manager-decision-header {
-        margin-bottom: 28px;
-    }
-
-    /* Style the small page label. */
-    .manager-decision-label {
-        color: #2563eb;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 8px;
-    }
-
-    /* Style the job title. */
-    .manager-decision-header h1 {
-        margin: 0;
-        color: #111827;
-        font-size: 30px;
-        font-weight: 700;
-    }
-
-    /* Style the short page description. */
-    .manager-decision-header p {
-        margin: 8px 0 0;
-        color: #64748b;
-        font-size: 14px;
-    }
-
-    /* Style error messages. */
-    .manager-decision-page .error {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
-        padding: 12px 15px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-    }
-
-    /* Create the same simple white cards used by Manager pages. */
-    .manager-decision-page .panel {
-        background: #ffffff;
-        border: 1px solid #e1e5ea;
-        border-radius: 8px;
-        padding: 26px;
-        margin-bottom: 22px;
-        box-shadow: none;
-    }
-
-    /* Style card headings. */
-    .manager-decision-page .panel h2 {
-        margin-top: 0;
-        margin-bottom: 18px;
-        color: #111827;
-        font-size: 19px;
-    }
-
-    /* Create a clean job information grid. */
-    .job-information {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-        margin-bottom: 25px;
-    }
-
-    /* Style each job information item. */
-    .job-information-item {
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        padding: 14px;
-    }
-
-    /* Style information labels. */
-    .job-information-label {
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-
-    /* Style information values. */
-    .job-information-value {
-        color: #111827;
-        font-size: 14px;
-        font-weight: 600;
-        word-break: break-word;
-    }
-
-    /* Add a divider before the detailed job information. */
-    .job-detail {
-        border-top: 1px solid #e5e7eb;
-        padding-top: 22px;
-    }
-
-    /* Style Description, Requirements and Benefits headings. */
-    .job-detail h2 {
-        margin-top: 22px;
-        margin-bottom: 9px;
-        color: #111827;
-        font-size: 17px;
-    }
-
-    /* Keep the job text easy to read. */
-    .job-detail p {
-        color: #475569;
-        font-size: 14px;
-        line-height: 1.7;
-        margin-top: 0;
-    }
-
-    /* Style the questions list. */
-    .manager-questions {
-        margin: 0;
-        padding-left: 24px;
-    }
-
-    /* Style each question. */
-    .manager-questions li {
-        color: #475569;
-        font-size: 14px;
-        line-height: 1.6;
-        padding: 7px 0;
-    }
-
-    /* Create the decision area. */
-    .decision-section {
-        border: 1px solid #e1e5ea;
-    }
-
-    /* Style the reason label. */
-    .decision-section label {
-        display: block;
-        color: #374151;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 7px;
-    }
-
-    /* Style the rejection reason field. */
-    .decision-section textarea {
-        width: 100%;
-        max-width: 100%;
-        min-height: 100px;
-        padding: 11px 13px;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        box-sizing: border-box;
-        resize: vertical;
-        font-family: inherit;
-        font-size: 14px;
-        color: #111827;
-    }
-
-    /* Highlight the textarea when selected. */
-    .decision-section textarea:focus {
-        outline: none;
-        border-color: #2563eb;
-    }
-
-    /* Put the decision buttons beside each other. */
-    .button-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 18px;
-    }
-
-    /* Style the Approve button. */
-    .button-row button[type="submit"] {
-        padding: 10px 18px;
-        border: none;
-        border-radius: 5px;
-        background: #2563eb;
-        color: #ffffff;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    /* Add a small hover effect to Approve. */
-    .button-row button[type="submit"]:hover {
-        background: #1d4ed8;
-    }
-
-    /* Style the Reject button separately. */
-    .button-row .btn-danger {
-        background: #ffffff;
-        border: 1px solid #dc2626;
-        color: #dc2626;
-    }
-
-    /* Add a light hover effect to Reject. */
-    .button-row .btn-danger:hover {
-        background: #fef2f2;
-    }
-
-    /* Style the Back link. */
-    .manager-back-link {
-        display: inline-block;
-        margin-top: 2px;
-        color: #2563eb;
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    /* Underline the Back link on hover. */
-    .manager-back-link:hover {
-        text-decoration: underline;
-    }
-
-    /* Make the information grid responsive. */
-    @media (max-width: 850px) {
-        .job-information {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    /* Make the page comfortable on mobile screens. */
-    @media (max-width: 600px) {
-        .manager-decision-page {
-            padding: 25px 18px 40px;
-        }
-
-        .manager-decision-header h1 {
-            font-size: 25px;
-        }
-
-        .job-information {
-            grid-template-columns: 1fr;
-        }
-
-        .button-row {
-            flex-direction: column;
-        }
-
-        .button-row button {
-            width: 100%;
-        }
-    }
-
-</style>
-
-
-<!-- Main Manager decision page. -->
-<div class="manager-decision-page">
-
-    <!-- Keep the content centered and readable. -->
-    <div class="manager-decision-container">
-
-
-        <!-- ==================== PAGE HEADER ==================== -->
-
-        <div class="manager-decision-header">
-
-            <!-- Small section label. -->
-            <div class="manager-decision-label">
-                Job review
-            </div>
-
-            <!-- Show the actual job title. -->
-            <h1>
-                {{ job.title }}
-            </h1>
-
-            <!-- Explain the purpose of the page. -->
-            <p>
-                Review the job details before making a final decision.
-            </p>
-
+        <!-- Blue header band. Replace the text with your logo image. -->
+        <div class="md-band">
+            <div class="md-logo">xloop</div>
+            <span class="md-band-label">Manager decision</span>
         </div>
 
+        <div class="md-body">
 
-        <!-- Show an error if the backend provides one. -->
-        {% if error %}
+            <!-- Error message -->
+            {% if error %}
+                <div class="md-error"><strong>Error:</strong> {{ error }}</div>
+            {% endif %}
 
-        <div class="error">
-            {{ error }}
+            <!-- Hero -->
+            <section class="md-hero">
+                <span class="md-tag">JOB REVIEW</span>
+                <h1>{{ job.title }}</h1>
+                <p>Review the job details before making a final decision.</p>
+            </section>
+
+            <!-- Info cards -->
+            <div class="md-stats">
+                <div class="md-stat">
+                    <span>Department</span>
+                    <strong>{{ job.department or "-" }}</strong>
+                </div>
+                <div class="md-stat">
+                    <span>Location</span>
+                    <strong>{{ job.location or "-" }}</strong>
+                </div>
+                <div class="md-stat">
+                    <span>Salary</span>
+                    <strong>{{ job.salary_range or "-" }}</strong>
+                </div>
+                <div class="md-stat">
+                    <span>Deadline</span>
+                    <strong>{{ job.deadline or "-" }}</strong>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <section class="md-card">
+                <div class="md-title">
+                    <div class="md-icon">i</div>
+                    <h2>Description</h2>
+                </div>
+                <p class="md-text">{{ job.description or "-" }}</p>
+            </section>
+
+            <!-- Requirements + Benefits side by side -->
+            <div class="md-two">
+
+                <section class="md-card">
+                    <div class="md-title">
+                        <div class="md-icon">R</div>
+                        <h2>Requirements</h2>
+                    </div>
+                    <p class="md-text">{{ job.requirements or "-" }}</p>
+                </section>
+
+                <section class="md-card">
+                    <div class="md-title">
+                        <div class="md-icon">B</div>
+                        <h2>Benefits</h2>
+                    </div>
+                    <p class="md-text">{{ job.benefits or "-" }}</p>
+                </section>
+
+            </div>
+
+            <!-- Questions -->
+            <section class="md-card">
+                <div class="md-title">
+                    <div class="md-icon">Q</div>
+                    <h2>Questions ({{ questions|length }})</h2>
+                </div>
+
+                {% if questions %}
+                    <ol class="md-questions">
+                        {% for q in questions %}
+                            <li>{{ q }}</li>
+                        {% endfor %}
+                    </ol>
+                {% else %}
+                    <p class="md-text">No questions have been added to this job.</p>
+                {% endif %}
+            </section>
+
+            <!-- Decision -->
+            <section class="md-decision">
+
+                <h2>Manager decision</h2>
+
+                <!-- Existing working decision form. -->
+                <form method="post" action="/manager/decide">
+
+                    <!-- Keep the existing job ID field. -->
+                    <input type="hidden" name="job_id" value="{{ job.job_id }}">
+
+                    <label for="reason">
+                        Reason
+                        <span class="md-optional">(needed only to reject)</span>
+                    </label>
+
+                    <!-- Keep the same textarea name and limits. -->
+                    <textarea
+                        id="reason"
+                        name="reason"
+                        rows="3"
+                        maxlength="500"
+                        placeholder="Enter the reason if you are rejecting this job..."
+                    ></textarea>
+
+                    <!-- Keep the existing approve/reject values. -->
+                    <div class="md-buttons">
+
+                        <button type="submit" name="decision" value="approve" class="md-approve">
+                            Approve and publish
+                        </button>
+
+                        <button type="submit" name="decision" value="reject" class="md-reject">
+                            Reject
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
         </div>
-
-        {% endif %}
-
-
-        <!-- ==================== JOB DETAILS ==================== -->
-
-        <section class="panel">
-
-            <!-- Section heading. -->
-            <h2>
-                Job details
-            </h2>
-
-
-            <!-- Main job information. -->
-            <div class="job-information">
-
-                <!-- Department. -->
-                <div class="job-information-item">
-
-                    <div class="job-information-label">
-                        Department
-                    </div>
-
-                    <div class="job-information-value">
-                        {{ job.department or "-" }}
-                    </div>
-
-                </div>
-
-
-                <!-- Location. -->
-                <div class="job-information-item">
-
-                    <div class="job-information-label">
-                        Location
-                    </div>
-
-                    <div class="job-information-value">
-                        {{ job.location or "-" }}
-                    </div>
-
-                </div>
-
-
-                <!-- Salary. -->
-                <div class="job-information-item">
-
-                    <div class="job-information-label">
-                        Salary
-                    </div>
-
-                    <div class="job-information-value">
-                        {{ job.salary_range or "-" }}
-                    </div>
-
-                </div>
-
-
-                <!-- Deadline. -->
-                <div class="job-information-item">
-
-                    <div class="job-information-label">
-                        Deadline
-                    </div>
-
-                    <div class="job-information-value">
-                        {{ job.deadline or "-" }}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Detailed job information. -->
-            <div class="job-detail">
-
-                <!-- Job description. -->
-                <h2>
-                    Description
-                </h2>
-
-                <p style="white-space: pre-line;">
-                    {{ job.description }}
-                </p>
-
-
-                <!-- Job requirements. -->
-                <h2>
-                    Requirements
-                </h2>
-
-                <p style="white-space: pre-line;">
-                    {{ job.requirements }}
-                </p>
-
-
-                <!-- Job benefits. -->
-                <h2>
-                    Benefits
-                </h2>
-
-                <p style="white-space: pre-line;">
-                    {{ job.benefits or "-" }}
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================== QUESTIONS ==================== -->
-
-        <section class="panel">
-
-            <!-- Questions heading. -->
-            <h2>
-                Questions ({{ questions|length }})
-            </h2>
-
-
-            <!-- Show all job questions. -->
-            <ol class="manager-questions">
-
-                {% for q in questions %}
-
-                <li>
-                    {{ q }}
-                </li>
-
-                {% endfor %}
-
-            </ol>
-
-        </section>
-
-
-        <!-- ==================== DECISION ==================== -->
-
-        <section class="panel decision-section">
-
-            <!-- Decision heading. -->
-            <h2>
-                Manager decision
-            </h2>
-
-            <!-- Existing working decision form. -->
-            <form method="post" action="/manager/decide">
-
-                <!-- Keep the existing job ID field. -->
-                <input
-                    type="hidden"
-                    name="job_id"
-                    value="{{ job.job_id }}"
-                >
-
-
-                <!-- Reason field. -->
-                <label for="reason">
-                    Reason
-                    <span style="font-weight:400; color:#64748b;">
-                        (needed only to reject)
-                    </span>
-                </label>
-
-                <!-- Keep the same textarea name and limits. -->
-                <textarea
-                    id="reason"
-                    name="reason"
-                    rows="3"
-                    maxlength="500"
-                    placeholder="Enter the reason if you are rejecting this job..."
-                ></textarea>
-
-
-                <!-- Keep the existing approve/reject values. -->
-                <div class="button-row">
-
-                    <button
-                        type="submit"
-                        name="decision"
-                        value="approve"
-                    >
-                        Approve and publish
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        name="decision"
-                        value="reject"
-                        class="btn-danger"
-                    >
-                        Reject
-                    </button>
-
-                </div>
-
-            </form>
-
-        </section>
-
-
-        <!-- Back to Manager dashboard. -->
-        <a
-            href="/manager"
-            class="manager-back-link"
-        >
-            &larr; Back to Manager
-        </a>
-
-
     </div>
 
 </div>
+
+
+<style>
+    .md-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 18px 20px 24px;
+        box-sizing: border-box;
+        color: #111827;
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    }
+
+    .md-top {
+        margin-bottom: 12px;
+    }
+
+    .md-back {
+        color: #334155;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .md-back:hover {
+        color: #2563eb;
+    }
+
+    /* Shell */
+    .md-shell {
+        border-radius: 22px;
+        background: #f3f7fd;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.07);
+    }
+
+    .md-band {
+        background: #2d7de6;
+        padding: 0 28px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .md-logo {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .md-band-label {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .md-body {
+        padding: 18px 22px 22px;
+    }
+
+    /* Error */
+    .md-error {
+        margin-bottom: 12px;
+        padding: 10px 16px;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        background: #fef2f2;
+        color: #b91c1c;
+        font-size: 13px;
+    }
+
+    /* Hero */
+    .md-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 20px 28px;
+        margin-bottom: 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #ffffff 40%, #f1f6ff 100%);
+    }
+
+    .md-hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 110px;
+        height: 110px;
+        border-bottom-left-radius: 110px;
+        background: #dbe8fd;
+    }
+
+    .md-hero > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .md-tag {
+        display: inline-block;
+        padding: 5px 12px;
+        border: 1px solid #dbe6fb;
+        border-radius: 999px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .md-hero h1 {
+        margin: 10px 0 2px;
+        font-size: 32px;
+        line-height: 1.1;
+        font-weight: 900;
+        color: #0f172a;
+    }
+
+    .md-hero p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Info cards */
+    .md-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .md-stat {
+        padding: 12px 18px;
+        border: 1px solid #e3e9f2;
+        border-radius: 16px;
+        background: #ffffff;
+        min-width: 0;
+    }
+
+    .md-stat span {
+        display: block;
+        margin-bottom: 2px;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .md-stat strong {
+        font-size: 15px;
+        font-weight: 800;
+        color: #0f172a;
+        word-break: break-word;
+    }
+
+    /* Section cards */
+    .md-card {
+        padding: 14px 20px 16px;
+        margin-bottom: 12px;
+        border: 1px solid #e3e9f2;
+        border-radius: 16px;
+        background: #ffffff;
+        min-width: 0;
+    }
+
+    .md-two {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .md-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .md-icon {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #dbe6fb;
+        border-radius: 8px;
+        background: #eef4ff;
+        color: #2563eb;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .md-card h2 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .md-text {
+        margin: 0;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.6;
+        white-space: pre-line;
+    }
+
+    .md-questions {
+        margin: 0;
+        padding-left: 20px;
+        color: #334155;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* Decision */
+    .md-decision {
+        padding: 16px 22px 18px;
+        border-radius: 16px;
+        background: #2d7de6;
+        color: #ffffff;
+    }
+
+    .md-decision h2 {
+        margin: 0 0 10px;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .md-decision label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .md-optional {
+        font-weight: 400;
+        opacity: 0.85;
+    }
+
+    .md-decision textarea {
+        width: 100%;
+        max-width: 100%;
+        min-height: 70px;
+        padding: 10px 13px;
+        box-sizing: border-box;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #111827;
+        font-family: inherit;
+        font-size: 13px;
+        resize: vertical;
+    }
+
+    .md-decision textarea:focus {
+        outline: none;
+        border-color: #bfdbfe;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+
+    .md-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .md-approve {
+        padding: 10px 24px;
+        border: 0;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #2563eb;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .md-approve:hover {
+        background: #eef4ff;
+    }
+
+    .md-reject {
+        padding: 9px 22px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 999px;
+        background: transparent;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .md-reject:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+        .md-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .md-body {
+            padding: 14px 12px 18px;
+        }
+
+        .md-two {
+            grid-template-columns: 1fr;
+        }
+
+        .md-hero h1 {
+            font-size: 26px;
+        }
+
+        .md-buttons {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+</style>
 
 {% endblock %}
