@@ -74,7 +74,7 @@ def check_file(filename, size):
 # Connect to the Neon database.
 def _connect():
     import psycopg2
-    return psycopg2.connect(os.environ["postgresql://neondb_owner:npg_ImTex5ZXArB8@ep-noisy-grass-beyx1dta-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"])
+    return psycopg2.connect(os.environ["DATABASE_URL"])
 
 
 # Save the uploaded CV inside the database.
