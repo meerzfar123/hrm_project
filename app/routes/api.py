@@ -9,7 +9,7 @@ import psycopg2
 from urllib.parse import quote
 
 # Import FastAPI, Request (the visitor's request), Form (reads form fields), files and background tasks
-from fastapi import APIRouter, FastAPI, Request, Form, File, UploadFile, BackgroundTasks
+from fastapi import APIRouter, FastAPI, Request, Form, File, Response, UploadFile, BackgroundTasks
 
 # Import the responses: redirect to another page, JSON data, and file download
 from fastapi.responses import RedirectResponse, JSONResponse, FileResponse
@@ -1098,15 +1098,26 @@ def hr_cv_download(request: Request, candidate_id: int = 0):
 
     # Use only the file name, so nobody can reach other folders
     saved_name = os.path.basename(app_row["cv_file_path"])
-    path = os.path.join(cv_tools.UPLOAD_DIR, saved_name)
-    if not os.path.isfile(path):
+    data = cv_tools.load_file(saved_name)
+    if data is None:
         return render(request, "message.html",
                       {"title": "Not available", "text": "The CV file is missing.", "user": user}, status_code=404)
 
-    ext = os.path.splitext(saved_name)[1]
-    return FileResponse(path, filename="CV-" + app_row["name"].replace(" ", "_") + ext)
+    ext = os.path.splitext(saved_name)[1].lower()
+    download_name = "CV-" + app_row["name"].replace(" ", "_") + ext
+    if ext == ".pdf":
+        media_type = "application/pdf"
+        disposition = "inline"      # opens in the browser tab
+    else:
+        media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        disposition = "attachment"  # Word files download
 
-
+    from urllib.parse import quote
+    return Response(
+        content=data,
+        media_type=media_type,
+        headers={"Content-Disposition": disposition + "; filename*=UTF-8''" + quote(download_name)},
+    )
 # ---------- HR: jobs ----------
 
 # Show the list of jobs (only HR)
