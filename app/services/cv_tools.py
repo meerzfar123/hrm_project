@@ -74,7 +74,7 @@ def check_file(filename, size):
 # Connect to the Neon database.
 def _connect():
     import psycopg2
-    return psycopg2.connect(os.environ["DATABASE_URL"])
+    return psycopg2.connect(os.environ["postgresql://neondb_owner:npg_ImTex5ZXArB8@ep-noisy-grass-beyx1dta-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"])
 
 
 # Save the uploaded CV inside the database.
@@ -152,7 +152,7 @@ def read_text(saved_name):
             return "\n".join(paragraphs)[:50000]
 
     except Exception as error:
-        print("Reading the CV failed:", error)
+        raise
 
     return ""
 # Read text from the saved CV.
