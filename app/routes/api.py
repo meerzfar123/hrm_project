@@ -2439,8 +2439,14 @@ async def careers_apply_submit(request: Request, background_tasks: BackgroundTas
         return show_error(file_problem)
 
     # Save the file, read it, and score it (same tools as the normal apply)
-    saved_name = cv_tools.save_file(cv.filename, content)
-    cv_text = cv_tools.read_text(saved_name)
+    #saved_name = cv_tools.save_file(cv.filename, content)
+    #cv_text = cv_tools.read_text(saved_name)
+    try:
+        saved_name = cv_tools.save_file(cv.filename, content)
+        cv_text = cv_tools.read_text(saved_name)
+    except Exception as e:
+        import traceback
+        return show_error("DEBUG: " + traceback.format_exc()[-500:])
     form["cv_text"] = cv_text[:20000]
     form["experience_years"] = experience_years
     form["expected_salary"] = int(form["expected_salary"])
