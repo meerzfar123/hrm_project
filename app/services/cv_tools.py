@@ -24,7 +24,8 @@ BASE_DIR = os.path.dirname(
 )
 
 # Create the uploads folder path.
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+import os
+UPLOAD_DIR = "/tmp/uploads" if os.environ.get("VERCEL") else "uploads"
 
 # Allow PDF and DOCX files.
 ALLOWED = (".pdf", ".docx")
