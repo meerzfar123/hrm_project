@@ -155,71 +155,7 @@ def read_text(saved_name):
             return "\n".join(paragraphs)[:50000]
 
     except Exception as error:
-        raise
-
-    return ""
-# Read text from the saved CV.
-def read_text(saved_name):
-
-    # Create the full CV path.
-    path = os.path.join(UPLOAD_DIR, saved_name)
-
-    try:
-
-        # Read PDF files.
-        if saved_name.lower().endswith(".pdf"):
-
-            # Import the PDF reader.
-            from pypdf import PdfReader
-
-            # Open the PDF.
-            reader = PdfReader(path)
-
-            # Create an empty page list.
-            pages = []
-
-            # Read every page.
-            for page in reader.pages:
-
-                # Extract text from the page.
-                page_text = page.extract_text() or ""
-
-                # Add the page text.
-                pages.append(page_text)
-
-            # Return the combined text.
-            return "\n".join(pages)[:50000]
-
-        # Read DOCX files.
-        if saved_name.lower().endswith(".docx"):
-
-            # Import the Word reader.
-            import docx
-
-            # Open the Word document.
-            document = docx.Document(path)
-
-            # Create an empty paragraph list.
-            paragraphs = []
-
-            # Read every paragraph.
-            for paragraph in document.paragraphs:
-
-                # Add paragraph text.
-                paragraphs.append(paragraph.text)
-
-            # Return the combined text.
-            return "\n".join(paragraphs)[:50000]
-
-    # Catch file-reading errors.
-    except Exception as error:
-
-        # Print the error for debugging.
-        print("Reading the CV failed:", error)
-
-    # Return empty text when the file cannot be read.
-    return ""
-
+        print("Reading the CV failed:", os.error)
 
 # Clean text before comparison.
 def clean_text(text):
