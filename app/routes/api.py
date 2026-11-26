@@ -1766,26 +1766,21 @@ async def hr_manual_candidate_save(
 
     # A job is optional, so NULL is used when HR leaves the job empty.
     database_job_id = None
+    selected_job = None
 
     # Only check ownership when HR actually selected a job.
-    if job_id != 0:
+        if job_id != 0:
         selected_job = job_tools.get_job(job_id)
 
-        # Make sure the selected job belongs to this HR.
         # Make sure the selected job belongs to the current HR.
         if selected_job is None or selected_job["created_by"] != user["user_id"]:
-         return RedirectResponse("/hr/candidate/add?error=badjob", status_code=303)
+            return RedirectResponse("/hr/candidate/add?error=badjob", status_code=303)
 
-          # Only approved and published jobs can receive HR-sourced candidates.
+        # Only published jobs can receive HR-sourced candidates.
         if selected_job["status"] != "published":
-          return RedirectResponse(
-        "/hr/candidate/add?error=jobnotpublished",
-        status_code=303,
-    )
+            return RedirectResponse("/hr/candidate/add?error=jobnotpublished", status_code=303)
 
-        # Save the real job ID for the database.
         database_job_id = job_id
-
     # Experience is optional. Blank means zero for the existing database field.
     experience_number = 0
 

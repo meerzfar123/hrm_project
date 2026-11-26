@@ -123,15 +123,15 @@ def load_file(saved_name):
 
 
 # Read text from the saved CV.
+# Read text from the saved CV.
 def read_text(saved_name):
 
     import io
 
-    data = load_file(saved_name)
-    if data is None:
-        return ""
-
     try:
+        data = load_file(saved_name)
+        if data is None:
+            return ""
 
         # Read PDF files.
         if saved_name.lower().endswith(".pdf"):
@@ -140,10 +140,7 @@ def read_text(saved_name):
             pages = []
             for page in reader.pages:
                 pages.append(page.extract_text() or "")
-            text = "\n".join(pages)
-            if text.strip() == "":
-                raise ValueError("PDF opened but no text found. bytes=" + str(len(data)) + " pages=" + str(len(reader.pages)))
-            return text[:50000]
+            return "\n".join(pages)[:50000]
 
         # Read DOCX files.
         if saved_name.lower().endswith(".docx"):
@@ -155,8 +152,9 @@ def read_text(saved_name):
             return "\n".join(paragraphs)[:50000]
 
     except Exception as error:
-        print("Reading the CV failed:", os.error)
+        print("Reading the CV failed:", error)
 
+    return ""
 # Clean text before comparison.
 def clean_text(text):
 
