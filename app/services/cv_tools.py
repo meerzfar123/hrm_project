@@ -71,10 +71,16 @@ def check_file(filename, size):
 
 
 # Save the uploaded CV.
+# Connect to the Neon database.
+def _connect():
+    import psycopg2
+    return psycopg2.connect(os.environ["DATABASE_URL"])
+
+
+# Save the uploaded CV inside the database.
 def save_file(filename, data):
 
-    # Create the uploads folder if necessary.
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    import psycopg2
 
     # Keep the original extension.
     ext = os.path.splitext(filename.lower())[1]
@@ -82,17 +88,73 @@ def save_file(filename, data):
     # Create a unique file name.
     saved_name = uuid.uuid4().hex + ext
 
-    # Create the complete file path.
-    path = os.path.join(UPLOAD_DIR, saved_name)
+    # Store the file bytes in the cv_files table.
+    conn = _connect()
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "INSERT INTO cv_files (saved_name, content) VALUES (%s, %s)",
+                    (saved_name, psycopg2.Binary(data)),
+                )
+    finally:
+        conn.close()
 
-    # Write the CV to disk.
-    with open(path, "wb") as file:
-        file.write(data)
-
-    # Return the saved file name.
     return saved_name
 
 
+# Load the CV bytes from the database (None if not found).
+def load_file(saved_name):
+
+    conn = _connect()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT content FROM cv_files WHERE saved_name = %s",
+                (saved_name,),
+            )
+            row = cur.fetchone()
+    finally:
+        conn.close()
+
+    if row is None:
+        return None
+    return bytes(row[0])
+
+
+# Read text from the saved CV.
+def read_text(saved_name):
+
+    import io
+
+    data = load_file(saved_name)
+    if data is None:
+        return ""
+
+    try:
+
+        # Read PDF files.
+        if saved_name.lower().endswith(".pdf"):
+            from pypdf import PdfReader
+            reader = PdfReader(io.BytesIO(data))
+            pages = []
+            for page in reader.pages:
+                pages.append(page.extract_text() or "")
+            return "\n".join(pages)[:50000]
+
+        # Read DOCX files.
+        if saved_name.lower().endswith(".docx"):
+            import docx
+            document = docx.Document(io.BytesIO(data))
+            paragraphs = []
+            for paragraph in document.paragraphs:
+                paragraphs.append(paragraph.text)
+            return "\n".join(paragraphs)[:50000]
+
+    except Exception as error:
+        print("Reading the CV failed:", error)
+
+    return ""
 # Read text from the saved CV.
 def read_text(saved_name):
 
