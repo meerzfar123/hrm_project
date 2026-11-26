@@ -1769,7 +1769,7 @@ async def hr_manual_candidate_save(
     selected_job = None
 
     # Only check ownership when HR actually selected a job.
-        if job_id != 0:
+    if job_id != 0:
         selected_job = job_tools.get_job(job_id)
 
         # Make sure the selected job belongs to the current HR.
