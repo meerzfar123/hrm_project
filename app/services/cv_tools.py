@@ -140,7 +140,10 @@ def read_text(saved_name):
             pages = []
             for page in reader.pages:
                 pages.append(page.extract_text() or "")
-            return "\n".join(pages)[:50000]
+            text = "\n".join(pages)
+            if text.strip() == "":
+                raise ValueError("PDF opened but no text found. bytes=" + str(len(data)) + " pages=" + str(len(reader.pages)))
+            return text[:50000]
 
         # Read DOCX files.
         if saved_name.lower().endswith(".docx"):
